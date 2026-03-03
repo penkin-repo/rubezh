@@ -1,0 +1,303 @@
+---
+import { Icon } from "astro-icon/components";
+// Данные: Шаг 4.1 → п.5 CTA блок, PROJECT_LOG_HOW → данные компании
+---
+
+<section
+    class="contact-form-section relative overflow-hidden py-24"
+    aria-labelledby="cta-heading"
+>
+    <!-- Фоновый паттерн -->
+    <div
+        class="cta-bg-pattern absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+    >
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-16 items-center">
+            <!-- Левая колонка: текст -->
+            <div>
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="w-10 h-0.5 bg-white/50" aria-hidden="true"
+                    ></span>
+                    <span
+                        class="text-white/70 text-xs font-semibold tracking-widest uppercase"
+                        >Обсудим ваш проект</span
+                    >
+                </div>
+                <h2
+                    id="cta-heading"
+                    class="font-heading text-white uppercase text-4xl sm:text-5xl lg:text-6xl leading-none tracking-wide mb-6"
+                >
+                    Свяжитесь с нами
+                </h2>
+                <p
+                    class="text-white/75 text-base lg:text-lg leading-relaxed mb-10"
+                >
+                    Оставьте заявку и мы подберём оптимальную технику и
+                    предложим лучшие условия для вашего объекта.
+                </p>
+
+                <!-- Быстрые контакты -->
+                <div class="space-y-3">
+                    <a
+                        href="tel:+79118793134"
+                        class="flex items-center gap-3 text-white hover:text-white/80 transition-colors group"
+                    >
+                        <span
+                            class="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center
+                         group-hover:bg-white/20 transition-colors flex-shrink-0"
+                        >
+                            <Icon name="lucide:phone" class="w-4 h-4" />
+                        </span>
+                        <span class="font-semibold">8-911-879-31-34</span>
+                    </a>
+                    <a
+                        href="mailto:amdofis@mail.ru"
+                        class="flex items-center gap-3 text-white hover:text-white/80 transition-colors group"
+                    >
+                        <span
+                            class="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center
+                         group-hover:bg-white/20 transition-colors flex-shrink-0"
+                        >
+                            <Icon name="lucide:mail" class="w-4 h-4" />
+                        </span>
+                        <span>amdofis@mail.ru</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Правая колонка: форма -->
+            <div class="relative">
+                <!-- Форма -->
+                <form
+                    id="contact-form"
+                    class="cta-form relative bg-white rounded-2xl p-8 shadow-2xl"
+                    novalidate
+                >
+                    <!-- <h3
+                        class="font-heading text-zinc-900 uppercase text-2xl mb-6"
+                    >
+                        Получить расчёт
+                    </h3> -->
+
+                    <!-- Имя -->
+                    <div class="mb-5">
+                        <label
+                            for="cf-name"
+                            class="block text-sm font-semibold text-zinc-700 mb-2"
+                            >Ваше имя *</label
+                        >
+                        <input
+                            type="text"
+                            id="cf-name"
+                            name="name"
+                            required
+                            placeholder="Иван Петров"
+                            class="w-full px-4 py-3 rounded-xl border border-zinc-200 text-zinc-900
+                     focus:outline-none focus:ring-2 focus:ring-brand-dark focus:border-transparent
+                     transition-all duration-200 text-sm"
+                        />
+                    </div>
+
+                    <!-- Телефон -->
+                    <div class="mb-5">
+                        <label
+                            for="cf-phone"
+                            class="block text-sm font-semibold text-zinc-700 mb-2"
+                            >Номер телефона *</label
+                        >
+                        <input
+                            type="tel"
+                            id="cf-phone"
+                            name="phone"
+                            required
+                            placeholder="+7 (___) ___-__-__"
+                            maxlength="18"
+                            class="w-full px-4 py-3 rounded-xl border border-zinc-200 text-zinc-900
+                     focus:outline-none focus:ring-2 focus:ring-brand-dark focus:border-transparent
+                     transition-all duration-200 text-sm"
+                        />
+                    </div>
+
+                    <!-- Комментарий -->
+                    <div class="mb-6">
+                        <label
+                            for="cf-comment"
+                            class="block text-sm font-semibold text-zinc-700 mb-2"
+                            >Комментарий</label
+                        >
+                        <textarea
+                            id="cf-comment"
+                            name="comment"
+                            rows="3"
+                            placeholder="Опишите задачу: тип работ, адрес объекта, сроки..."
+                            class="w-full px-4 py-3 rounded-xl border border-zinc-200 text-zinc-900
+                     focus:outline-none focus:ring-2 focus:ring-brand-dark focus:border-transparent
+                     transition-all duration-200 text-sm resize-none"
+                        ></textarea>
+                    </div>
+
+                    <!-- Submit -->
+                    <button
+                        type="submit"
+                        id="cf-submit"
+                        class="cta-submit-btn w-full py-4 px-8 rounded-xl uppercase tracking-wide
+                   text-white text-sm transition-all duration-300"
+                    >
+                        <span id="cf-btn-text">Отправить заявку</span>
+                        <span id="cf-spinner" class="hidden">
+                            <Icon
+                                name="lucide:loader-circle"
+                                class="w-5 h-5 animate-spin inline"
+                            />
+                            Отправляем...
+                        </span>
+                    </button>
+
+                    <p class="text-zinc-400 text-xs text-center mt-4">
+                        Нажимая кнопку, вы соглашаетесь с обработкой
+                        персональных данных
+                    </p>
+                </form>
+
+                <!-- Успех -->
+                <div
+                    id="form-success"
+                    class="hidden absolute inset-0 bg-white rounded-2xl p-8 shadow-2xl
+                 flex flex-col items-center justify-center text-center"
+                >
+                    <div
+                        class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-6"
+                    >
+                        <Icon
+                            name="lucide:check"
+                            class="w-8 h-8 text-green-600"
+                        />
+                    </div>
+                    <h3
+                        class="font-heading text-zinc-900 uppercase text-2xl mb-3"
+                    >
+                        Заявка принята!
+                    </h3>
+                    <p class="text-zinc-500 text-base leading-relaxed">
+                        Наш инженер свяжется с вами в ближайшее время для
+                        расчёта стоимости.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .contact-form-section {
+        background: linear-gradient(
+            135deg,
+            #0257c0 0%,
+            #0c1a3a 60%,
+            #060b18 100%
+        );
+    }
+    .cta-bg-pattern {
+        background-image: radial-gradient(
+            rgba(255, 255, 255, 0.06) 1.5px,
+            transparent 1.5px
+        );
+        background-size: 28px 28px;
+    }
+    .cta-submit-btn {
+        background: linear-gradient(135deg, #0257c0, #297fec);
+        box-shadow: 0 4px 16px rgba(2, 87, 192, 0.4);
+    }
+    .cta-submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(2, 87, 192, 0.55);
+    }
+    .cta-submit-btn:disabled {
+        opacity: 0.7;
+        transform: none;
+        cursor: not-allowed;
+    }
+</style>
+
+<script>
+    const form = document.getElementById("contact-form") as HTMLFormElement;
+    const phoneInput = document.getElementById("cf-phone") as HTMLInputElement;
+    const submitBtn = document.getElementById("cf-submit") as HTMLButtonElement;
+    const btnText = document.getElementById("cf-btn-text") as HTMLElement;
+    const spinner = document.getElementById("cf-spinner") as HTMLElement;
+    const success = document.getElementById("form-success") as HTMLElement;
+
+    // ── Маска телефона +7 (___) ___-__-__ ──
+    phoneInput?.addEventListener("input", () => {
+        let raw = phoneInput.value.replace(/\D/g, "");
+        if (raw.startsWith("8")) raw = "7" + raw.slice(1);
+        if (!raw.startsWith("7") && raw.length > 0) raw = "7" + raw;
+        raw = raw.slice(0, 11);
+
+        let formatted = "+7";
+        if (raw.length > 1) formatted += " (" + raw.slice(1, 4);
+        if (raw.length >= 4) formatted += ") " + raw.slice(4, 7);
+        if (raw.length >= 7) formatted += "-" + raw.slice(7, 9);
+        if (raw.length >= 9) formatted += "-" + raw.slice(9, 11);
+
+        phoneInput.value = formatted;
+    });
+
+    // ── Отправка формы → Google Apps Script ──
+    // ВАЖНО: Замените URL ниже на ваш задеплоенный Google Apps Script Web App URL
+    const APPS_SCRIPT_URL =
+        "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+
+    form?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = (
+            document.getElementById("cf-name") as HTMLInputElement
+        ).value.trim();
+        const phone = (
+            document.getElementById("cf-phone") as HTMLInputElement
+        ).value.trim();
+        const comment = (
+            document.getElementById("cf-comment") as HTMLTextAreaElement
+        ).value.trim();
+
+        if (!name || !phone) {
+            alert("Пожалуйста, заполните обязательные поля: Имя и Телефон");
+            return;
+        }
+
+        // Состояние загрузки
+        submitBtn.disabled = true;
+        btnText.classList.add("hidden");
+        spinner.classList.remove("hidden");
+
+        try {
+            await fetch(APPS_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors", // Google Apps Script требует no-cors
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name,
+                    phone,
+                    comment,
+                    source: "Главная страница — форма",
+                    timestamp: new Date().toLocaleString("ru-RU", {
+                        timeZone: "Europe/Moscow",
+                    }),
+                }),
+            });
+
+            // Успех (no-cors не возвращает статус, считаем успехом)
+            form.classList.add("hidden");
+            success.classList.remove("hidden");
+        } catch {
+            submitBtn.disabled = false;
+            btnText.classList.remove("hidden");
+            spinner.classList.add("hidden");
+            alert("Ошибка отправки. Позвоните нам напрямую: 8-911-879-31-34");
+        }
+    });
+</script>

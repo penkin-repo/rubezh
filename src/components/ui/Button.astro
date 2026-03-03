@@ -1,0 +1,100 @@
+---
+interface Props {
+    href: string;
+    variant?: "primary" | "outline";
+    class?: string;
+}
+
+const { href, variant = "primary", class: className = "" } = Astro.props;
+---
+
+<a
+    href={href}
+    class:list={[
+        "btn",
+        variant === "primary" ? "btn-primary" : "btn-outline",
+        className,
+    ]}
+>
+    <slot />
+</a>
+
+<style>
+    /* ====================================================
+     Базовые стили кнопки
+     Все цвета берутся из CSS-переменных global.css
+     ==================================================== */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1.5rem 2rem;
+        border-radius: 0.5rem; /* rounded-lg */
+        font-family: var(--font-body);
+        font-weight: 700;
+        font-size: 0.8125rem; /* 13px */
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+        transition:
+            transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+            box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+            color 0.2s ease;
+        cursor: pointer;
+    }
+
+    /* Псевдоэлемент для shimmer-эффекта при hover */
+    .btn::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            105deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.2) 50%,
+            transparent 70%
+        );
+        transform: translateX(-100%);
+        transition: transform 0.45s ease;
+    }
+    .btn:hover::after {
+        transform: translateX(100%);
+    }
+
+    /* -------- PRIMARY — диагональный градиент бренда -------- */
+    .btn-primary {
+        background: var(--gradient-brand); /* из global.css */
+        color: #ffffff;
+        box-shadow: 0 4px 18px rgba(2, 87, 192, 0.4);
+        border: 2px solid transparent;
+    }
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(2, 87, 192, 0.55);
+    }
+    .btn-primary:active {
+        transform: translateY(0px);
+        box-shadow: 0 2px 10px rgba(2, 87, 192, 0.35);
+    }
+
+    /* -------- OUTLINE — белая рамка, прозрачный фон -------- */
+    .btn-outline {
+        background: rgba(0, 0, 0, 0.3);
+        color: #ffffff;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    }
+    .btn-outline:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+    .btn-outline:active {
+        transform: translateY(0px);
+        background: rgba(255, 255, 255, 0.18);
+    }
+</style>

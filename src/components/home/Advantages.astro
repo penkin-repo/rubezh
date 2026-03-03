@@ -1,0 +1,191 @@
+---
+import { Icon } from 'astro-icon/components';
+
+// Данные из start/Шаг 4.1
+const advantages = [
+  {
+    title: 'Свой автопарк',
+    description: '60+ тяжелых машин (от бульдозеров до установок ГНБ) всегда в боевой готовности. Мы не зависим от чужой техники.',
+    icon: 'lucide:tractor',
+    span: 'lg:col-span-2',
+  },
+  {
+    title: 'Своя логистика',
+    description: 'Сами доставляем песок, щебень и асфальт нашими 3-х и 4-х осными самосвалами. Никаких простоев из-за сторонних перевозчиков.',
+    icon: 'lucide:truck',
+    span: 'lg:col-span-1',
+  },
+  {
+    title: 'Соблюдение сроков',
+    description: 'Контролируем каждый этап работ лично. Вы работаете напрямую с исполнителем, а не с цепочкой субподрядчиков.',
+    icon: 'lucide:timer',
+    span: 'lg:col-span-1',
+  },
+  {
+    title: 'Команда профессионалов',
+    description: '130+ штатных инженеров, геодезистов и механизаторов с актуальными допуcками к сложным работам.',
+    icon: 'lucide:hard-hat',
+    span: 'lg:col-span-2',
+  },
+  {
+    title: 'Решение сложных задач',
+    description: 'Беремся за нетиповые проекты и гидротехнические сооружения, от которых отказываются другие.',
+    icon: 'lucide:cog',
+    span: 'lg:col-span-2',
+  },
+  {
+    title: 'Гарантия качества',
+    description: 'Несем юридическую ответственность за результат. Соблюдаем СП и СНиПы на всех этапах — от песчаной подушки до финишного покрытия.',
+    icon: 'lucide:shield-check',
+    span: 'lg:col-span-1',
+  },
+] as const;
+---
+
+<section class="adv-section py-24 text-zinc-900 relative overflow-hidden w-full">
+
+  <!-- Фоновый dot-паттерн -->
+  <div class="adv-bg-pattern absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+    <!-- Заголовок -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+      <div class="max-w-3xl">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-2 h-2 bg-brand-dark rounded-full" aria-hidden="true"></div>
+          <span class="text-sm font-bold tracking-widest uppercase text-zinc-500">Почему мы</span>
+        </div>
+        <h2
+          id="advantages-heading"
+          class="font-heading text-4xl md:text-5xl lg:text-6xl tracking-wide uppercase leading-none"
+        >
+          Преимущества работы с нами
+        </h2>
+      </div>
+      <div class="max-w-sm text-zinc-500 border-l-2 border-brand-dark pl-6 py-1 text-base lg:text-lg leading-relaxed">
+        Надёжность, подкреплённая собственными ресурсами, техникой и многолетним опытом.
+      </div>
+    </div>
+
+    <!-- Сетка карточек -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-zinc-200 border border-zinc-200 shadow-xl shadow-zinc-200/50">
+      {advantages.map((adv, i) => (
+        <div
+          class:list={[
+            "adv-item group bg-white relative overflow-hidden",
+            "flex flex-col justify-between min-h-[300px] lg:min-h-[320px] p-10",
+            "transition-colors duration-500 hover:bg-zinc-50",
+            adv.span,
+          ]}
+          data-index={i}
+        >
+          <!-- Watermark число -->
+          <div
+            class="adv-watermark absolute -right-4 -bottom-8 font-black leading-none select-none pointer-events-none
+                   text-zinc-50 group-hover:text-zinc-100 transition-colors duration-500"
+            aria-hidden="true"
+          >
+            0{i + 1}
+          </div>
+
+          <!-- Верх: иконка + заголовок -->
+          <div class="relative z-10">
+            <div class="adv-icon-box w-14 h-14 bg-zinc-100 border border-zinc-200
+                        flex items-center justify-center mb-8
+                        group-hover:bg-brand-dark group-hover:border-brand-dark
+                        transition-all duration-500">
+              <Icon
+                name={adv.icon}
+                class="adv-icon w-6 h-6 text-zinc-600 group-hover:text-white transition-colors duration-500"
+                stroke-width="1.5"
+              />
+            </div>
+            <h3 class="font-heading text-2xl lg:text-3xl uppercase leading-tight mb-4 text-zinc-900
+                       group-hover:translate-x-2 transition-transform duration-500">
+              {adv.title}
+            </h3>
+          </div>
+
+          <!-- Низ: описание -->
+          <div class="relative z-10 mt-auto">
+            <p class="text-zinc-500 leading-relaxed text-base lg:text-lg
+                      group-hover:text-zinc-800 transition-colors duration-500">
+              {adv.description}
+            </p>
+          </div>
+
+          <!-- Угловые акценты (инженерный стиль) -->
+          <div class="absolute top-0 left-0 m-3 w-4 h-4 border-t-2 border-l-2 border-transparent
+                      group-hover:border-brand-dark transition-colors duration-500"
+               aria-hidden="true"></div>
+          <div class="absolute bottom-0 right-0 m-3 w-4 h-4 border-b-2 border-r-2 border-transparent
+                      group-hover:border-brand-dark transition-colors duration-500"
+               aria-hidden="true"></div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* Watermark: огромный размер шрифта (нельзя через Tailwind-утилиты) */
+  .adv-watermark { font-size: 160px; }
+
+  /* Фоновый паттерн (нельзя через Tailwind — нестандартный radial-gradient) */
+  .adv-section {
+        background-image:
+            linear-gradient(#00000010 1px, #0000 1px),
+            linear-gradient(90deg, #00000010 1px, #0000 1px);
+        background-size: 60px 60px;
+        background-color: #f7f8fa;
+    
+  }
+  .adv-bg-pattern {
+    background-image: radial-gradient(#000 1.5px, transparent 1.5px);
+    background-size: 32px 32px;
+    opacity: 0.03;
+  }
+
+  /* ── Scroll-анимация появления карточек ── */
+  .adv-item {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.55s ease,
+      transform 0.55s ease,
+      background-color 0.5s ease;
+  }
+  .adv-item.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Задержки по индексу */
+  .adv-item:nth-child(1) { transition-delay: 0s; }
+  .adv-item:nth-child(2) { transition-delay: 0.08s; }
+  .adv-item:nth-child(3) { transition-delay: 0.16s; }
+  .adv-item:nth-child(4) { transition-delay: 0.24s; }
+  .adv-item:nth-child(5) { transition-delay: 0.32s; }
+  .adv-item:nth-child(6) { transition-delay: 0.4s; }
+</style>
+
+<script>
+  // Анимация появления при скролле (замена motion.whileInView)
+  const items = document.querySelectorAll<HTMLElement>(".adv-item");
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12 }
+  );
+
+  items.forEach((item) => observer.observe(item));
+</script>

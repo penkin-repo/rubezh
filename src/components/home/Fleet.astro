@@ -1,0 +1,327 @@
+---
+import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+import placeholder from '../../assets/services.png';
+
+// Топ-6 машин из каталога (Шаг 4.4)
+const fleet = [
+  {
+    id: 'howo',
+    name: 'Самосвал HOWO T5G',
+    type: 'Самосвал 3-осный',
+    specs: [
+      { label: 'Грузоподъёмность', value: '30 т' },
+      { label: 'Объём кузова', value: '20 м³' },
+      { label: 'Колёсная формула', value: '6×4' },
+      { label: 'В парке', value: '6 ед.' },
+    ],
+    badge: '× 6',
+  },
+  {
+    id: 'scania',
+    name: 'Самосвал SCANIA P440',
+    type: 'Самосвал 4-осный',
+    specs: [
+      { label: 'Грузоподъёмность', value: '30 т' },
+      { label: 'Объём кузова', value: '20 м³' },
+      { label: 'Колёсная формула', value: '8×4' },
+      { label: 'В парке', value: '2 ед.' },
+    ],
+    badge: '× 2',
+  },
+  {
+    id: 'liugong',
+    name: 'Экскаватор Liugong CLG922E',
+    type: 'Экскаватор гусеничный',
+    specs: [
+      { label: 'Тип', value: 'Гусеничный' },
+      { label: 'Ковш', value: '0.9–1.2 м³' },
+      { label: 'В парке', value: '9 ед.' },
+    ],
+    badge: '× 9',
+  },
+  {
+    id: 'komatsu',
+    name: 'Бульдозер Komatsu D65PX',
+    type: 'Бульдозер',
+    specs: [
+      { label: 'Масса', value: '21 т' },
+      { label: 'Мощность', value: '168 л.с.' },
+      { label: 'В парке', value: '1 ед.' },
+    ],
+    badge: '',
+  },
+  {
+    id: 'hamm',
+    name: 'Каток HAMM 3114',
+    type: 'Грунтовый каток',
+    specs: [
+      { label: 'Масса', value: '14 т' },
+      { label: 'Тип', value: 'Грунтовый' },
+      { label: 'В парке', value: '1 ед.' },
+    ],
+    badge: '',
+  },
+  {
+    id: 'gnb',
+    name: 'Установка ГНБ GOODENG GD360C',
+    type: 'Горизонтально-направленное бурение',
+    specs: [
+      { label: 'Тяговое усилие', value: '36 т' },
+      { label: 'Глубина', value: 'до 25 м' },
+      { label: 'В парке', value: '1 ед.' },
+    ],
+    badge: '',
+  },
+] as const;
+
+// Бегущая строка — повторяем 3 раза для бесшовного loop
+const marqueeItems = [
+  'Самосвалы', 'Экскаваторы', 'Бульдозеры', 'Катки',
+  'Асфальтоукладчики', 'Установки ГНБ', 'Краны и КМУ', 'Водовозки',
+];
+---
+
+<section class="fleet-section relative overflow-hidden py-24" aria-labelledby="fleet-heading">
+
+  <!-- Фоновая сетка -->
+  <div class="fleet-bg-grid absolute inset-0 pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative z-10">
+
+    <!-- Заголовок -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+      <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+        <div>
+          <div class="flex items-center gap-3 mb-4 justify-left">
+                <div
+                    class="w-2 h-2 bg-brand-dark rounded-full"
+                    aria-hidden="true"
+                >
+                </div>
+                <span
+                    class="text-sm font-bold tracking-widest uppercase text-brand-dark"
+                    >Заказ спецтехники</span
+                >
+            </div>
+          <h2 id="fleet-heading"
+              class="font-heading text-white uppercase text-4xl sm:text-5xl lg:text-6xl leading-none tracking-wide">
+            Наш автопарк
+          </h2>
+        </div>
+        <p class="text-slate-400 text-base lg:text-lg max-w-md leading-relaxed">
+          Подача на объект — в день обращения.
+        </p>
+      </div>
+    </div>
+
+    <!-- Бегущая строка (Swiper marquee) -->
+    <div class="marquee-wrapper overflow-hidden mb-12 border-y border-white/10 py-4">
+      <div class="swiper swiper-marquee" id="swiper-marquee" aria-hidden="true">
+        <div class="swiper-wrapper items-center">
+          {[...marqueeItems, ...marqueeItems, ...marqueeItems].map((item) => (
+            <div class="swiper-slide !w-auto">
+              <span class="flex items-center gap-6 px-8 text-slate-400 text-sm font-semibold tracking-widest uppercase whitespace-nowrap">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-light flex-shrink-0" aria-hidden="true"></span>
+                {item}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Swiper слайдер карточек -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="swiper swiper-fleet" id="swiper-fleet">
+        <div class="swiper-wrapper">
+          {fleet.map((item) => (
+            <div class="swiper-slide !h-auto">
+              <article class="fleet-card group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden
+                             hover:border-brand-light/40 transition-colors duration-300 h-full flex flex-col">
+                <!-- Фото заглушка -->
+                <div class="relative overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 aspect-[4/3]">
+                  <Image
+                    src={placeholder}
+                    alt={item.name}
+                    widths={[400, 600]}
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    loading="lazy"
+                    quality={80}
+                    class="w-full h-full object-cover opacity-30 group-hover:opacity-40 transition-opacity duration-300"
+                  />
+                  <!-- Тип техники badge -->
+                  <div class="absolute top-4 left-4">
+                    <span class="bg-white/80 backdrop-blur-sm text-black text-xs font-semibold
+                                 px-3 py-1 rounded-lg">
+                      {item.type}
+                    </span>
+                  </div>
+                  {/* {item.badge && (
+                    <div class="absolute top-4 right-4">
+                      <span class="bg-white/10 backdrop-blur-sm text-white text-xs font-bold
+                                   px-3 py-1 rounded-full border border-white/20">
+                        {item.badge}
+                      </span>
+                    </div>
+                  )} */}
+                </div>
+
+                <!-- Контент -->
+                <div class="flex flex-col flex-1 p-6">
+                  <h3 class="text-white uppercase text-xl leading-tight mb-4">
+                    {item.name}
+                  </h3>
+
+                  <!-- Характеристики -->
+                  <ul class="space-y-2 mb-6 flex-1" role="list">
+                    {item.specs.map((spec) => (
+                      <li class="flex items-center justify-between text-sm">
+                        <span class="text-slate-400">{spec.label}</span>
+                        <span class="text-white font-semibold">{spec.value}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <!-- Кнопка -->
+                  <a
+                    href="/equipment"
+                    class="fleet-rent-btn block text-center py-3 px-6 rounded-xl border border-white/20
+                           text-white text-sm font-semibold tracking-wide
+                           hover:bg-brand-dark hover:border-brand-dark transition-all duration-300"
+                  >
+                    Арендовать
+                  </a>
+                </div>
+              </article>
+            </div>
+          ))}
+        </div>
+
+        <!-- Navigation -->
+        <div class="swiper-fleet-prev swiper-nav-btn" aria-label="Предыдущий слайд">
+          <Icon name="lucide:chevron-left" class="w-5 h-5" />
+        </div>
+        <div class="swiper-fleet-next swiper-nav-btn" aria-label="Следующий слайд">
+          <Icon name="lucide:chevron-right" class="w-5 h-5" />
+        </div>
+
+        <!-- Pagination -->
+        <div class="swiper-fleet-pagination mt-8 flex justify-center gap-2"></div>
+      </div>
+
+      <!-- CTA под слайдером -->
+      <div class="text-center mt-10">
+        <a href="/equipment"
+           class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font
+                  uppercase tracking-wide text-white border border-white/20
+                  hover:bg-white/10 transition-all duration-300 text-sm">
+          Смотреть весь автопарк
+          <Icon name="lucide:arrow-right" class="w-4 h-4" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fleet-section {
+    background-color: #080e1c;
+  }
+  .fleet-bg-grid {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* Навигационные кнопки слайдера */
+  .swiper-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .swiper-nav-btn:hover { background: rgba(41,127,236,0.3); border-color: rgba(41,127,236,0.5); }
+  .swiper-nav-btn.swiper-button-disabled { opacity: 0.3; pointer-events: none; }
+  .swiper-fleet-prev { left: -1.5rem; }
+  .swiper-fleet-next { right: -1.5rem; }
+
+  /* Пагинация */
+  :global(.swiper-fleet-pagination .swiper-pagination-bullet) {
+    width: 6px; height: 6px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50%;
+    display: inline-block;
+    transition: background 0.3s, width 0.3s;
+    cursor: pointer;
+  }
+  :global(.swiper-fleet-pagination .swiper-pagination-bullet-active) {
+    background: #297fec;
+    width: 20px;
+    border-radius: 3px;
+  }
+
+  /* Карточка — равная высота слайдов */
+  #swiper-fleet { overflow: visible; padding: 0 2rem; }
+  @media (max-width: 768px) {
+    #swiper-fleet { padding: 0; }
+    .swiper-fleet-prev, .swiper-fleet-next { display: none; }
+  }
+</style>
+
+<script>
+  import Swiper from 'swiper';
+  import { Navigation, Pagination, Autoplay, FreeMode, A11y } from 'swiper/modules';
+  import 'swiper/css';
+
+  // ── Бегущая строка ──
+  new Swiper('#swiper-marquee', {
+    modules: [Autoplay, FreeMode],
+    slidesPerView: 'auto',
+    spaceBetween: 0,
+    loop: true,
+    freeMode: true,
+    speed: 6000,
+    autoplay: {
+      delay: 0,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true,
+    },
+    grabCursor: true,
+    allowTouchMove: true,
+    a11y: { enabled: false },
+  });
+
+  // ── Карусель карточек ──
+  new Swiper('#swiper-fleet', {
+    modules: [Navigation, Pagination, A11y],
+    slidesPerView: 1,
+    spaceBetween: 20,
+    grabCursor: true,
+    navigation: {
+      prevEl: '.swiper-fleet-prev',
+      nextEl: '.swiper-fleet-next',
+    },
+    pagination: {
+      el: '.swiper-fleet-pagination',
+      clickable: true,
+    },
+    breakpoints: {
+      640:  { slidesPerView: 2, spaceBetween: 20 },
+      1024: { slidesPerView: 3, spaceBetween: 24 },
+    },
+    a11y: { enabled: true },
+  });
+</script>

@@ -1,0 +1,206 @@
+---
+import { Image } from 'astro:assets';
+import logoMain from '../../assets/logo-main.svg';
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../../keystatic.config';
+
+// Читаем настройки шапки из Keystatic singleton
+const reader = createReader(process.cwd(), keystaticConfig);
+const headerData = await reader.singletons.header.read();
+
+// Fallbacks
+const phone    = headerData?.phone    ?? '8-911-879-31-34';
+const phoneHref = headerData?.phoneHref ?? '+79118793134';
+const ctaLabel = headerData?.ctaLabel ?? 'Заказать звонок';
+const ctaHref  = headerData?.ctaHref  ?? '#contact-form';
+const navItems = headerData?.navItems ?? [
+  { label: 'О компании',       href: '/about',     dropdown: [{ label: 'О нас', href: '/about' }, { label: 'Вакансии', href: '/about/vacancies' }] },
+  { label: 'Наши работы',      href: '/projects',  dropdown: [] },
+  { label: 'Аренда спецтехники', href: '/equipment', dropdown: [] },
+  { label: 'Контакты',          href: '/contacts',  dropdown: [] },
+];
+---
+
+<header class="absolute top-0 left-0 right-0 z-50 w-full bg-gradient-to-b from-black/50 to-black/0 multiply">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+
+      <!-- Логотип -->
+      <a href="/" class="flex-shrink-0" aria-label="ООО Рубеж — на главную">
+        <Image
+          src={logoMain}
+          alt="ООО Рубеж — логотип"
+          width={160}
+          height={48}
+          loading="eager"
+        />
+      </a>
+
+      <!-- Навигация (десктоп) -->
+      <nav class="hidden lg:flex items-center gap-8 font-body" aria-label="Основная навигация">
+        {navItems.map((item) =>
+          item.dropdown && item.dropdown.length > 0 ? (
+            <!-- Пункт с выпадающим меню -->
+            <div class="relative group">
+              <button
+                class="flex items-center gap-1 text-white text-sm font-semibold tracking-widest uppercase
+                       hover:text-blue-400 transition-colors duration-200 cursor-pointer"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {item.label}
+                <svg class="w-3 h-3 mt-0.5 transition-transform duration-200 group-hover:rotate-180"
+                     fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              <!-- Dropdown -->
+              <div class="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-44
+                          opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                          transition-all duration-200 translate-y-1 group-hover:translate-y-0">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-blue-600 rotate-45 rounded-sm"></div>
+                <ul class="relative bg-blue-600 rounded-lg overflow-hidden shadow-2xl py-1" role="menu">
+                  {item.dropdown.map((sub) => (
+                    <li role="none">
+                      <a
+                        href={sub.href}
+                        role="menuitem"
+                        class="font-body block px-5 py-3 text-white text-sm font-semibold
+                               tracking-widest uppercase hover:bg-blue-500 transition-colors duration-150"
+                      >
+                        {sub.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ) : (
+            <a
+              href={item.href}
+              class="text-white text-sm font-semibold tracking-widest uppercase
+                     hover:text-blue-400 transition-colors duration-200"
+            >
+              {item.label}
+            </a>
+          )
+        )}
+      </nav>
+
+      <!-- Правый блок: телефон + CTA (десктоп) -->
+      <div class="hidden lg:flex items-center gap-5">
+        <a
+          href={`tel:${phoneHref}`}
+          class="text-white/80 text-sm font-semibold hover:text-white transition-colors duration-200 tracking-wide"
+        >
+          {phone}
+        </a>
+        <a
+          href={ctaHref}
+          class="px-5 py-2.5 rounded-xl text-white text-sm font-semibold tracking-wide
+                 border border-white/25 hover:bg-white/10 hover:border-white/40
+                 transition-all duration-200"
+        >
+          {ctaLabel}
+        </a>
+      </div>
+
+      <!-- Мобильная кнопка-бургер -->
+      <button
+        id="mobile-menu-btn"
+        class="lg:hidden flex flex-col gap-1.5 p-2 cursor-pointer"
+        aria-label="Открыть меню"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <span class="block w-6 h-0.5 bg-white transition-all duration-300" id="burger-line-1"></span>
+        <span class="block w-6 h-0.5 bg-white transition-all duration-300" id="burger-line-2"></span>
+        <span class="block w-4 h-0.5 bg-white transition-all duration-300" id="burger-line-3"></span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Мобильное меню -->
+  <div
+    id="mobile-menu"
+    class="lg:hidden hidden bg-slate-900/95 backdrop-blur-md border-t border-white/10"
+    aria-hidden="true"
+  >
+    <nav class="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-1" aria-label="Мобильная навигация">
+      {navItems.map((item, idx) =>
+        item.dropdown && item.dropdown.length > 0 ? (
+          <div>
+            <button
+              class="mob-dropdown-btn w-full flex items-center justify-between py-3
+                     text-white text-sm font-semibold tracking-widest uppercase font-heading
+                     border-b border-white/10"
+              data-target={`mob-sub-${idx}`}
+              aria-expanded="false"
+            >
+              {item.label}
+              <svg class="mob-dropdown-arrow w-4 h-4 transition-transform duration-200"
+                   fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div id={`mob-sub-${idx}`} class="hidden pl-4 flex flex-col">
+              {item.dropdown.map((sub) => (
+                <a href={sub.href}
+                   class="py-2.5 text-blue-300 text-sm font-semibold tracking-widest uppercase
+                          font-heading hover:text-white transition-colors">
+                  {sub.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <a
+            href={item.href}
+            class="py-3 text-white text-sm font-semibold tracking-widest uppercase
+                   font-heading border-b border-white/10 last:border-0"
+          >
+            {item.label}
+          </a>
+        )
+      )}
+
+      <!-- Телефон в мобиле -->
+      <a href={`tel:${phoneHref}`}
+         class="mt-4 py-3 text-blue-300 text-sm font-semibold tracking-wide">
+        {phone}
+      </a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Мобильное меню — бургер
+  const btn  = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const line3 = document.getElementById('burger-line-3');
+
+  btn?.addEventListener('click', () => {
+    const isOpen = !menu?.classList.contains('hidden');
+    menu?.classList.toggle('hidden');
+    menu?.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+    btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+    line3?.classList.toggle('w-6');
+    line3?.classList.toggle('w-4');
+  });
+
+  // Мобильные dropdown-подменю (динамически из Keystatic)
+  document.querySelectorAll<HTMLButtonElement>('.mob-dropdown-btn').forEach((dropBtn) => {
+    const targetId = dropBtn.dataset.target;
+    const sub   = targetId ? document.getElementById(targetId) : null;
+    const arrow = dropBtn.querySelector<SVGElement>('.mob-dropdown-arrow');
+
+    dropBtn.addEventListener('click', () => {
+      sub?.classList.toggle('hidden');
+      arrow?.classList.toggle('rotate-180');
+      const expanded = dropBtn.getAttribute('aria-expanded') === 'true';
+      dropBtn.setAttribute('aria-expanded', String(!expanded));
+    });
+  });
+</script>

@@ -1,0 +1,172 @@
+---
+import { Icon } from "astro-icon/components";
+import logoMain from "../../assets/logo-main.svg";
+import { Image } from "astro:assets";
+
+const nav = [
+    { label: "О компании", href: "/about" },
+    { label: "Вакансии", href: "/about/vacancies" },
+    { label: "Проекты", href: "/projects" },
+    { label: "Аренда техники", href: "/equipment" },
+    { label: "Контакты", href: "/contacts" },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer-root relative overflow-hidden" role="contentinfo">
+    <!-- Верхняя часть -->
+    <div class="footer-top relative z-10 py-16 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                <!-- Логотип + слоган -->
+                <div class="lg:col-span-2">
+                    <a
+                        href="/"
+                        class="flex-shrink-0"
+                        aria-label="ООО Рубеж — на главную"
+                    >
+                        <Image
+                            src={logoMain}
+                            alt="ООО Рубеж — логотип"
+                            width={160}
+                            height={48}
+                            loading="eager"
+                        />
+                    </a>
+
+                    <p
+                        class="text-slate-400 text-sm leading-relaxed max-w-sm mt-4"
+                    >
+                        Дорожно-строительная компания с 2015 года. Собственный
+                        автопарк 60+ единиц. Работаем в Архангельске и
+                        Архангельской области.
+                    </p>
+
+                    <!-- Соцсети -->
+                    <div class="flex gap-3 mt-6">
+                        <a
+                            href="https://vk.com/id865770117"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center
+                      text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/10
+                      transition-all duration-200"
+                            aria-label="ВКонтакте"
+                        >
+                            <Icon name="lucide:link" class="w-4 h-4" />
+                        </a>
+                        <a
+                            href="https://www.avito.ru/profile/items/active/all?s=4"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center
+                      text-slate-400 hover:text-white hover:border-white/30 hover:bg-white/10
+                      transition-all duration-200"
+                            aria-label="Avito"
+                        >
+                            <Icon name="lucide:tag" class="w-4 h-4" />
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Навигация -->
+                <nav aria-label="Навигация в подвале">
+                    <p
+                        class="text-white/50 text-xs font-semibold tracking-widest uppercase mb-4"
+                    >
+                        Страницы
+                    </p>
+                    <ul class="space-y-2.5" role="list">
+                        {
+                            nav.map((link) => (
+                                <li>
+                                    <a
+                                        href={link.href}
+                                        class="text-slate-400 text-sm hover:text-white transition-colors duration-200
+                          hover:translate-x-1 inline-flex items-center gap-1.5 group"
+                                    >
+                                        <span
+                                            class="w-1 h-1 rounded-full bg-brand-light opacity-0 group-hover:opacity-100
+                               transition-opacity duration-200"
+                                            aria-hidden="true"
+                                        />
+                                        {link.label}
+                                    </a>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </nav>
+
+                <!-- Контакты -->
+                <address class="not-italic">
+                    <p
+                        class="text-white/50 text-xs font-semibold tracking-widest uppercase mb-4"
+                    >
+                        Контакты
+                    </p>
+                    <div class="space-y-3">
+                        <div>
+                            <p class="text-slate-500 text-xs mb-0.5">Офис</p>
+                            <a
+                                href="tel:+79118793134"
+                                class="text-slate-300 text-sm hover:text-white transition-colors"
+                            >
+                                8-911-879-31-34
+                            </a>
+                        </div>
+                        <div>
+                            <p class="text-slate-500 text-xs mb-0.5">Email</p>
+                            <a
+                                href="mailto:amdofis@mail.ru"
+                                class="text-slate-300 text-sm hover:text-white transition-colors break-all"
+                            >
+                                amdofis@mail.ru
+                            </a>
+                        </div>
+                        <div>
+                            <p class="text-slate-500 text-xs mb-0.5">Адрес</p>
+                            <p class="text-slate-400 text-sm leading-snug">
+                                Архангельск,<br />ул. Дачная, 61к1
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-slate-500 text-xs mb-0.5">
+                                ИНН / ОГРН
+                            </p>
+                            <p class="text-slate-500 text-xs">
+                                2901259316 / 1152901005630
+                            </p>
+                        </div>
+                    </div>
+                </address>
+            </div>
+        </div>
+    </div>
+
+    <!-- Нижняя полоска -->
+    <div class="relative z-10 py-6">
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8
+                flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500 text-xs"
+        >
+            <p>© {year} ООО «Рубеж». Все права защищены.</p>
+            <div class="flex items-center gap-6">
+                <a
+                    href="/privacy"
+                    class="hover:text-slate-300 transition-colors"
+                    >Политика конфиденциальности</a
+                >
+                <span aria-hidden="true">·</span>
+                <span>Сделано в Архангельске</span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+    .footer-root {
+        background-color: #060b18;
+    }
+</style>

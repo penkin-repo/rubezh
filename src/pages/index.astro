@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/layout/Header.astro";
+import Hero from "../components/home/Hero.astro";
+import Services from "../components/home/Services.astro";
+import Advantages from "../components/home/Advantages.astro";
+import Fleet from "../components/home/Fleet.astro";
+import Projects from "../components/home/Projects.astro";
+import ContactForm from "../components/home/ContactForm.astro";
+import Contacts from "../components/home/Contacts.astro";
+import Footer from "../components/layout/Footer.astro";
+---
+
+<BaseLayout
+	title="ООО Рубеж — Дорожное строительство и аренда спецтехники в Архангельске"
+	description="Дорожно-строительная компания ООО «Рубеж» с 2015 года. Строительство и ремонт дорог, аренда спецтехники, земляные работы в Архангельской области. 11+ лет, 200+ объектов."
+>
+	<Header />
+	<main>
+		<Hero />
+		<Services />
+		<Advantages />
+		<Fleet />
+		<Projects />
+		<ContactForm />
+		<Contacts />
+	</main>
+	<Footer />
+</BaseLayout>

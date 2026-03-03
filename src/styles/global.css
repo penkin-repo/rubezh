@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+/* ====================================================
+   Фирменные цвета ООО «Рубеж»
+   --color-brand-dark  #0257c0 — тёмный синий (основной)
+   --color-brand-light #297fec — светлый синий (акцентный)
+   ==================================================== */
+
+:root {
+  /* Бренд-цвета */
+  --color-brand-dark: #0257c0;
+  --color-brand-light: #297fec;
+
+  /* Градиент кнопки (диагональный) */
+  --gradient-brand: linear-gradient(135deg, var(--color-brand-dark), var(--color-brand-light));
+
+  /* Шрифты */
+  --font-heading: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  --font-body: Inter, system-ui, -apple-system, sans-serif;
+
+  /* Тень на Hero-заголовке */
+  --hero-text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* @theme — Tailwind v4 директива (IDE может показывать warning, это нормально).
+   Все переменные здесь становятся Tailwind-utility-классами: text-brand-dark, bg-adv-blue и т.д. */
+@theme {
+  --font-heading: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  --font-body: Inter, system-ui, -apple-system, sans-serif;
+
+  /* Tailwind utilities для бренд-цветов */
+  --color-brand-dark: #0257c0;
+  --color-brand-light: #297fec;
+
+  /* Акцентные цвета секции Advantages (без inline styles) */
+  --color-adv-blue: #0257c0;
+  --color-adv-green: #059669;
+  --color-adv-violet: #7c3aed;
+  --color-adv-orange: #ea580c;
+  --color-adv-teal: #0f766e;
+}
+
+html {
+  font-family: var(--font-body);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+  color: #ffffff;
+}
+
+/* ====================================================
+   Утилитарные классы
+   ==================================================== */
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* Hero — тень на заголовке */
+.hero-text-shadow {
+  text-shadow: var(--hero-text-shadow);
+}
+
+/* ====================================================
+   Анимации появления Hero-контента
+   ==================================================== */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-title {
+  animation: fadeSlideUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-hero-subtitle {
+  animation: fadeSlideUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+.animate-hero-buttons {
+  animation: fadeSlideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+}
+
+.animate-hero-sub-text {
+  animation: fadeSlideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
+}

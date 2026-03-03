@@ -1,0 +1,171 @@
+---
+import { Image } from "astro:assets";
+import heroImg from "../../assets/hero.jpg";
+import leftHero from "../../assets/left-hero.png";
+import rightHero from "../../assets/right-hero.png";
+import StatsBar from "./StatsBar.astro";
+import Button from "../ui/Button.astro";
+import { createReader } from "@keystatic/core/reader";
+import keystaticConfig from "../../../keystatic.config";
+
+// Читаем контент Hero-секции из Keystatic singleton
+const reader = createReader(process.cwd(), keystaticConfig);
+const heroData = await reader.singletons.hero.read();
+
+// Fallback если файл ещё не создан
+const titleLine1 = heroData?.titleLine1 ?? "Строительство дорог";
+const titleLine2 = heroData?.titleLine2 ?? "и аренда спецтехники";
+const subtitle = heroData?.subtitle ?? "от надёжного подрядчика";
+const description =
+    heroData?.description ??
+    "Выполняем полный комплекс работ в Архангельской области. Собственный парк из 60+ единиц техники.";
+const primaryBtnLabel = heroData?.primaryBtnLabel ?? "Заказать технику";
+const primaryBtnHref = heroData?.primaryBtnHref ?? "/equipment";
+const secondaryBtnLabel = heroData?.secondaryBtnLabel ?? "Рассчитать смету";
+const secondaryBtnHref = heroData?.secondaryBtnHref ?? "/contacts";
+---
+
+<section class="relative flex flex-col pb-[30%] lg:pb-[10%]">
+    <!-- Фоновое изображение -->
+    <div class="absolute inset-0 z-0">
+        <Image
+            src={heroImg}
+            alt="Спецтехника ООО Рубеж на объекте дорожного строительства"
+            widths={[640, 1024, 1440, 1920]}
+            sizes="100vw"
+            loading="eager"
+            quality={85}
+            class="w-full object-cover object-top h-full"
+        />
+    </div>
+
+    <!-- Контент hero -->
+    <div class="relative z-10 flex-1 flex flex-col justify-end pt-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+            <!-- Главный заголовок — анимация появления + параллакс при скролле -->
+            <div
+                class="mb-8 max-w-5xl m-auto mt-100 relative"
+                id="hero-content"
+            >
+                <h1
+                    class="font-heading text-center text-white uppercase leading-none tracking-wide hero-text-shadow animate-hero-title"
+                >
+                    <span
+                        class="block text-4xl sm:text-5xl lg:text-6xl xl:text-7xl mb-1"
+                    >
+                        {titleLine1}
+                    </span>
+                    <span
+                        class="block text-4xl sm:text-5xl lg:text-6xl xl:text-7xl mb-4"
+                    >
+                        {titleLine2}
+                    </span>
+                    <span
+                        class="block font-body text-2xl sm:text-3xl lg:text-4xl xl:text-4xl text-white/90 animate-hero-subtitle"
+                    >
+                        {subtitle}
+                    </span>
+                </h1>
+            </div>
+
+            <!-- CTA кнопки -->
+            <div
+                class="flex flex-wrap gap-4 mb-8 m-auto justify-center animate-hero-buttons"
+            >
+                <Button href={primaryBtnHref} variant="primary">
+                    {primaryBtnLabel}
+                </Button>
+                <Button href={secondaryBtnHref} variant="outline">
+                    {secondaryBtnLabel}
+                </Button>
+            </div>
+
+            <!-- Подзаголовок -->
+            <p
+                class="font-body text-white/85 text-xl sm:text-2xl mb-0 max-w-3xl text-center m-auto animate-hero-sub-text hero-text-shadow"
+            >
+                {description}
+            </p>
+        </div>
+
+        <!-- Блок статистики + декоративные картинки -->
+        <div class="relative mt-12">
+            <!-- Декоративные изображения по бокам (параллакс, разные скорости) -->
+            <div
+                class="absolute left-0 bottom-0 -translate-y-1/10 h-64 w-120 lg:h-240 lg:w-160 pointer-events-none select-none z-10 overflow opacity-50"
+                aria-hidden="true"
+                id="parallax-left"
+                data-speed="0.40"
+            >
+                <Image
+                    src={leftHero}
+                    alt=""
+                    widths={[256, 384]}
+                    sizes="(max-width: 1024px) 192px, 256px"
+                    loading="eager"
+                    quality={80}
+                    class="w-full h-full object-cover object-bottom"
+                />
+            </div>
+            <div
+                class="absolute right-0 bottom-0 -translate-y-1/10 h-64 w-48 lg:h-260 lg:w-160 pointer-events-none select-none z-10 opacity-70"
+                aria-hidden="true"
+                id="parallax-right"
+                data-speed="0.50"
+            >
+                <Image
+                    src={rightHero}
+                    alt=""
+                    widths={[256, 384]}
+                    sizes="(max-width: 1024px) 192px, 256px"
+                    loading="eager"
+                    quality={80}
+                    class="w-full h-full object-cover object-bottom"
+                />
+            </div>
+
+            <!-- Карточки статистики -->
+            <StatsBar />
+        </div>
+    </div>
+</section>
+
+<script>
+    // ====================================================
+    // Параллакс: left-right изображения (разные скорости)
+    // + параллакс заголовка при скролле (медленный дрейф)
+    // ====================================================
+    const leftEl = document.getElementById(
+        "parallax-left",
+    ) as HTMLElement | null;
+    const rightEl = document.getElementById(
+        "parallax-right",
+    ) as HTMLElement | null;
+    const heroContent = document.getElementById(
+        "hero-content",
+    ) as HTMLElement | null;
+
+    // Скорости из data-атрибутов (разные для левого и правого)
+    const leftSpeed = parseFloat(leftEl?.dataset.speed ?? "0.18");
+    const rightSpeed = parseFloat(rightEl?.dataset.speed ?? "0.28");
+    const titleSpeed = 0.08; // медленный параллакс у заголовка
+
+    function onScroll() {
+        const scrollY = window.scrollY;
+
+        // Изображения — поднимаются с разными скоростями
+        if (leftEl)
+            leftEl.style.transform = `translateY(calc(60% + ${-scrollY * leftSpeed}px))`;
+        if (rightEl)
+            rightEl.style.transform = `translateY(calc(60% + ${-scrollY * rightSpeed}px))`;
+
+        // Заголовок — медленный дрейф вверх
+        if (heroContent)
+            heroContent.style.transform = `translateY(${-scrollY * titleSpeed}px)`;
+    }
+
+    // ⚠️ Вызываем СРАЗУ — чтобы картинки стояли на правильной позиции с загрузки
+    // без этого при первом скролле они "прыгают" из своей CSS-позиции
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+</script>

@@ -1,0 +1,31 @@
+---
+import "../styles/global.css";
+
+interface Props {
+    title?: string;
+    description?: string;
+}
+
+const {
+    title = "ООО Рубеж — Дорожное строительство и аренда спецтехники в Архангельске",
+    description = "Дорожно-строительная компания ООО «Рубеж». Строительство дорог, аренда спецтехники, земляные работы в Архангельской области. 11+ лет опыта, 60+ единиц техники.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <!-- Preload hero image для LCP -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+    </head>
+    <body>
+        <slot />
+    </body>
+</html>

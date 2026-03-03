@@ -1,0 +1,318 @@
+---
+import { Image } from "astro:assets";
+import servicesImg from "../../assets/services.png";
+import cogs from "../../assets/cogs.svg";
+
+const services = [
+    {
+        id: "road",
+        title: "Дорожное строительство",
+        desc: "Капитальный ремонт, устройство прочных оснований и дорожное строительство под ключ. Строго по ГОСТ.",
+        link: "/equipment",
+        size: "large", // Большая карточка — занимает 2 колонки
+    },
+    {
+        id: "asphalt",
+        title: "Асфальтирование территорий",
+        desc: "Выполняем асфальтирование дорог (Архангельск), муниципальных трасс, складских площадок, а также благоустройство дворовых проездов и парковок.",
+        link: "/equipment",
+        size: "normal",
+    },
+    {
+        id: "rent",
+        title: "Аренда спецтехники",
+        desc: "Выгодная аренда спецтехники (Архангельск) с опытными экипажами. Самосвалы, экскаваторы, бульдозеры, катки и спецтранспорт готовы к выезду в день обращения.",
+        link: "/equipment",
+        size: "normal",
+    },
+    {
+        id: "earth",
+        title: "Земляные работы",
+        desc: "Котлованы, вывоз грунта, планировка. Работа с мерзлым грунтом любой сложности.",
+        link: "/equipment",
+        size: "large",
+    },
+    {
+        id: "infra",
+        title: "Инженерные коммуникации",
+        desc: "Прокладка водопровода, канализации (НВК) и других сетей. Используем бестраншейный метод (ГНБ) для сохранения ландшафта и дорожного покрытия.",
+        link: "/equipment",
+        size: "large",
+    },
+] as const;
+---
+
+<section class="services-section relative bg-white text-slate-900 z-10">
+    <!-- Зубчатый переход сверху — cogs.svg repeat-x -->
+    <div
+        class="services-teeth"
+        style={`background-image: url(${cogs.src})`}
+        aria-hidden="true"
+    >
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-32">
+        <!-- Заголовок секции -->
+        <div class="text-center mb-14">
+            <div class="flex items-center gap-3 mb-4 justify-center">
+                <div
+                    class="w-2 h-2 bg-brand-dark rounded-full"
+                    aria-hidden="true"
+                >
+                </div>
+                <span
+                    class="text-sm font-bold tracking-widest uppercase text-brand-dark"
+                    >Услуги</span
+                >
+            </div>
+            <h2
+                class="font-heading text-slate-900 uppercase text-4xl sm:text-5xl lg:text-6xl leading-none tracking-wide"
+            >
+                Основные виды<br />деятельности
+            </h2>
+            <p class="text-lg text-slate-600 mt-4">
+                Полный цикл работ от проектирования до сдачи объекта в
+                эксплуатацию
+            </p>
+        </div>
+
+        <!-- Bento Box сетка -->
+        <div class="bento-grid">
+            <!-- Большая карточка (дорожное строительство) — 2 колонки -->
+            <div class="service-card bento-large group" data-service="road">
+                <Image
+                    src={servicesImg}
+                    alt="Дорожное строительство"
+                    widths={[640, 900, 1200]}
+                    sizes="(max-width: 768px) 100vw, 60vw"
+                    loading="lazy"
+                    quality={85}
+                    class="service-card__img"
+                />
+                <div class="service-card__overlay"></div>
+                <div class="service-card__content">
+                    <h3 class="service-card__title">
+                        Дорожное<br />строительство
+                    </h3>
+                    <p class="service-card__desc">
+                        Капитальный ремонт, устройство прочных оснований и
+                        дорожное строительство под ключ. Строго по ГОСТ.
+                    </p>
+                    <a href="/equipment" class="service-card__link">
+                        Подробнее →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Малые карточки -->
+            {
+                services.slice(1).map((s) => (
+                    <div class="service-card group" data-service={s.id}>
+                        <Image
+                            src={servicesImg}
+                            alt={s.title}
+                            widths={[400, 600]}
+                            sizes="(max-width: 768px) 100vw, 30vw"
+                            loading="lazy"
+                            quality={80}
+                            class="service-card__img"
+                        />
+                        <div class="service-card__overlay" />
+                        <div class="service-card__content">
+                            <h3 class="service-card__title">{s.title}</h3>
+                            <p class="service-card__desc">{s.desc}</p>
+                            <a href={s.link} class="service-card__link">
+                                Подробнее →
+                            </a>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+    .services-section {
+        background-image:
+            linear-gradient(#00000010 1px, #0000 1px),
+            linear-gradient(90deg, #00000010 1px, #0000 1px);
+        background-size: 60px 60px;
+        background-color: #f7f8fa;
+    }
+
+    /* ====================================================
+     Зубчатый переход — повторяющийся SVG-тайл cogs.svg
+     Каждый зуб = один тайл (трапеция, белый на прозрачном)
+     Регулировка: меняй --tooth-w (ширина одного зуба)
+     ==================================================== */
+    .services-teeth {
+        --tooth-w: 230px; /* ← ширина одного зуба */
+        --tooth-h: 88px; /* ← высота зубьев */
+
+        width: 100%;
+        height: var(--tooth-h);
+
+        /* Прозрачный фон — сквозь него виден Hero */
+        background-color: transparent;
+
+        /* SVG-зубья повторяются по горизонтали */
+        /* background-image: url("/cogs.svg"); */
+        background-repeat: repeat-x;
+        background-position: top left;
+        background-size: var(--tooth-w) var(--tooth-h);
+
+        position: absolute;
+        top: 30px;
+        left: 0;
+        right: 0;
+        transform: translateY(-100%);
+        z-index: 20;
+        pointer-events: none;
+    }
+
+    /* ====================================================
+     Bento Box сетка
+     ==================================================== */
+    .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto auto;
+        gap: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .bento-grid {
+            grid-template-columns: 1fr;
+        }
+        .bento-large {
+            grid-column: span 1 !important;
+        }
+    }
+
+    .bento-large {
+        grid-column: span 2;
+        min-height: 420px;
+    }
+
+    /* ====================================================
+     Карточка услуги
+     ==================================================== */
+    .service-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1rem;
+        min-height: 400px;
+        cursor: pointer;
+    }
+
+    /* Фоновое изображение */
+    .service-card__img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Zoom при наведении */
+    .service-card:hover .service-card__img {
+        transform: scale(1.07);
+    }
+
+    /* Градиентный оверлей */
+    .service-card__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to top,
+            rgba(2, 10, 30, 0.92) 0%,
+            rgba(2, 10, 30, 0.45) 50%,
+            rgba(2, 10, 30, 0.1) 100%
+        );
+        transition: background 0.35s ease;
+    }
+
+    /* При наведении усиливаем оверлей брендовым цветом */
+    .service-card:hover .service-card__overlay {
+        background: linear-gradient(
+            to top,
+            rgba(2, 87, 192, 0.92) 0%,
+            rgba(2, 87, 192, 0.5) 55%,
+            rgba(2, 87, 192, 0.12) 100%
+        );
+    }
+
+    /* Контент внутри карточки */
+    .service-card__content {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 1.75rem;
+    }
+
+    .service-card__title {
+        font-family: var(--font-heading);
+        font-size: 1.75rem;
+        line-height: 1.1;
+        text-transform: uppercase;
+        color: #ffffff;
+        margin: 0 0 0.5rem;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .bento-large .service-card__title {
+        font-size: 2.5rem;
+    }
+
+    /* Описание — скрыто по умолчанию, выезжает при hover */
+    .service-card__desc {
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.88);
+        line-height: 1.55;
+        margin: 0 0 0.875rem;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(10px);
+        transition:
+            max-height 0.8s ease,
+            opacity 0.35s ease 0.05s,
+            transform 0.35s ease 0.05s;
+    }
+
+    .service-card:hover .service-card__desc {
+        max-height: 8rem;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Ссылка «Подробнее» */
+    .service-card__link {
+        font-family: var(--font-body);
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #ffffff;
+        text-decoration: none;
+        opacity: 0;
+        transform: translateY(8px);
+        transition:
+            opacity 0.3s ease 0.1s,
+            transform 0.3s ease 0.1s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .service-card:hover .service-card__link {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
