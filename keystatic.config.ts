@@ -3,14 +3,9 @@ import { config, fields, collection, singleton } from '@keystatic/core';
 
 export default config({
     storage: {
-        kind: 'cloud',
+        kind: 'github',
+        repo: 'afishi29/rubezh',
     },
-    cloud: {
-        project: 'afishi29/rubezh',
-    },
-    // storage: {
-    //     kind: 'local',
-    // },
 
     // ── Singletons ────────────────────────────────────────────────────────
     singletons: {
