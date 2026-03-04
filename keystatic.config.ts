@@ -86,17 +86,17 @@ export default config({
     },
 
     // ── Collections ───────────────────────────────────────────────────────
-    collections: {
-        equipment: collection({
-            label: '🚛 Спецтехника',
-            slugField: 'title',
-            path: 'src/content/equipment/*/',
-            format: { contentField: 'content' },
-            schema: {
-                title: fields.slug({ name: { label: 'Название' } }),
-                description: fields.text({ label: 'Краткое описание', multiline: true }),
-                content: fields.markdoc({ label: 'Подробное описание' }),
-            },
-        }),
-    },
+    // collections: {
+    //     equipment: collection({
+    //         label: '🚛 Спецтехника',
+    //         slugField: 'title',
+    //         path: 'src/content/equipment/*/',
+    //         format: { contentField: 'content' },
+    //         schema: {
+    //             title: fields.slug({ name: { label: 'Название' } }),
+    //             description: fields.text({ label: 'Краткое описание', multiline: true }),
+    //             content: fields.markdoc({ label: 'Подробное описание' }),
+    //         },
+    //     }),
+    // },
 });
