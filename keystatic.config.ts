@@ -3,11 +3,10 @@ import { config, fields, collection, singleton } from '@keystatic/core';
 
 export default config({
     storage: {
-        kind: 'github',
-        repo: {
-            owner: 'penkin-repo',
-            name: 'rubezh',
-        },
+        kind: 'cloud',
+    },
+    cloud: {
+        project: 'afishi29/rubezh',
     },
 
     // ── Singletons ────────────────────────────────────────────────────────
