@@ -13,7 +13,7 @@
 
 **Клиент:** ООО «Рубеж» — дорожно-строительная компания, г. Архангельск  
 **Тип сайта:** Корпоративный сайт с каталогом техники и формой заявок  
-**Стек:** Astro JS + Keystatic CMS + pnpm + Tailwind CSS  
+**Стек:** Astro JS + Sanity CMS + pnpm + Tailwind CSS  
 **Корень проекта:** `c:\DEV\2026\RUBEZH\`
 
 ---
@@ -49,7 +49,7 @@
 ## ⚙️ Технический стек
 
 - **Фреймворк:** Astro JS (SSG — статическая генерация)
-- **CMS:** Keystatic (локальное хранение, файлы в `src/content/`)
+- **CMS:** Sanity (embedded studio `/studio`, API `sanity.io`)
 - **Стили:** Tailwind CSS
 - **Пакетный менеджер:** pnpm
 - **Язык:** TypeScript
@@ -60,16 +60,18 @@
 
 ### Текущие зависимости (package.json):
 - `astro` — основной фреймворк
-- `@keystatic/core` + `@keystatic/astro` — CMS
+- `sanity`, `@sanity/client` — CMS
 - `tailwindcss` — стили (через Tailwind v4 / Vite plugin)
 - `@tailwindcss/vite` — интеграция Tailwind с Astro/Vite
 
 ---
 
-## 🗂 Keystatic — Коллекции
+## 🗂 Sanity — Схемы
 
-На момент старта в `keystatic.config.ts` есть:
-- `equipment` — Спецтехника (title, description, content)
+На момент переезда в `src/sanity/schemas/` уже готовы:
+- `hero` (singleton главной страницы)
+- `header` (singleton шапки сайта с навигацией)
+- `equipment` — Спецтехника (title, description, content) (надо перенести)
 
 **Нужно добавить:**
 - `projects` — Проекты (название, slug, категория, год, описание, изображения)
@@ -90,7 +92,7 @@ RUBEZH/
 │   └── styles/          — глобальные стили (CSS/Tailwind)
 ├── start/               — ТЗ клиента, план разработки, результаты шагов 1–4
 ├── public/              — статика (favicon, robots.txt и др.)
-├── keystatic.config.ts  — конфиг CMS
+├── sanity.config.ts     — конфиг Sanity Studio и CMS
 ├── astro.config.mjs     — конфиг Astro
 ├── package.json
 ├── MASTER-PROMPT.MD     — краткий контекст (3 строки)
@@ -137,7 +139,7 @@ RUBEZH/
 | 3 | Структура и архитектура сайта | ✅ Готово |
 | 4 | Контент и копирайтинг | ✅ Готово |
 | 5 | Дизайн и UI/UX | ⬜ В очереди |
-| 6 | Разработка на Astro + Keystatic | ⬜ В очереди |
+| 6 | Разработка на Astro + Sanity CMS | ⬜ В очереди |
 | 7 | Тестирование и запуск | ⬜ В очереди |
 
 ---
@@ -156,7 +158,7 @@ RUBEZH/
 
 ## 🛠 Tech Stack & Versions
 * **Astro:** [версия]
-* **Keystatic:** [версия]
+* **Sanity:** [версия]
 * **Tailwind CSS:** [версия]
 * **pnpm:** [версия]
 
@@ -170,7 +172,7 @@ RUBEZH/
 ## 📂 Key Files Map
 * `src/pages/index.astro` — Главная страница
 * `src/layouts/BaseLayout.astro` — Базовый layout
-* `keystatic.config.ts` — Конфигурация CMS
+* `sanity.config.ts` — Конфигурация CMS
 * `src/components/` — Компоненты
 * `start/` — ТЗ и материалы от клиента
 ```
@@ -196,7 +198,7 @@ RUBEZH/
 
 ### Компоненты — только Astro
 - **Все компоненты** пишутся как `.astro` файлы — никакого React/Vue/Svelte на страницах сайта.
-- **React используется ТОЛЬКО** внутри Keystatic CMS (уже подключён в `astro.config.mjs` через `@astrojs/react`).
+- **React используется ТОЛЬКО** внутри Sanity Studio (роут `/studio`), интегрированного в Astro проект. На самом сайте — только Astro.
 - Каждая секция страницы = отдельный компонент в `src/components/`.
 - Пример декомпозиции главной страницы:
   ```
@@ -280,7 +282,7 @@ const { title, subtitle } = Astro.props;
 - ❌ `<script>` теги с бизнес-логикой внутри компонентов (кроме минимального JS для интерактива: меню, галерея)
 - ❌ `useState`, `useEffect` и любой React в компонентах страниц
 - ❌ Inline стили (`style="color: red"`)
-- ❌ Хардкод текстов прямо в компоненте без Props — тексты должны приходить из `start/` material или Keystatic
+- ❌ Хардкод текстов прямо в компоненте без Props — тексты должны приходить из `start/` material или Sanity CMS
 - ❌ `<img>` тег — только `<Image />` из `astro:assets`
 
 ---
@@ -363,14 +365,14 @@ const { title, subtitle } = Astro.props;
 
 ```
 / — Главная
-/about — О компании
-/about/vacancies — Вакансии
-/projects — Проекты
-/equipment — Аренда спецтехники
-/equipment/samosvaly — Самосвалы
-/equipment/spetstekhnika — Спецтехника
-/equipment/ekskavatory — Экскаваторы
-/equipment/buldozery — Бульдозеры
-/equipment/katki — Катки
-/contacts — Контакты
+/o-kompanii — О компании
+/vakansii — Вакансии
+/proekty — Проекты
+/arenda-spetstehniki — Аренда спецтехники
+/arenda-spetstehniki/samosvaly — Самосвалы
+/arenda-spetstehniki/spetstekhnika — Спецтехника
+/arenda-spetstehniki/ekskavatory — Экскаваторы
+/arenda-spetstehniki/buldozery — Бульдозеры
+/arenda-spetstehniki/katki — Катки
+/kontakty — Контакты
 ```

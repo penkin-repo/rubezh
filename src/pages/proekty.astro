@@ -1,0 +1,144 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import ContactForm from "../components/home/ContactForm.astro";
+import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+const title = "Выполненные проекты (Архангельск) — ООО «Рубеж»";
+const description = "Фотогалерея выполненных работ компании ООО «Рубеж» по дорожному строительству, асфальтированию, земляным работам и аренде спецтехники.";
+
+// Получаем ВСЕ проекты (без ограничения в 4 шт) и сортируем по order
+const allProjects = await getCollection('projects');
+const projects = allProjects.sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title={title} description={description}>
+    <Header />
+    
+    <PageHeader 
+        title="Наши"
+        highlight="проекты"
+        subtitle="Портфолио"
+    >
+        <p class="text-slate-400 text-lg md:text-xl leading-relaxed mb-4">
+            В этом разделе представлены фотографии с объектов, на которых работала наша техника и бригады. Вы можете подробно ознакомиться с качеством выполнения работ.
+        </p>
+    </PageHeader>
+
+    <section class="py-16 bg-zinc-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Сетка 3 колонки на Desktop, 2 на Tablet -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {projects.map((project) => (
+                <div class="project-gallery">
+                  <!-- Главная обложка -->
+                  <a
+                    href={project.data.images[0].src}
+                    data-pswp-width={project.data.images[0].width}
+                    data-pswp-height={project.data.images[0].height}
+                    target="_blank"
+                    class="project-item group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-zoom-in text-left block"
+                    aria-label={`Открыть проект: ${project.data.title}`}
+                  >
+                    <!-- Фото -->
+                    <Image
+                      src={project.data.images[0]}
+                      alt={project.data.title}
+                      widths={[400, 700]}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      loading="lazy"
+                      quality={85}
+                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+
+                    <!-- Overlay (Always visible) -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6">
+                      <div class="flex items-start justify-between gap-4">
+                        <div>
+                          <h3 class="font-heading text-white uppercase text-xl leading-tight">
+                            {project.data.title}
+                          </h3>
+                          <p class="text-slate-300 text-sm mt-1 flex items-center gap-1">
+                            <Icon name="lucide:map-pin" class="w-3.5 h-3.5" />
+                            {project.data.location}
+                          </p>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center
+                                    border border-white/30 flex-shrink-0 mt-auto">
+                          <Icon name="lucide:camera" class="w-5 h-5 text-white" />
+                          <span class="absolute -top-2 -right-2 bg-brand-light text-brand-dark text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                            {project.data.images.length}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+
+                  <!-- Скрытые фотографии проекта для галереи -->
+                  {project.data.images.slice(1).map((img) => (
+                    <a
+                      href={img.src}
+                      data-pswp-width={img.width}
+                      data-pswp-height={img.height}
+                      target="_blank"
+                      class="hidden"
+                    >
+                      <Image 
+                        src={img} 
+                        alt={`${project.data.title} фото`} 
+                        width={img.width > 1200 ? 1200 : img.width}
+                        loading="lazy" 
+                        quality={80} 
+                      />
+                    </a>
+                  ))}
+                </div>
+              ))}
+            </div>
+        </div>
+    </section>
+
+    <!-- Форма в конце -->
+    <ContactForm />
+
+    <Footer />
+</BaseLayout>
+
+<style>
+  /* Кастомизация PhotoSwipe под стилистику сайта */
+  :global(.pswp__bg) {
+    background: rgba(0, 0, 0, 0.9) !important;
+    backdrop-filter: blur(8px);
+  }
+  :global(.pswp__top-bar) {
+    background: transparent !important;
+  }
+  :global(.pswp__counter) {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 14px;
+    letter-spacing: 0.05em;
+  }
+</style>
+
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  import 'photoswipe/style.css';
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '.project-gallery',
+    children: 'a',
+    pswpModule: () => import('photoswipe'),
+    
+    // UI опции 2026
+    bgOpacity: 0.9,
+    padding: { top: 20, bottom: 20, left: 20, right: 20 },
+    wheelToZoom: true,
+    showHideAnimationType: 'zoom',
+  });
+  
+  lightbox.init();
+</script>

@@ -1,23 +1,37 @@
 # Project Status: RUBEZH — ООО «Рубеж» Корпоративный сайт
 
-**Last Updated:** 2026-03-03 01:15 (UTC+03:00)
-**Current Phase:** Фаза 6 — Шаг 6.9: Главная страница ЗАВЕРШЕНА ✅
+**Last Updated:** 2026-03-17 09:15 (UTC+03:00)
+**Current Phase:** Фаза 6 — Разработка на Astro + Sanity CMS 🚧
 
 ## 🚀 Active Context
-* **Current Task:** Все блоки главной сделаны: Hero, Services, Advantages, Fleet (Swiper), Projects (lightbox), ContactForm (Google Sheets), Contacts (Яндекс.Карта), Footer
-* **Next Step:** Внутренние страницы (/about, /equipment, /projects, /contacts) + Keystatic коллекции
+* **Current Task:** Все блоки главной сделаны. Создана страница `/kontakty` (Яндекс Карты, данные, форма), навигация сайта переведена на транслит-пути: `/o-kompanii`, `/vakansii`, `/proekty`, `/arenda-spetstehniki`, `/kontakty` для лучшей индексации в Яндексе.
+* **Next Step:** Каталог спецтехники (`/arenda-spetstehniki`) + Sanity схемы (projects, vacancies)
 
 ## 🛠 Tech Stack & Versions
 * **Astro:** (установлен, см. package.json)
-* **Keystatic:** @keystatic/core + @keystatic/astro
+* **Sanity:** `sanity` + `@sanity/client`
 * **Tailwind CSS:** v4 (через @tailwindcss/vite)
 * **pnpm:** менеджер пакетов
 * **TypeScript:** yes
 
 ## 🐛 Known Bugs / Issues
-* [ ] [Low] `keystatic.config.ts` содержит только коллекцию `equipment` — нужно добавить `projects`, `vacancies` и singletons
+* [ ] [Low] В `src/sanity/schemas/` добавлены только `hero` и `header` — нужно перенести/добавить `equipment`, `projects`, `vacancies` и singletons для внутренних страниц
 
 ## 📝 Recent Changes (Changelog)
+
+### Миграция на Sanity (завершено)
+* [2026-03-05/06] Удалён Keystatic, установлен Sanity CMS
+* [2026-03-05/06] Настроен роут `/studio` для встроенной Sanity Studio в Astro (hybrid output)
+* [2026-03-05/06] Созданы схемы `hero.ts` и `header.ts`, компоненты `Hero.astro` и `Header.astro` переведены на использование `@sanity/client`
+* [2026-03-05/06] Написан и выполнен скрипт миграции `seed-sanity.mjs` для переноса статического контента из кода в Sanity
+
+### Основные фичи и UI
+* [2026-03-17] Проекты переведены на Astro Content Collections (`src/content/projects/*.md`). Убраны все моки и упоминания Keystatic. Скрытые фото галереи PhotoSwipe теперь оптимизируются компонентом `<Image>`.
+* [2026-03-17] Создана полноценная отдельная страница `/proekty` с выводом всех проектов из MD-файлов в виде фотогалереи (PhotoSwipe).
+* [2026-03-17] Создан переиспользуемый компонент `PageHeader.astro` для унификации шапок внутренних страниц (тёмный фон + сетка).
+* [2026-03-17] Добавлено модальное окно `ServiceModal.astro` для карточек услуг (тег dialog, формат статьи, нативный тег video вместо iframe).
+* [2026-03-17] Перевод всех роутов навигации в транслит (например, `/contacts` -> `/kontakty`, `/projects` -> `/proekty`).
+* [2026-03-17] Страница `/kontakty` обновлена: добавлен `PageHeader`, карта переведена на lazy load, реквизиты сделаны кнопкой скачивания.
 
 ### Подготовительные фазы (до старта кода)
 * [2026-03-02] Инициализирован проект Astro JS + Keystatic + Tailwind CSS + pnpm
@@ -46,7 +60,7 @@
 * [До 2026-03-02] Шаг 4.4 — Каталог техники: `start/Шаг 4.4 Контент для каталога спецтехники.md`
 * [До 2026-03-02] Шаг 4.5/4.6 — «Проекты» и «Контакты»: `start/Шаг 4.5 4.6 Страница Проекты.md`
 
-### Фаза 6: Разработка на Astro + Keystatic 🚧
+### Фаза 6: Разработка на Astro + Sanity CMS 🚧
 * [2026-03-02] `PROJECT_LOG_HOW.md` дополнен правилами написания кода (Astro-компоненты, запрет React на страницах, Astro Image с widths/sizes, Impact/Inter шрифты)
 * [2026-03-02] `astro.config.mjs` — убран `@astrojs/node` adapter (не установлен), mode=static для dev
 * [2026-03-02] `src/styles/global.css` — CSS-переменные шрифтов (Impact/Inter), базовые стили Tailwind v4
@@ -59,8 +73,8 @@
 * `start/Техническое задание №1.md` — Первичное ТЗ клиента
 * `start/Техническое задание №2.md` — Расширенное ТЗ (тексты, вся техника, реквизиты)
 * `start/plan.md` — Полный план разработки (Фазы 1–7 с промтами)
-* `keystatic.config.ts` — Конфигурация CMS (пока только `equipment`)
-* `astro.config.mjs` — Конфигурация Astro (SSG, Tailwind v4, React только для Keystatic)
+* `sanity.config.ts` — Конфигурация Sanity Studio (embedded)
+* `astro.config.mjs` — Конфигурация Astro (SSG + hybrid роут для Studio, Tailwind v4)
 * `src/styles/global.css` — Глобальные стили (Impact/Inter переменные, базовые настройки)
 * `src/layouts/BaseLayout.astro` — Базовый layout (SEO, lang=ru, global.css)
 * `src/components/layout/Header.astro` — Header + dropdown меню

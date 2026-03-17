@@ -5,14 +5,12 @@ import leftHero from "../../assets/left-hero.png";
 import rightHero from "../../assets/right-hero.png";
 import StatsBar from "./StatsBar.astro";
 import Button from "../ui/Button.astro";
-import { createReader } from "@keystatic/core/reader";
-import keystaticConfig from "../../../keystatic.config";
+import { client } from "../../sanity/client";
 
-// Читаем контент Hero-секции из Keystatic singleton
-const reader = createReader(process.cwd(), keystaticConfig);
-const heroData = await reader.singletons.hero.read();
+// Читаем контент Hero-секции из Sanity
+const heroData = await client.fetch(`*[_type == "hero" && _id == "hero"][0]`);
 
-// Fallback если файл ещё не создан
+// Fallback если документ ещё не создан в Studio
 const titleLine1 = heroData?.titleLine1 ?? "Строительство дорог";
 const titleLine2 = heroData?.titleLine2 ?? "и аренда спецтехники";
 const subtitle = heroData?.subtitle ?? "от надёжного подрядчика";
@@ -75,9 +73,9 @@ const secondaryBtnHref = heroData?.secondaryBtnHref ?? "/contacts";
                 <Button href={primaryBtnHref} variant="primary">
                     {primaryBtnLabel}
                 </Button>
-                <Button href={secondaryBtnHref} variant="outline">
+                <!-- <Button href={secondaryBtnHref} variant="outline">
                     {secondaryBtnLabel}
-                </Button>
+                </Button> -->
             </div>
 
             <!-- Подзаголовок -->

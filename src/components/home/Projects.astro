@@ -1,15 +1,10 @@
 ---
 import { Icon } from 'astro-icon/components';
 import { Image } from 'astro:assets';
-import placeholder from '../../assets/services.png';
+import { getCollection } from 'astro:content';
 
-// 4 заглушка-проекта (будут заменены реальными фото через Keystatic)
-const projects = [
-  { id: 1, title: 'Ремонт муниципальной дороги', category: 'Дорожное строительство', location: 'Архангельск' },
-  { id: 2, title: 'Благоустройство дворовой территории', category: 'Асфальтирование', location: 'Северодвинск' },
-  { id: 3, title: 'Прокладка коммуникаций ГНБ', category: 'Инженерные сети', location: 'Архангельская обл.' },
-  { id: 4, title: 'Земляные работы на объекте', category: 'Земляные работы', location: 'Архангельск' },
-] as const;
+const allProjects = await getCollection('projects');
+const projects = allProjects.sort((a, b) => a.data.order - b.data.order).slice(0, 4);
 ---
 
 <section class="py-24 bg-zinc-100" aria-labelledby="projects-heading">
@@ -38,48 +33,69 @@ const projects = [
     <!-- Сетка 2×2 -->
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {projects.map((project) => (
-        <button
-          class="project-item group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-zoom-in text-left"
-          data-id={project.id}
-          data-title={project.title}
-          data-category={project.category}
-          data-location={project.location}
-          aria-label={`Открыть проект: ${project.title}`}
-        >
-          <!-- Фото -->
-          <Image
-            src={placeholder}
-            alt={project.title}
-            widths={[400, 700, 900]}
-            sizes="(max-width: 640px) 100vw, 50vw"
-            loading="lazy"
-            quality={85}
-            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-          />
+        <div class="project-gallery">
+          <!-- Главная обложка -->
+          <a
+            href={project.data.images[0].src}
+            data-pswp-width={project.data.images[0].width}
+            data-pswp-height={project.data.images[0].height}
+            target="_blank"
+            class="project-item group relative overflow-hidden rounded-2xl aspect-[4/3] cursor-zoom-in text-left block"
+            aria-label={`Открыть проект: ${project.data.title}`}
+          >
+            <!-- Фото -->
+            <Image
+              src={project.data.images[0]}
+              alt={project.data.title}
+              widths={[400, 700, 900]}
+              sizes="(max-width: 640px) 100vw, 50vw"
+              loading="lazy"
+              quality={85}
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
 
-          <!-- Overlay -->
-          <div class="project-overlay absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent
-                      opacity-0 group-hover:opacity-100 transition-opacity duration-400 flex flex-col justify-end p-6">
-            <div class="flex items-start justify-between">
-              <div>
-                <span class="text-brand-light text-xs font-semibold tracking-widest uppercase block mb-1">
-                  {project.category}
-                </span>
-                <h3 class="font-heading text-white uppercase text-xl lg:text-2xl leading-tight">
-                  {project.title}
-                </h3>
-                <p class="text-slate-300 text-sm mt-1 flex items-center gap-1">
-                  <Icon name="lucide:map-pin" class="w-3.5 h-3.5" />
-                  {project.location}
-                </p>
-              </div>
-              <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center
-                          border border-white/30 flex-shrink-0 mt-auto">
-                <Icon name="lucide:zoom-in" class="w-5 h-5 text-white" />
+            <!-- Overlay (Always visible) -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h3 class="font-heading text-white uppercase text-xl lg:text-2xl leading-tight">
+                    {project.data.title}
+                  </h3>
+                  <p class="text-slate-300 text-sm mt-1 flex items-center gap-1">
+                    <Icon name="lucide:map-pin" class="w-3.5 h-3.5" />
+                    {project.data.location}
+                  </p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center
+                            border border-white/30 flex-shrink-0 mt-auto">
+                  <Icon name="lucide:camera" class="w-5 h-5 text-white" />
+                  <span class="absolute -top-2 -right-2 bg-brand-light text-brand-dark text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                    {project.data.images.length}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        </button>
+          </a>
+
+          <!-- Скрытые фотографии проекта для галереи -->
+          {project.data.images.slice(1).map((img) => (
+            <a
+              href={img.src}
+              data-pswp-width={img.width}
+              data-pswp-height={img.height}
+              target="_blank"
+              class="hidden"
+            >
+              <Image 
+                src={img} 
+                alt={`${project.data.title} фото`} 
+                width={img.width > 1200 ? 1200 : img.width}
+                loading="lazy" 
+                quality={80} 
+              />
+            </a>
+          ))}
+        </div>
       ))}
     </div>
 
@@ -95,85 +111,37 @@ const projects = [
   </div>
 </section>
 
-<!-- Native Lightbox -->
-<dialog id="project-lightbox" class="lightbox-dialog p-0 max-w-4xl w-full bg-transparent">
-  <div class="lightbox-inner relative bg-zinc-900 rounded-2xl overflow-hidden shadow-2xl">
-    <button
-      id="lightbox-close"
-      class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm
-             border border-white/20 flex items-center justify-center text-white
-             hover:bg-white/20 transition-colors"
-      aria-label="Закрыть"
-    >
-      <Icon name="lucide:x" class="w-5 h-5" />
-    </button>
-
-    <Image
-      src={placeholder}
-      alt=""
-      widths={[800, 1200]}
-      sizes="90vw"
-      loading="lazy"
-      quality={90}
-      id="lightbox-img"
-      class="w-full aspect-video object-cover"
-    />
-    <div class="p-6">
-      <p id="lightbox-category" class="text-brand-light text-xs font-semibold tracking-widest uppercase mb-1"></p>
-      <h3 id="lightbox-title" class="font-heading text-white uppercase text-2xl leading-tight"></h3>
-      <p id="lightbox-location" class="text-slate-400 text-sm mt-1 flex items-center gap-1.5">
-        <Icon name="lucide:map-pin" class="w-3.5 h-3.5" />
-        <span></span>
-      </p>
-    </div>
-  </div>
-</dialog>
-
 <style>
-  /* Lightbox dialog стили — нельзя через Tailwind (нет утилит ::backdrop) */
-  .lightbox-dialog {
-    border: none;
-    border-radius: 1rem;
-    background: transparent;
-    max-height: 90vh;
-    overflow: hidden;
+  /* Кастомизация PhotoSwipe под стилистику сайта */
+  :global(.pswp__bg) {
+    background: rgba(0, 0, 0, 0.9) !important;
+    backdrop-filter: blur(8px);
   }
-  .lightbox-dialog::backdrop {
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(4px);
+  :global(.pswp__top-bar) {
+    background: transparent !important;
   }
-  .lightbox-dialog[open] {
-    display: block;
-    animation: lightbox-in 0.3s ease both;
-  }
-  @keyframes lightbox-in {
-    from { opacity: 0; transform: scale(0.96); }
-    to   { opacity: 1; transform: scale(1); }
-  }
-
-  .project-overlay {
-    transition: opacity 0.35s ease;
+  :global(.pswp__counter) {
+    font-family: var(--font-body, system-ui, sans-serif);
+    font-size: 14px;
+    letter-spacing: 0.05em;
   }
 </style>
 
 <script>
-  const dialog   = document.getElementById('project-lightbox') as HTMLDialogElement;
-  const closeBtn = document.getElementById('lightbox-close');
-  const titleEl  = document.getElementById('lightbox-title');
-  const catEl    = document.getElementById('lightbox-category');
-  const locEl    = document.getElementById('lightbox-location')?.querySelector('span');
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  import 'photoswipe/style.css';
 
-  // Открытие по клику на карточку
-  document.querySelectorAll<HTMLElement>('.project-item').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      if (titleEl) titleEl.textContent = btn.dataset.title ?? '';
-      if (catEl)   catEl.textContent   = btn.dataset.category ?? '';
-      if (locEl)   locEl.textContent   = btn.dataset.location ?? '';
-      dialog?.showModal();
-    });
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '.project-gallery',
+    children: 'a',
+    pswpModule: () => import('photoswipe'),
+    
+    // UI опции 2026
+    bgOpacity: 0.9,
+    padding: { top: 20, bottom: 20, left: 20, right: 20 },
+    wheelToZoom: true,
+    showHideAnimationType: 'zoom',
   });
-
-  // Закрытие
-  closeBtn?.addEventListener('click', () => dialog?.close());
-  dialog?.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+  
+  lightbox.init();
 </script>

@@ -1,0 +1,30 @@
+---
+export const prerender = false;
+import SanityStudio from "../../components/SanityStudio";
+---
+
+<!doctype html>
+<html lang="ru" style="margin:0;padding:0;height:100%;">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Рубеж — CMS Studio</title>
+        <meta name="robots" content="noindex,nofollow" />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+            }
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body style="height:100%">
+        <SanityStudio client:only="react" />
+    </body>
+</html>

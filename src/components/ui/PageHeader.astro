@@ -1,0 +1,40 @@
+---
+// src/components/ui/PageHeader.astro
+interface Props {
+  title: string;
+  subtitle: string;
+  highlight?: string; // Слово для выделения синим цветом, если нужно
+}
+
+const { title, subtitle, highlight } = Astro.props;
+---
+
+<section class="pt-32 pb-16 md:pt-40 md:pb-24 bg-slate-900 relative overflow-hidden page-header-section">
+  <!-- Фоновая сетка как в автопарке -->
+  <div class="absolute inset-0 pointer-events-none header-bg-grid" aria-hidden="true"></div>
+  
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="max-w-3xl">
+          <div class="flex items-center gap-3 mb-6">
+              <div class="w-2 h-2 bg-brand-light rounded-full"></div>
+              <span class="text-xs font-bold tracking-widest uppercase text-brand-light">{subtitle}</span>
+          </div>
+          <h1 class="font-heading text-5xl md:text-6xl lg:text-7xl xl:text-8xl uppercase text-white mb-8 leading-none">
+              {title} {highlight && <span class="text-brand-light">{highlight}</span>}
+          </h1>
+          <slot />
+      </div>
+  </div>
+</section>
+
+<style>
+  .page-header-section {
+    background-color: #080e1c;
+  }
+  .header-bg-grid {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+</style>

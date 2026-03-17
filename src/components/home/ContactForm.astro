@@ -41,7 +41,7 @@ import { Icon } from "astro-icon/components";
 
                 <!-- Быстрые контакты -->
                 <div class="space-y-3">
-                    <a
+                    <!-- <a
                         href="tel:+79118793134"
                         class="flex items-center gap-3 text-white hover:text-white/80 transition-colors group"
                     >
@@ -52,7 +52,7 @@ import { Icon } from "astro-icon/components";
                             <Icon name="lucide:phone" class="w-4 h-4" />
                         </span>
                         <span class="font-semibold">8-911-879-31-34</span>
-                    </a>
+                    </a> -->
                     <a
                         href="mailto:amdofis@mail.ru"
                         class="flex items-center gap-3 text-white hover:text-white/80 transition-colors group"
@@ -201,11 +201,10 @@ import { Icon } from "astro-icon/components";
         );
     }
     .cta-bg-pattern {
-        background-image: radial-gradient(
-            rgba(255, 255, 255, 0.06) 1.5px,
-            transparent 1.5px
-        );
-        background-size: 28px 28px;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
     }
     .cta-submit-btn {
         background: linear-gradient(135deg, #0257c0, #297fec);

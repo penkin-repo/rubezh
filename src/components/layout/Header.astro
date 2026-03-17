@@ -1,23 +1,23 @@
 ---
 import { Image } from 'astro:assets';
 import logoMain from '../../assets/logo-main.svg';
-import { createReader } from '@keystatic/core/reader';
-import keystaticConfig from '../../../keystatic.config';
+import { client } from '../../sanity/client';
 
-// Читаем настройки шапки из Keystatic singleton
-const reader = createReader(process.cwd(), keystaticConfig);
-const headerData = await reader.singletons.header.read();
+// Читаем настройки шапки из Sanity
+const headerData = await client.fetch(
+  `*[_type == "header" && _id == "header"][0]`
+);
 
 // Fallbacks
-const phone    = headerData?.phone    ?? '8-911-879-31-34';
+const phone     = headerData?.phone     ?? '8-911-879-31-34';
 const phoneHref = headerData?.phoneHref ?? '+79118793134';
-const ctaLabel = headerData?.ctaLabel ?? 'Заказать звонок';
-const ctaHref  = headerData?.ctaHref  ?? '#contact-form';
-const navItems = headerData?.navItems ?? [
-  { label: 'О компании',       href: '/about',     dropdown: [{ label: 'О нас', href: '/about' }, { label: 'Вакансии', href: '/about/vacancies' }] },
-  { label: 'Наши работы',      href: '/projects',  dropdown: [] },
-  { label: 'Аренда спецтехники', href: '/equipment', dropdown: [] },
-  { label: 'Контакты',          href: '/contacts',  dropdown: [] },
+const ctaLabel  = headerData?.ctaLabel  ?? 'Заказать звонок';
+const ctaHref   = headerData?.ctaHref   ?? '#contact-form';
+const navItems  = headerData?.navItems  ?? [
+  { label: 'О компании',         href: '/o-kompanii',     dropdown: [{ label: 'О нас', href: '/o-kompanii' }, { label: 'Вакансии', href: '/vakansii' }] },
+  { label: 'Наши работы',        href: '/proekty',  dropdown: [] },
+  { label: 'Аренда спецтехники', href: '/arenda-spetstehniki', dropdown: [] },
+  { label: 'Контакты',           href: '/kontakty',  dropdown: [] },
 ];
 ---
 
@@ -96,14 +96,6 @@ const navItems = headerData?.navItems ?? [
         >
           {phone}
         </a>
-        <a
-          href={ctaHref}
-          class="px-5 py-2.5 rounded-xl text-white text-sm font-semibold tracking-wide
-                 border border-white/25 hover:bg-white/10 hover:border-white/40
-                 transition-all duration-200"
-        >
-          {ctaLabel}
-        </a>
       </div>
 
       <!-- Мобильная кнопка-бургер -->
@@ -134,7 +126,7 @@ const navItems = headerData?.navItems ?? [
           <div>
             <button
               class="mob-dropdown-btn w-full flex items-center justify-between py-3
-                     text-white text-sm font-semibold tracking-widest uppercase font-heading
+                     text-white text-sm font-semibold tracking-widest uppercase
                      border-b border-white/10"
               data-target={`mob-sub-${idx}`}
               aria-expanded="false"
@@ -148,8 +140,8 @@ const navItems = headerData?.navItems ?? [
             <div id={`mob-sub-${idx}`} class="hidden pl-4 flex flex-col">
               {item.dropdown.map((sub) => (
                 <a href={sub.href}
-                   class="py-2.5 text-blue-300 text-sm font-semibold tracking-widest uppercase
-                          font-heading hover:text-white transition-colors">
+                   class="py-2 text-sm font-semibold tracking-widest uppercase
+                          hover:text-white transition-colors">
                   {sub.label}
                 </a>
               ))}
@@ -159,14 +151,14 @@ const navItems = headerData?.navItems ?? [
           <a
             href={item.href}
             class="py-3 text-white text-sm font-semibold tracking-widest uppercase
-                   font-heading border-b border-white/10 last:border-0"
+                   border-b border-white/10 last:border-0"
           >
             {item.label}
           </a>
         )
       )}
 
-      <!-- Телефон в мобиле -->
+      <!-- Телефон в мобильном меню -->
       <a href={`tel:${phoneHref}`}
          class="mt-4 py-3 text-blue-300 text-sm font-semibold tracking-wide">
         {phone}

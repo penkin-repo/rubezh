@@ -4,10 +4,17 @@ import { Icon } from "astro-icon/components";
 ---
 
 <section
-    class="contacts-section py-24 bg-zinc-900"
+    class="contacts-section relative overflow-hidden py-24 bg-slate-900"
     aria-labelledby="contacts-heading"
 >
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Фоновый паттерн -->
+    <div
+        class="absolute inset-0 pointer-events-none contacts-bg-grid"
+        aria-hidden="true"
+    >
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <!-- Заголовок -->
         <div class="mb-12">
             <div class="flex items-center gap-3 mb-4">
@@ -66,7 +73,7 @@ import { Icon } from "astro-icon/components";
                         <p
                             class="text-white/50 text-xs font-semibold tracking-widest uppercase mb-1"
                         >
-                            Телефон (офис)
+                            Главный бухгалтер
                         </p>
                         <a
                             href="tel:+79118793134"
@@ -172,7 +179,7 @@ import { Icon } from "astro-icon/components";
                     <div class="space-y-1">
                         <p class="text-white text-sm flex justify-between">
                             <span>Пн — Пт</span><span class="text-white/80"
-                                >8:00 — 18:00</span
+                                >09:00 — 17:00</span
                             >
                         </p>
                         <p class="text-white text-sm flex justify-between">
@@ -211,6 +218,18 @@ import { Icon } from "astro-icon/components";
     </div>
 </section>
 
+<style>
+    .contacts-section {
+        background-color: #080e1c;
+    }
+    .contacts-bg-grid {
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
+    }
+</style>
+
 <script>
     // Lazy loading карты — загружаем iframe только когда секция видна
     const mapFrame = document.getElementById("yandex-map") as HTMLIFrameElement;
@@ -223,8 +242,8 @@ import { Icon } from "astro-icon/components";
             entries.forEach((entry) => {
                 if (entry.isIntersecting && mapFrame) {
                     const src = mapFrame.dataset.src;
-                    if (src && !mapFrame.src) {
-                        mapFrame.src = src;
+                    if (src && mapFrame.getAttribute("src") !== src) {
+                        mapFrame.setAttribute("src", src);
                         mapFrame.addEventListener(
                             "load",
                             () => {
