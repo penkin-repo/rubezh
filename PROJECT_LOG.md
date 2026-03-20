@@ -1,6 +1,6 @@
 # Project Status: RUBEZH — ООО «Рубеж» Корпоративный сайт
 
-**Last Updated:** 2026-03-19 18:48 (UTC+03:00)
+**Last Updated:** 2026-03-20 12:10 (UTC+03:00)
 **Current Phase:** Фаза 6 — Разработка на Astro + Sanity CMS 🚧
 
 ## 🚀 Active Context
@@ -18,6 +18,11 @@
 * [ ] [Low] В `src/sanity/schemas/` добавлены только `hero` и `header` — нужно перенести/добавить `equipment`, `projects`, `vacancies` и singletons для внутренних страниц
 
 ## 📝 Recent Changes (Changelog)
+
+### Вакансии переведены в Astro content (2026-03-20)
+* [2026-03-20] Добавлена коллекция `vacancies` в `src/content/config.ts` (поля: `title`, `order`).
+* [2026-03-20] Созданы md-файлы вакансий в `src/content/vacancies/*.md` для заполнения менеджерами обычным текстом.
+* [2026-03-20] `src/components/vacancies/VacancyAccordion.astro` переведён с хардкода на `getCollection("vacancies")` + рендер markdown-контента внутри аккордеона.
 
 ### Исправление ошибки simple-icons (2026-03-19)
 * [2026-03-19] Для устранения ошибки `Unable to locate the "simple-icons" icon set` в `package.json` добавлена зависимость `@iconify-json/simple-icons`.

@@ -67,9 +67,18 @@ const site = defineCollection({
   })
 });
 
+const vacancies = defineCollection({
+  loader: glob({ pattern: "*.md", base: "./src/content/vacancies" }),
+  schema: z.object({
+    title: z.string(),
+    order: z.number().optional().default(0),
+  })
+});
+
 export const collections = {
   projects,
   equipment,
   services,
   site,
+  vacancies,
 };

@@ -34,6 +34,7 @@ type NavItem = {
 // Fallbacks
 const phone     = headerData?.phone     ?? contacts.mainPhoneDisplay;
 const phoneHref = headerData?.phoneHref ?? contacts.mainPhoneHref;
+const officeEmail = contacts.officeEmail;
 const ctaLabel  = headerData?.ctaLabel  ?? 'Заказать звонок';
 const ctaHref   = headerData?.ctaHref   ?? '#contact-form';
 const isHomePage = Astro.url.pathname === '/';
@@ -122,13 +123,22 @@ const navItems: NavItem[] = headerData?.navItems  ?? [
 
       <!-- Правый блок: телефон + CTA (десктоп) -->
       <div class="hidden lg:flex items-center gap-5">
-        <a
-          href={`tel:${phoneHref}`}
-          class="inline-flex items-center gap-2 text-white/80 text-sm font-semibold hover:text-white transition-colors duration-200 tracking-wide"
-        >
-          <Icon name="lucide:phone" class="w-4 h-4 text-blue-300" />
-          {phone}
-        </a>
+        <div class="flex flex-col items-start gap-1 leading-tight">
+          <a
+            href={`tel:${phoneHref}`}
+            class="inline-flex items-center gap-2 text-white/80 text-sm font-semibold hover:text-white transition-colors duration-200 tracking-wide"
+          >
+            <Icon name="lucide:phone" class="w-4 h-4 text-blue-300" />
+            {phone}
+          </a>
+          <a
+            href={`mailto:${officeEmail}`}
+            class="inline-flex items-center gap-2 text-white/70 text-xs font-semibold hover:text-white transition-colors duration-200 tracking-wide"
+          >
+            <Icon name="lucide:mail" class="w-4 h-4 text-blue-300" />
+            {officeEmail}
+          </a>
+        </div>
       </div>
 
       <!-- Мобильная кнопка-бургер -->
@@ -196,6 +206,12 @@ const navItems: NavItem[] = headerData?.navItems  ?? [
          class="mt-4 py-3 text-blue-300 text-sm font-semibold tracking-wide inline-flex items-center gap-2">
         <Icon name="lucide:phone" class="w-4 h-4" />
         {phone}
+      </a>
+
+      <a href={`mailto:${officeEmail}`}
+         class="py-2 text-blue-300/90 text-sm font-semibold tracking-wide inline-flex items-center gap-2">
+        <Icon name="lucide:mail" class="w-4 h-4" />
+        {officeEmail}
       </a>
     </nav>
   </div>
