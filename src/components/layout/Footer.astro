@@ -1,6 +1,8 @@
 ---
+import { getCollection } from "astro:content";
 import { Icon } from "astro-icon/components";
 import logoMain from "../../assets/logo-main.svg";
+import avitoIcon from "../../assets/avito.svg";
 import { Image } from "astro:assets";
 
 const nav = [
@@ -11,6 +13,15 @@ const nav = [
     { label: "Контакты", href: "/kontakty" },
 ];
 
+const [contactsEntry] = (await getCollection("site")).sort((a, b) =>
+    a.id.localeCompare(b.id),
+);
+
+if (!contactsEntry) {
+    throw new Error("Site contacts content is missing in src/content/site.");
+}
+
+const contacts = contactsEntry.data;
 const year = new Date().getFullYear();
 ---
 
@@ -46,7 +57,7 @@ const year = new Date().getFullYear();
                     <!-- Соцсети -->
                     <div class="flex gap-3 mt-6">
                         <a
-                            href="https://vk.com/id865770117"
+                            href={contacts.vkUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center
@@ -54,10 +65,10 @@ const year = new Date().getFullYear();
                       transition-all duration-200"
                             aria-label="ВКонтакте"
                         >
-                            <Icon name="lucide:link" class="w-4 h-4" />
+                            <Icon name="simple-icons:vk" class="w-4 h-4" />
                         </a>
                         <a
-                            href="https://www.avito.ru/profile/items/active/all?s=4"
+                            href={contacts.avitoUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             class="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center
@@ -65,7 +76,13 @@ const year = new Date().getFullYear();
                       transition-all duration-200"
                             aria-label="Avito"
                         >
-                            <Icon name="lucide:tag" class="w-4 h-4" />
+                            <Image
+                                src={avitoIcon}
+                                alt="Avito"
+                                width={16}
+                                height={16}
+                                loading="lazy"
+                            />
                         </a>
                     </div>
                 </div>
@@ -112,25 +129,25 @@ const year = new Date().getFullYear();
                                 Главный бухгалтер
                             </p>
                             <a
-                                href="tel:+79118793134"
+                                href={`tel:${contacts.mainPhoneHref}`}
                                 class="text-slate-300 text-sm hover:text-white transition-colors"
                             >
-                                8-911-879-31-34
+                                {contacts.mainPhoneDisplay}
                             </a>
                         </div>
                         <div>
                             <p class="text-slate-500 text-xs mb-0.5">Email</p>
                             <a
-                                href="mailto:amdofis@mail.ru"
+                                href={`mailto:${contacts.officeEmail}`}
                                 class="text-slate-300 text-sm hover:text-white transition-colors break-all"
                             >
-                                amdofis@mail.ru
+                                {contacts.officeEmail}
                             </a>
                         </div>
                         <div>
                             <p class="text-slate-500 text-xs mb-0.5">Адрес</p>
                             <p class="text-slate-400 text-sm leading-snug">
-                                Архангельск,<br />ул. Дачная, 61к1
+                                {contacts.addressShort}
                             </p>
                         </div>
                         <div>
@@ -138,7 +155,7 @@ const year = new Date().getFullYear();
                                 ИНН / ОГРН
                             </p>
                             <p class="text-slate-500 text-xs">
-                                2901259316 / 1152901005630
+                                {contacts.inn} / {contacts.ogrn}
                             </p>
                         </div>
                     </div>

@@ -1,0 +1,108 @@
+---
+// src/components/vacancies/VacancyAccordion.astro
+import { getCollection } from "astro:content";
+import { Icon } from "astro-icon/components";
+
+const [contactsEntry] = (await getCollection("site")).sort((a, b) =>
+  a.id.localeCompare(b.id),
+);
+
+if (!contactsEntry) {
+  throw new Error("Site contacts content is missing in src/content/site.");
+}
+
+const contacts = contactsEntry.data;
+
+const vacancies = [
+  {
+    id: "v1",
+    title: "Водитель на самосвал категории С",
+    duties: "Транспортировка инертных материалов (песок, щебень, асфальт) и вывоз грунта на строительных объектах. Работа на 3-х и 4-х осных самосвалах (HOWO, FAW, SCANIA, KAMAZ).",
+    reqs: "Водительское удостоверение категории С. Подтвержденный опыт работы на грузовых самосвалах от 1 года. Знание технического устройства автомобиля и бережное отношение к технике.",
+    terms: "Официальное трудоустройство, своевременная выплата заработной платы и работу на современной, регулярно обслуживаемой технике."
+  },
+  {
+    id: "v2",
+    title: "Машинист гусеничного экскаватора",
+    duties: "Разработка котлованов, траншей, планировка откосов и погрузка грунта в самосвалы. Управление современными экскаваторами марок Hyundai, Liugong, Hitachi.",
+    reqs: "Действующее удостоверение тракториста-машиниста с соответствующей отметкой. Опыт точной разработки грунта.",
+    terms: "Комфортные условия труда, техническое обслуживание машин силами слесарей и высокий уровень дохода без задержек."
+  },
+  {
+    id: "v3",
+    title: "Машинист бульдозера",
+    duties: "Управление тяжелыми бульдозерами (Komatsu, Shantui, Caterpillar массой 20-21 т) при производстве земляных работ. Планировка площадей, послойное разравнивание грунта.",
+    reqs: "Наличие действующего удостоверения с обязательной особой отметкой «машинист бульдозера». Опыт работы на объектах дорожного строительства.",
+    terms: "Круглогодичная занятость на объектах Архангельской области, официальное оформление и обеспечение спецодеждой."
+  },
+  {
+    id: "v4",
+    title: "Монтажник НВК",
+    duties: "Прокладка наружных инженерных коммуникаций, монтаж трубопроводов, установка колодцев и запорной арматуры на инфраструктурных объектах.",
+    reqs: "Опыт работы в сфере НВК. Умение читать чертежи и знание базовых строительных норм (СНиП).",
+    terms: "Участие в крупных и интересных проектах. Прозрачная система оплаты, предоставление профессионального инструмента."
+  },
+  {
+    id: "v5",
+    title: "Дорожный рабочий",
+    duties: "Выполнение комплекса работ по устройству дорожного полотна: подготовка основания, укладка асфальтобетонной смеси, установка бортового камня (поребриков) и укладка тротуарной плитки.",
+    reqs: "Физическая выносливость, ответственность. Опыт работы в дорожных бригадах приветствуется.",
+    terms: "Стабильная работа в дорожном строительстве (Архангельск). Своевременные выплаты, доставка до удаленных объектов служебным транспортом."
+  }
+];
+---
+
+<div class="space-y-4 max-w-4xl mx-auto">
+  {vacancies.map((v, i) => (
+    <details class="group bg-white rounded-2xl border border-zinc-200 overflow-hidden transition-all duration-300 open:ring-1 open:ring-brand-dark open:shadow-xl">
+      <summary class="flex items-center justify-between p-6 cursor-pointer list-none list-image-none">
+        <div class="flex items-center gap-4">
+          <span class="w-10 h-10 rounded-xl bg-zinc-100 flex items-center justify-center font-heading text-xl text-zinc-400 group-open:bg-brand-dark group-open:text-white transition-colors">
+            {i + 1}
+          </span>
+          <h3 class="font-bold text-lg sm:text-xl text-zinc-900 group-hover:text-brand-dark transition-colors">{v.title}</h3>
+        </div>
+        <div class="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 group-open:rotate-180 transition-transform duration-300">
+           <Icon name="lucide:chevron-down" class="w-5 h-5" />
+        </div>
+      </summary>
+      
+      <div class="px-6 pb-8 pt-2">
+        <div class="h-px bg-zinc-100 mb-8"></div>
+        
+        <div class="space-y-8">
+           <div class="grid md:grid-cols-[140px_1fr] gap-4">
+              <span class="text-zinc-400 text-sm font-bold uppercase tracking-wider">Обязанности</span>
+              <p class="text-zinc-600 leading-relaxed">{v.duties}</p>
+           </div>
+           
+           <div class="grid md:grid-cols-[140px_1fr] gap-4">
+              <span class="text-zinc-400 text-sm font-bold uppercase tracking-wider">Требования</span>
+              <p class="text-zinc-600 leading-relaxed">{v.reqs}</p>
+           </div>
+           
+           <div class="grid md:grid-cols-[140px_1fr] gap-4">
+              <span class="text-zinc-400 text-sm font-bold uppercase tracking-wider">Условия</span>
+              <div class="flex items-center gap-3 p-4 bg-brand-dark/5 rounded-xl border border-brand-dark/10">
+                 <Icon name="lucide:check-circle" class="w-5 h-5 text-brand-dark flex-shrink-0" />
+                 <p class="text-zinc-900 font-medium leading-relaxed">{v.terms}</p>
+              </div>
+           </div>
+           
+           <div class="pt-4 flex justify-end">
+              <a href={`mailto:${contacts.hrEmail}?subject=Вакансия: ${v.title}`} class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-brand-dark hover:text-brand-light transition-colors">
+                Откликнуться на вакансию
+                <Icon name="lucide:arrow-right" class="w-4 h-4" />
+              </a>
+           </div>
+        </div>
+      </div>
+    </details>
+  ))}
+</div>
+
+<style>
+  summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

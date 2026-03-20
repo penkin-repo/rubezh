@@ -1,0 +1,31 @@
+---
+// src/components/about/QuoteSection.astro
+---
+
+<section class="py-32 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 relative overflow-hidden">
+    <!-- Декоративные элементы -->
+    <div class="absolute top-0 left-0 w-96 h-96 bg-brand-light/5 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-brand-dark/10 rounded-full blur-3xl"></div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="bg-zinc-800/50 backdrop-blur-sm rounded-2xl p-8 sm:p-12 lg:p-16 border border-white/10 shadow-2xl">
+            <div class="flex items-start mb-6">
+                <svg class="w-12 h-12 text-brand-light opacity-50" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"></path>
+                </svg>
+            </div>
+
+            <blockquote class="space-y-6">
+                <p class="text-xl sm:text-2xl lg:text-3xl text-white leading-relaxed font-light">
+                    Благодаря <span class="font-semibold text-brand-light">многолетнему опыту</span>, строгому соблюдению всех нормативных правил, высокому контролю качества и соблюдению сроков выполнения работ, наша компания зарекомендовала себя как <span class="font-semibold text-brand-light">надежный партнер</span> и <span class="font-semibold text-brand-light">профессионал своего дела</span>!
+                </p>
+            </blockquote>
+
+            <div class="flex justify-end mt-6">
+                <svg class="w-12 h-12 text-brand-light opacity-50 rotate-180" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+</section>

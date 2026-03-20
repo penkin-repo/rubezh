@@ -1,0 +1,37 @@
+---
+// src/pages/o-kompanii.astro
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import Marquee from "../components/about/Marquee.astro";
+import AboutHero from "../components/about/AboutHero.astro";
+import ServicesSection from "../components/about/ServicesSection.astro";
+import FeaturesSection from "../components/about/FeaturesSection.astro";
+import QuoteSection from "../components/about/QuoteSection.astro";
+import StatsSection from "../components/about/StatsSection.astro";
+---
+
+<BaseLayout
+    title="О компании ООО «Рубеж» — дорожное строительство полного цикла"
+    description="Узнайте больше о компании ООО «Рубеж». 11+ лет опыта на рынке дорожного строительства в Архангельске, собственный автопарк 60+ единиц техники."
+>
+    <Header />
+
+    <main>
+        <PageHeader title="О компании" />
+
+        <!-- Hero Section with Marquee -->
+        <section class="py-24 bg-white overflow-hidden relative">
+            <Marquee />
+            <AboutHero />
+        </section>
+
+        <ServicesSection />
+        <FeaturesSection />
+        <QuoteSection />
+        <StatsSection />
+    </main>
+
+    <Footer />
+</BaseLayout>

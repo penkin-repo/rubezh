@@ -1,0 +1,82 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import { getCollection } from "astro:content";
+
+const [contactsEntry] = (await getCollection("site")).sort((a, b) =>
+    a.id.localeCompare(b.id),
+);
+
+if (!contactsEntry) {
+    throw new Error("Site contacts content is missing in src/content/site.");
+}
+
+const contacts = contactsEntry.data;
+
+const title = "Политика конфиденциальности — ООО «Рубеж»";
+const description = "Политика конфиденциальности ООО «Рубеж» по обработке персональных данных и использованию cookie-файлов.";
+---
+
+<BaseLayout title={title} description={description}>
+    <Header />
+
+    <main class="bg-white pt-32 pb-20">
+        <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="font-heading text-3xl sm:text-4xl uppercase text-zinc-900 mb-6">
+                Политика конфиденциальности
+            </h1>
+
+            <div class="rounded border border-zinc-200 bg-zinc-50 p-6 sm:p-8 space-y-6 text-zinc-700 leading-relaxed">
+                <p>
+                    Это временная версия страницы политики конфиденциальности. Вы
+                    можете заменить текст на финальную юридическую редакцию в
+                    любое время.
+                </p>
+
+                <section>
+                    <h2 class="font-semibold text-zinc-900 mb-2">1. Общие положения</h2>
+                    <p>
+                        Настоящий документ определяет порядок обработки и защиты
+                        персональных данных пользователей сайта ООО «Рубеж».
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="font-semibold text-zinc-900 mb-2">2. Какие данные мы обрабатываем</h2>
+                    <p>
+                        Мы можем обрабатывать имя, номер телефона, комментарий к
+                        заявке, а также технические данные, включая cookie.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="font-semibold text-zinc-900 mb-2">3. Цели обработки</h2>
+                    <p>
+                        Данные используются для обратной связи, подготовки
+                        коммерческих предложений, улучшения качества сервиса и
+                        корректной работы сайта.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="font-semibold text-zinc-900 mb-2">4. Cookie-файлы</h2>
+                    <p>
+                        Сайт использует cookie для сохранения пользовательских
+                        настроек и аналитики посещений. Вы можете ограничить
+                        использование cookie в настройках браузера.
+                    </p>
+                </section>
+
+                <section>
+                    <h2 class="font-semibold text-zinc-900 mb-2">5. Контакты оператора</h2>
+                    <p>
+                        По вопросам обработки персональных данных: <a href={`mailto:${contacts.officeEmail}`} class="text-brand-dark underline hover:no-underline">{contacts.officeEmail}</a>
+                    </p>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <Footer />
+</BaseLayout>

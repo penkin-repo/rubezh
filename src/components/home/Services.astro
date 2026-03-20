@@ -1,57 +1,18 @@
 ---
 import { Image } from "astro:assets";
-import servicesImg from "../../assets/services.png";
+import { getCollection, render } from "astro:content";
 import cogs from "../../assets/cogs.svg";
 import ServiceModal from "./ServiceModal.astro";
 
-const services = [
-    {
-        id: "road",
-        title: "Дорожное строительство",
-        desc: "Капитальный ремонт, устройство прочных оснований и дорожное строительство под ключ. Строго по ГОСТ.",
-        fullDesc:
-            "Полный комплекс работ по возведению дорожных одежд: от земляных работ и устройства песчано-щебеночной подушки до укладки асфальтобетона в несколько слоев.\n\nМы применяем современную технику и геодезическое оборудование для контроля уклонов и ровности. Гарантируем долговечность покрытия и соблюдение всех актуальных нормативов (СНиП, ГОСТ). За нашими плечами десятки километров сданных в эксплуатацию магистралей федерального и регионального значения.",
-        image: servicesImg,
-        size: "large", // Большая карточка — занимает 2 колонки
-    },
-    {
-        id: "asphalt",
-        title: "Асфальтирование территорий",
-        desc: "Выполняем асфальтирование дорог (Архангельск), муниципальных трасс, складских площадок, а также благоустройство дворовых проездов и парковок.",
-        fullDesc:
-            "Услуги асфальтирования любой сложности под ключ. Подготавливаем основание, фрезеруем старое покрытие, укладываем щебеночно-мастичный асфальтобетон (ЩМА).\n\nБлагоустройство общественных пространств, парковок у торговых центров, внутридворовых проездов и частного сектора. Особенности нашей работы — идеальная разуклонка для предотвращения луж и применение битумных эмульсий высочайшего качества.",
-        image: servicesImg,
-        size: "normal",
-    },
-    {
-        id: "rent",
-        title: "Аренда спецтехники",
-        desc: "Выгодная аренда спецтехники с опытными экипажами. Самосвалы, экскаваторы, бульдозеры, катки готовы к выезду в день обращения.",
-        fullDesc:
-            "Собственный автопарк ООО «Рубеж» насчитывает более 60 единиц современной и обслуженной спецтехники. \n\nМы предлагаем только надежную технику брендов КАМАЗ, FAW, SCANIA, SHANTUI, XCMG, HITACHI и других мировых лидеров. Каждая машина подается с опытным механизатором или водителем. Возможна аренда от одной смены до круглосуточной 24/7 работы на масштабных объектах. Техника доставляется на объект собственными тралами компании.",
-        image: servicesImg,
-        videoSrc: "https://vk.com/video-64387052_456266313", // Вставьте сюда ссылку на .mp4 файл
-        size: "normal",
-    },
-    {
-        id: "earth",
-        title: "Земляные работы",
-        desc: "Котлованы, вывоз грунта, планировка. Работа с мерзлым грунтом любой сложности.",
-        fullDesc:
-            "Производим разработку котлованов под фундаменты зданий, рытье траншей для укладки коммуникаций и выемку осадочных пород.\n\nНаши мощные гусеничные экскаваторы (от 20 тонн) и бульдозеры способны быстро планировать рельеф на площадках любых размеров. Мы также берем на себя утилизацию и вывоз строительного мусора и грунта с объекта собственным парком 3-х и 4-осных самосвалов. Работаем в любых погодных условиях, включая мерзлый грунт севера.",
-        image: servicesImg,
-        size: "large",
-    },
-    {
-        id: "infra",
-        title: "Инженерные коммуникации",
-        desc: "Прокладка водопровода, канализации (НВК) и других сетей. Используем бестраншейный метод (ГНБ) для сохранения ландшафта.",
-        fullDesc:
-            "Комплексный монтаж наружных сетей водоснабжения, канализации (НВК), ливневок и теплосетей.\n\nВ нашем распоряжении находятся установки горизонтально-направленного бурения (ГНБ) GOODENG с тяговым усилием 36 тонн. Это позволяет нам прокладывать коммуникации под дорогами, реками и зданиями бестраншейным методом — без перекрытия движения и разрушения существующего асфальтового покрытия. Сварка труб ПНД диаметром до 1200 мм.",
-        image: servicesImg,
-        size: "large",
-    },
-] as const;
+const servicesRaw = await getCollection("services");
+const services = await Promise.all(
+    servicesRaw
+        .sort((a, b) => a.data.order - b.data.order)
+        .map(async (entry) => {
+            const { Content } = await render(entry);
+            return { data: entry.data, id: entry.id, Content };
+        })
+);
 ---
 
 <section class="services-section relative bg-white text-slate-900 z-10">
@@ -63,10 +24,12 @@ const services = [
     >
     </div>
 
+    
+
     <div class="max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-32">
         <!-- Заголовок секции -->
         <div class="text-center mb-14">
-            <div class="flex items-center gap-3 mb-4 justify-center">
+            <!-- <div class="flex items-center gap-3 mb-4 justify-center">
                 <div
                     class="w-2 h-2 bg-brand-dark rounded-full"
                     aria-hidden="true"
@@ -76,9 +39,9 @@ const services = [
                     class="text-sm font-bold tracking-widest uppercase text-brand-dark"
                     >Услуги</span
                 >
-            </div>
+            </div> -->
             <h2
-                class="font-heading text-slate-900 uppercase text-4xl sm:text-5xl lg:text-6xl leading-none tracking-wide"
+                class="font-heading text-slate-900 uppercase text-3xl sm:text-4xl lg:text-5xl leading-none tracking-wide"
             >
                 Основные виды<br />деятельности
             </h2>
@@ -90,54 +53,25 @@ const services = [
 
         <!-- Bento Box сетка -->
         <div class="bento-grid">
-            <!-- Большая карточка (дорожное строительство) — 2 колонки -->
-            <button
-                class="service-card bento-large group text-left w-full js-open-modal"
-                data-target={`modal-road`}
-            >
-                <Image
-                    src={servicesImg}
-                    alt="Дорожное строительство"
-                    widths={[640, 900, 1200]}
-                    sizes="(max-width: 768px) 100vw, 60vw"
-                    loading="lazy"
-                    quality={85}
-                    class="service-card__img"
-                />
-                <div class="service-card__overlay"></div>
-                <div class="service-card__content">
-                    <h3 class="service-card__title">
-                        Дорожное<br />строительство
-                    </h3>
-                    <p class="service-card__desc">
-                        {services[0].desc}
-                    </p>
-                    <span class="service-card__link">
-                        Подробнее о деятельности →
-                    </span>
-                </div>
-            </button>
-
-            <!-- Малые карточки -->
             {
-                services.slice(1).map((s) => (
+                services.map(({ data, id }) => (
                     <button
-                        class="service-card group text-left w-full js-open-modal"
-                        data-target={`modal-${s.id}`}
+                        class={`service-card group text-left w-full js-open-modal${data.size === 'large' ? ' bento-large' : ''}`}
+                        data-target={`modal-${id}`}
                     >
                         <Image
-                            src={servicesImg}
-                            alt={s.title}
-                            widths={[400, 600]}
-                            sizes="(max-width: 768px) 100vw, 30vw"
+                            src={data.image}
+                            alt={data.title}
+                            widths={data.size === 'large' ? [640, 900, 1200] : [400, 600]}
+                            sizes={data.size === 'large' ? '(max-width: 768px) 100vw, 60vw' : '(max-width: 768px) 100vw, 30vw'}
                             loading="lazy"
-                            quality={80}
+                            quality={85}
                             class="service-card__img"
                         />
-                        <div class="service-card__overlay" />
+                        <div class="service-card__overlay"></div>
                         <div class="service-card__content">
-                            <h3 class="service-card__title">{s.title}</h3>
-                            <p class="service-card__desc">{s.desc}</p>
+                            <h3 class="service-card__title">{data.title}</h3>
+                            <p class="service-card__desc">{data.desc}</p>
                             <span class="service-card__link">Подробнее →</span>
                         </div>
                     </button>
@@ -149,15 +83,16 @@ const services = [
 
 <!-- Рендеринг всех модальных окон -->
 {
-    services.map((s) => (
+    services.map(({ data, id, Content }) => (
         <ServiceModal
-            id={s.id}
-            title={s.title}
-            desc={s.desc}
-            fullDesc={s.fullDesc}
-            image={s.image}
-            videoSrc={s.videoSrc}
-        />
+            id={id}
+            title={data.title}
+            desc={data.desc}
+            image={data.hideModalImage ? undefined : data.image}
+            videoEmbedUrl={data.videoEmbedUrl}
+        >
+            <Content />
+        </ServiceModal>
     ))
 }
 
@@ -221,7 +156,7 @@ const services = [
     .service-card {
         position: relative;
         overflow: hidden;
-        border-radius: 1rem;
+        border-radius: 0.25rem;
         min-height: 400px;
         cursor: pointer;
         border: none;
@@ -291,7 +226,7 @@ const services = [
     }
 
     .bento-large .service-card__title {
-        font-size: 2.5rem;
+        /* font-size: 2.5rem; */
     }
 
     /* Описание — скрыто по умолчанию, выезжает при hover */

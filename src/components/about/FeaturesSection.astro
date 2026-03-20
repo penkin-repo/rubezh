@@ -1,0 +1,142 @@
+---
+// src/components/about/FeaturesSection.astro
+import { Image } from 'astro:assets';
+import image2 from '../../assets/image2.png';
+import image3 from '../../assets/image3.png';
+---
+
+<section class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Блок 1: Текст слева, картинка справа -->
+        <div class="grid lg:grid-cols-2 gap-16 items-center mb-24">
+            <div class="animate-fade-in-left">
+                <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl uppercase leading-none mb-6 text-zinc-900">
+                    Профессиональная <span class="text-brand-dark">команда</span>
+                </h2>
+                <p class="text-lg text-zinc-900 leading-relaxed mb-6">
+                    Специалисты компании имеют большой опыт, все необходимые допуски для производства и сдачи объектов в эксплуатацию.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-6 h-6 bg-brand-dark rounded-full flex items-center justify-center">
+                            <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-zinc-900">Опыт сдачи сложных объектов</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative animate-fade-in-right">
+                <div class="aspect-[4/3] rounded overflow-hidden shadow-2xl">
+                    <Image
+                        src={image2}
+                        alt="Команда профессионалов"
+                        widths={[600, 900]}
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+                <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-brand-dark/10 rounded-full -z-10 blur-2xl animate-pulse"></div>
+            </div>
+        </div>
+
+        <!-- Блок 2: Картинка слева, текст справа -->
+        <div class="grid lg:grid-cols-2 gap-16 items-center mb-24">
+            <div class="relative animate-fade-in-left order-2 lg:order-1">
+                <div class="aspect-[4/3] rounded overflow-hidden shadow-2xl">
+                    <Image
+                        src={image3}
+                        alt="Современная спецтехника"
+                        widths={[600, 900]}
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        class="w-full h-full object-cover"
+                    />
+                </div>
+                <div class="absolute -top-6 -left-6 w-24 h-24 bg-brand-light/30 rounded-full -z-10 blur-xl animate-bounce-slow"></div>
+            </div>
+
+            <div class="animate-fade-in-right order-1 lg:order-2">
+                <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl uppercase leading-none mb-6 text-zinc-900">
+                    Собственный <span class="text-brand-dark">автопарк</span>
+                </h2>
+                <p class="text-lg text-zinc-900 leading-relaxed mb-6">
+                    Наличие широкого автопарка спец-техники позволяет выполнять строительные работы в кратчайшие сроки.
+                </p>
+                <p class="text-lg text-zinc-900 leading-relaxed mb-6">
+                    Весь строительный материал (асфальт, песок, щебень и тд.) доставляется собственными самосвалами, что также сокращает сроки выполнения работ, а следовательно и их стоимость.
+                </p>
+
+                <div class="flex items-center gap-3">
+                    <div class="w-6 h-6 bg-brand-dark rounded-full flex items-center justify-center">
+                        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-zinc-900">
+                        На выполненные работы предоставляется гарантия качества.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .animate-fade-in-left {
+        animation: fadeInLeft 1s ease-out;
+    }
+
+    .animate-fade-in-right {
+        animation: fadeInRight 1s ease-out;
+    }
+
+    @keyframes fadeInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes fadeInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .animate-pulse {
+        animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    .animate-bounce-slow {
+        animation: bounce 3s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 0.1;
+        }
+        50% {
+            opacity: 0.2;
+        }
+    }
+
+    @keyframes bounce {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+</style>

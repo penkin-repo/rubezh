@@ -1,0 +1,190 @@
+---
+// src/components/about/ServicesSection.astro
+import { Image } from 'astro:assets';
+import image1 from '../../assets/image1.png';
+import image2 from '../../assets/image2.png';
+import image3 from '../../assets/image3.png';
+---
+
+<section class="py-24 bg-zinc-50 relative overflow-hidden">
+    <!-- Фоновая сетка -->
+    <div class="absolute inset-0 pointer-events-none services-bg-grid" aria-hidden="true"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-16">
+            <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl uppercase leading-none text-zinc-900 mb-4">
+                С 2015 года мы успешно выполняем работы:
+            </h2>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-16">
+            <!-- Список услуг -->
+            <div class="space-y-4">
+                <div class="service-item" data-service="1">
+                    <div class="flex items-center gap-4 p-4 bg-white rounded shadow-sm hover:shadow-md transition-all cursor-pointer">
+                        <div class="service-number w-12 h-12 bg-zinc-200 text-zinc-700 rounded flex items-center justify-center font-bold transition-colors">
+                            1
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-zinc-900">Строительство и ремонт дорог</h3>
+                            <p class="text-sm text-zinc-600">Асфальтирование, устройство дорожных покрытий</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-item" data-service="2">
+                    <div class="flex items-center gap-4 p-4 bg-white rounded shadow-sm hover:shadow-md transition-all cursor-pointer">
+                        <div class="service-number w-12 h-12 bg-zinc-200 text-zinc-700 rounded flex items-center justify-center font-bold transition-colors">
+                            2
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-zinc-900">Благоустройство территорий</h3>
+                            <p class="text-sm text-zinc-600">Общественные пространства и парки</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-item" data-service="3">
+                    <div class="flex items-center gap-4 p-4 bg-white rounded shadow-sm hover:shadow-md transition-all cursor-pointer">
+                        <div class="service-number w-12 h-12 bg-zinc-200 text-zinc-700 rounded flex items-center justify-center font-bold transition-colors">
+                            3
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-zinc-900">Земляные работы</h3>
+                            <p class="text-sm text-zinc-600">Любой сложности</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-item" data-service="4">
+                    <div class="flex items-center gap-4 p-4 bg-white rounded shadow-sm hover:shadow-md transition-all cursor-pointer">
+                        <div class="service-number w-12 h-12 bg-zinc-200 text-zinc-700 rounded flex items-center justify-center font-bold transition-colors">
+                            4
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-zinc-900">Инженерные сети</h3>
+                            <p class="text-sm text-zinc-600">Ремонт и монтаж</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-item" data-service="5">
+                    <div class="flex items-center gap-4 p-4 bg-white rounded shadow-sm hover:shadow-md transition-all cursor-pointer">
+                        <div class="service-number w-12 h-12 bg-zinc-200 text-zinc-700 rounded flex items-center justify-center font-bold transition-colors">
+                            5
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-zinc-900">Гидротехнические сооружения</h3>
+                            <p class="text-sm text-zinc-600">Строительство и реконструкция</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Изображение, меняющееся при клике -->
+            <div class="relative">
+                <div class="aspect-[4/3] rounded overflow-hidden shadow-2xl">
+                    <Image
+                        id="service-image-1"
+                        src={image1}
+                        alt="Строительство и ремонт дорог"
+                        widths={[600, 900]}
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        class="service-image w-full h-full object-cover transition-opacity duration-500"
+                    />
+                    <Image
+                        id="service-image-2"
+                        src={image2}
+                        alt="Благоустройство территорий"
+                        widths={[600, 900]}
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        class="service-image w-full h-full object-cover transition-opacity duration-500 absolute inset-0 opacity-0"
+                    />
+                    <Image
+                        id="service-image-3"
+                        src={image3}
+                        alt="Земляные работы"
+                        widths={[600, 900]}
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        class="service-image w-full h-full object-cover transition-opacity duration-500 absolute inset-0 opacity-0"
+                    />
+                    <Image
+                        id="service-image-4"
+                        src={image1}
+                        alt="Инженерные сети"
+                        widths={[600, 900]}
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        class="service-image w-full h-full object-cover transition-opacity duration-500 absolute inset-0 opacity-0"
+                    />
+                    <Image
+                        id="service-image-5"
+                        src={image2}
+                        alt="Гидротехнические сооружения"
+                        widths={[600, 900]}
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        class="service-image w-full h-full object-cover transition-opacity duration-500 absolute inset-0 opacity-0"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .services-bg-grid {
+        background-image:
+            linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
+    }
+
+    .service-item {
+        transition: all 0.3s ease;
+    }
+
+    .service-item:hover {
+        transform: translateX(5px);
+    }
+
+    .service-item.active .service-number {
+        background-color: rgb(23 23 23);
+        color: white;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const serviceItems = document.querySelectorAll<HTMLElement>('.service-item');
+        const serviceImages = document.querySelectorAll<HTMLElement>('.service-image');
+        
+        // Активируем первую карточку по умолчанию
+        if (serviceItems.length > 0) {
+            serviceItems[0].classList.add('active');
+        }
+        
+        serviceItems.forEach((item) => {
+            item.addEventListener('click', () => {
+                // Удаляем активный класс у всех
+                serviceItems.forEach(i => i.classList.remove('active'));
+                
+                // Добавляем активный класс текущему
+                item.classList.add('active');
+                
+                // Получаем номер сервиса
+                const serviceId = Number(item.dataset.service);
+                if (!Number.isFinite(serviceId)) return;
+                
+                // Скрываем все изображения
+                serviceImages.forEach(img => {
+                    img.style.opacity = '0';
+                });
+                
+                // Показываем нужное изображение
+                const targetImage = document.getElementById(`service-image-${serviceId}`);
+                if (targetImage instanceof HTMLElement) {
+                    targetImage.style.opacity = '1';
+                }
+            });
+        });
+    });
+</script>

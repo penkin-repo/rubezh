@@ -17,6 +17,9 @@ importers:
       '@iconify-json/lucide':
         specifier: ^1.2.95
         version: 1.2.95
+      '@iconify-json/simple-icons':
+        specifier: ^1.2.74
+        version: 1.2.74
       '@sanity/client':
         specifier: ^7.16.0
         version: 7.16.0(debug@4.4.3)
@@ -1191,6 +1194,9 @@ packages:
 
   '@iconify-json/lucide@1.2.95':
     resolution: {integrity: sha512-SxDM/NEJtcGGAiLAnaZ7rcmVxkJI8esswTZLCm5BfNcoPf/yawIImb4nNfsu4dtFzP/Cl6KRg+vZq521zOUOnQ==}
+
+  '@iconify-json/simple-icons@1.2.74':
+    resolution: {integrity: sha512-yqaohfY6jnYjTVpuTkaBQHrWbdUrQyWXhau0r/0EZiNWYXPX/P8WWwl1DoLH5CbvDjjcWQw5J0zADhgCUklOqA==}
 
   '@iconify/tools@4.2.0':
     resolution: {integrity: sha512-WRxPva/ipxYkqZd1+CkEAQmd86dQmrwH0vwK89gmp2Kh2WyyVw57XbPng0NehP3x4V1LzLsXUneP1uMfTMZmUA==}
@@ -7241,6 +7247,10 @@ snapshots:
   '@floating-ui/utils@0.2.11': {}
 
   '@iconify-json/lucide@1.2.95':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/simple-icons@1.2.74':
     dependencies:
       '@iconify/types': 2.0.0
 

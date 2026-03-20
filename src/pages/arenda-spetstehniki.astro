@@ -1,0 +1,472 @@
+---
+// src/pages/arenda-spetstehniki.astro
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import PageHeader from "../components/ui/PageHeader.astro";
+import EquipmentCard from "../components/equipment/EquipmentCard.astro";
+import { Icon } from "astro-icon/components";
+import { getCollection } from "astro:content";
+
+const equipmentCollection = await getCollection('equipment');
+const [contactsEntry] = (await getCollection('site')).sort((a, b) =>
+    a.id.localeCompare(b.id),
+);
+
+if (!contactsEntry) {
+    throw new Error('Site contacts content is missing in src/content/site.');
+}
+
+const contacts = contactsEntry.data;
+
+const equipment = equipmentCollection
+    .flatMap((entry) => entry.data.items)
+    .sort((a, b) => a.order - b.order);
+
+const categories = [
+    'Все',
+    ...Array.from(new Set(equipment.map((item) => item.category))),
+];
+---
+
+<BaseLayout
+    title="Аренда спецтехники в Архангельске — ООО «Рубеж»"
+    description="Аренда спецтехники с опытным оператором. Самосвалы, экскаваторы, бульдозеры, катки. Собственный автопарк 60+ единиц. Работаем по Архангельской области."
+>
+    <Header />
+
+    <main>
+        <PageHeader title="Аренда спецтехники" />
+
+        <!-- Фильтры -->
+        <section class="py-8 bg-white border-b border-zinc-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-wrap gap-3">
+                    {categories.map((category) => (
+                        <button
+                            class={`filter-btn px-6 py-2 rounded font-semibold transition-colors cursor-pointer ${
+                                category === "Все" 
+                                    ? "bg-brand-dark text-white" 
+                                    : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200"
+                            }`}
+                            data-category={category}
+                        >
+                            {category}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        </section>
+
+        <!-- Каталог техники -->
+        <section class="py-16 bg-zinc-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div id="equipment-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {equipment.map((item) => (
+                        <EquipmentCard
+                            title={item.title}
+                            specs={item.specs}
+                            category={item.category}
+                            image={item.image}
+                        />
+                    ))}
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <Footer />
+
+    <!-- Скрытый iframe для отправки в Google Apps Script -->
+    <iframe name="gas-iframe" id="gas-iframe" class="hidden" tabindex="-1" aria-hidden="true"></iframe>
+    <form id="gas-hidden-form" method="POST" target="gas-iframe" class="hidden" tabindex="-1">
+        <input type="hidden" name="fio" />
+        <input type="hidden" name="phone" />
+        <input type="hidden" name="comment" />
+        <input type="hidden" name="consent" />
+    </form>
+
+    <!-- Модальное окно формы заявки -->
+    <div id="rental-modal" class="modal-overlay hidden">
+        <div class="modal-container">
+            <div class="modal-content rounded">
+                <button class="modal-close rounded cursor-pointer" onclick="closeRentalModal()" type="button" aria-label="Закрыть форму">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+                
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-zinc-900 mb-2">Заявка на аренду</h2>
+                    <p id="selected-equipment" class="text-brand-dark font-semibold"></p>
+                </div>
+                
+                <form id="rental-form" class="space-y-4">
+                    <input type="hidden" id="rf-main-phone" value={contacts.mainPhoneDisplay} />
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-700 mb-2">Ваше имя *</label>
+                        <input
+                            type="text"
+                            id="rf-name"
+                            name="name"
+                            required
+                            placeholder="Иван Петров"
+                            class="w-full px-4 py-3 rounded border border-zinc-200 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-brand-dark focus:border-transparent transition-all duration-200 text-sm"
+                        />
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-700 mb-2">Номер телефона *</label>
+                        <input
+                            type="tel"
+                            id="rf-phone"
+                            name="phone"
+                            required
+                            placeholder="8 (___) ___-__-__"
+                            maxlength="17"
+                            class="w-full px-4 py-3 rounded border border-zinc-200 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-brand-dark focus:border-transparent transition-all duration-200 text-sm"
+                        />
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-zinc-700 mb-2">Комментарий</label>
+                        <textarea
+                            id="rf-comment"
+                            name="comment"
+                            rows="3"
+                            placeholder="Адрес объекта, дополнительные пожелания..."
+                            class="w-full px-4 py-3 rounded border border-zinc-200 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-brand-dark focus:border-transparent transition-all duration-200 text-sm resize-none"
+                        ></textarea>
+                    </div>
+                    
+                    <button
+                        type="submit"
+                        id="rf-submit"
+                        class="rental-submit-btn w-full py-4 px-8 rounded uppercase tracking-wide text-white text-sm transition-all duration-300 cursor-pointer"
+                    >
+                        <span id="rf-btn-text">Отправить заявку</span>
+                        <span id="rf-spinner" class="hidden">
+                            <Icon name="lucide:loader-circle" class="w-5 h-5 animate-spin inline" />
+                            Отправляем...
+                        </span>
+                    </button>
+                    
+                    <label class="flex items-start gap-2.5 text-xs text-zinc-500">
+                        <input
+                            type="checkbox"
+                            id="rf-consent"
+                            name="consent"
+                            class="mt-0.5 h-4 w-4 rounded border-zinc-300 text-brand-dark focus:ring-brand-dark"
+                        />
+                        <span>
+                            Я соглашаюсь с
+                            <a
+                                href="/privacy"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="text-brand-dark underline hover:no-underline"
+                            >
+                                политикой конфиденциальности
+                            </a>
+                            и обработкой персональных данных.
+                        </span>
+                    </label>
+                </form>
+                
+                <!-- Успех -->
+                <div id="rental-success" class="hidden text-center">
+                    <div class="w-16 h-16 rounded bg-green-100 flex items-center justify-center mx-auto mb-6">
+                        <Icon name="lucide:check" class="w-8 h-8 text-green-600" />
+                    </div>
+                    <h3 class="text-zinc-900 uppercase text-2xl mb-3">Заявка принята!</h3>
+                    <p class="text-zinc-500 text-base leading-relaxed">
+                        Наш менеджер свяжется с вами в ближайшее время для уточнения деталей.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</BaseLayout>
+
+<style>
+    /* Модальное окно */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        z-index: 70;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+    
+    .modal-overlay.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+    
+    .modal-container {
+        width: 100%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        transform: scale(0.9);
+        transition: transform 0.3s ease;
+    }
+    
+    .modal-overlay.show .modal-container {
+        transform: scale(1);
+    }
+    
+    .modal-content {
+        background: white;
+        padding: 2rem;
+        position: relative;
+    }
+    
+    .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.5rem;
+        background: transparent;
+        border: none;
+        color: #71717a;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+    
+    .modal-close:hover {
+        background: #f4f4f5;
+        color: #18181b;
+    }
+
+    a,
+    button,
+    [role="button"] {
+        cursor: pointer;
+    }
+    
+    .rental-submit-btn {
+        background: linear-gradient(135deg, #0257c0, #297fec);
+        box-shadow: 0 4px 16px rgba(2, 87, 192, 0.4);
+    }
+    
+    .rental-submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(2, 87, 192, 0.55);
+    }
+    
+    .rental-submit-btn:disabled {
+        opacity: 0.7;
+        transform: none;
+        cursor: not-allowed;
+    }
+</style>
+
+<script>
+    type RentalWindow = Window & typeof globalThis & {
+        openRentalForm: (button: HTMLButtonElement) => void;
+        closeRentalModal: () => void;
+    };
+
+    const rentalWindow = window as RentalWindow;
+
+    // Фильтрация техники
+    const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+    const equipmentCards = document.querySelectorAll<HTMLElement>('.equipment-card');
+    
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const category = btn.dataset.category;
+            
+            // Обновляем активную кнопку
+            filterBtns.forEach(b => {
+                b.classList.remove('bg-brand-dark', 'text-white');
+                b.classList.add('bg-zinc-100', 'text-zinc-700');
+            });
+            btn.classList.remove('bg-zinc-100', 'text-zinc-700');
+            btn.classList.add('bg-brand-dark', 'text-white');
+            
+            // Фильтруем карточки
+            equipmentCards.forEach(card => {
+                if (category === 'Все' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+    
+    // Открытие модального окна
+    const modal = document.getElementById('rental-modal');
+    const form = document.getElementById('rental-form');
+    const success = document.getElementById('rental-success');
+    const submitBtn = document.getElementById('rf-submit');
+    const btnText = document.getElementById('rf-btn-text');
+    const spinner = document.getElementById('rf-spinner');
+    const consentInput = document.getElementById('rf-consent');
+    const fallbackMainPhone =
+        (document.getElementById('rf-main-phone') as HTMLInputElement | null)?.value ??
+        '';
+
+    function resetRentalModalState() {
+        if (!(form instanceof HTMLFormElement)) return;
+        if (!(success instanceof HTMLElement)) return;
+        if (!(submitBtn instanceof HTMLButtonElement)) return;
+        if (!(btnText instanceof HTMLElement)) return;
+        if (!(spinner instanceof HTMLElement)) return;
+
+        form.reset();
+        form.classList.remove('hidden');
+        success.classList.add('hidden');
+        submitBtn.disabled = false;
+        btnText.classList.remove('hidden');
+        spinner.classList.add('hidden');
+    }
+
+    rentalWindow.openRentalForm = function(button: HTMLButtonElement) {
+        const equipmentName = button.dataset.equipment;
+        const selectedEquipment = document.getElementById('selected-equipment');
+        
+        if (selectedEquipment && equipmentName) {
+            selectedEquipment.textContent = equipmentName;
+        }
+        
+        if (modal) {
+            resetRentalModalState();
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => modal.classList.add('show'));
+            document.body.style.overflow = 'hidden';
+        }
+    };
+    
+    // Закрытие модального окна
+    rentalWindow.closeRentalModal = function() {
+        if (modal) {
+            const focused = document.activeElement;
+            if (focused instanceof HTMLElement && modal.contains(focused)) {
+                focused.blur();
+            }
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 250);
+        }
+    };
+    
+    // Закрытие по клику вне модального окна
+    document.getElementById('rental-modal')?.addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) {
+            rentalWindow.closeRentalModal();
+        }
+    });
+    
+    // Маска телефона
+    const phoneInput = document.getElementById('rf-phone');
+    phoneInput?.addEventListener('input', () => {
+        if (!(phoneInput instanceof HTMLInputElement)) return;
+        let raw = phoneInput.value.replace(/\D/g, '');
+        if (raw.startsWith('7')) raw = '8' + raw.slice(1);
+        if (!raw.startsWith('8') && raw.length > 0) raw = '8' + raw;
+        raw = raw.slice(0, 11);
+
+        let formatted = '8';
+        if (raw.length > 1) formatted += ' (' + raw.slice(1, 4);
+        if (raw.length >= 4) formatted += ') ' + raw.slice(4, 7);
+        if (raw.length >= 7) formatted += '-' + raw.slice(7, 9);
+        if (raw.length >= 9) formatted += '-' + raw.slice(9, 11);
+
+        phoneInput.value = formatted;
+    });
+    
+    // Отправка формы
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzMqNnWkWI9RpuMJWVlGdG7Fzdcay5BGH4Zg1iqsOwpi-OR5DsGXLh9UARmMYzlfKcseg/exec';
+    // Устанавливаем action скрытой формы сразу
+    const hiddenForm = document.getElementById('gas-hidden-form') as HTMLFormElement;
+    if (hiddenForm) hiddenForm.action = APPS_SCRIPT_URL;
+    
+    form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!(form instanceof HTMLFormElement)) return;
+        if (!(submitBtn instanceof HTMLButtonElement)) return;
+        if (!(btnText instanceof HTMLElement)) return;
+        if (!(spinner instanceof HTMLElement)) return;
+        if (!(success instanceof HTMLElement)) return;
+        
+        const nameEl = document.getElementById('rf-name');
+        const phoneEl = document.getElementById('rf-phone');
+        const commentEl = document.getElementById('rf-comment');
+        const equipmentEl = document.getElementById('selected-equipment');
+
+        if (!(nameEl instanceof HTMLInputElement)) return;
+        if (!(phoneEl instanceof HTMLInputElement)) return;
+        if (!(commentEl instanceof HTMLTextAreaElement)) return;
+
+        const fio = nameEl.value.trim();
+        const phone = phoneEl.value.trim();
+        const equipment = equipmentEl?.textContent?.trim() ?? '';
+        const baseComment = commentEl.value.trim();
+        const comment = equipment
+            ? `Техника: ${equipment}${baseComment ? ` | ${baseComment}` : ''}`
+            : baseComment;
+        
+        if (!fio || !phone) {
+            alert('Пожалуйста, заполните обязательные поля: Имя и Телефон');
+            return;
+        }
+
+        if (!(consentInput instanceof HTMLInputElement) || !consentInput.checked) {
+            alert('Подтвердите согласие с политикой конфиденциальности');
+            return;
+        }
+        
+        // Состояние загрузки
+        submitBtn.disabled = true;
+        btnText.classList.add('hidden');
+        spinner.classList.remove('hidden');
+        
+        try {
+            const hiddenForm = document.getElementById('gas-hidden-form') as HTMLFormElement;
+            hiddenForm.action = APPS_SCRIPT_URL;
+            (hiddenForm.querySelector('input[name="fio"]') as HTMLInputElement).value = fio;
+            (hiddenForm.querySelector('input[name="phone"]') as HTMLInputElement).value = phone;
+            (hiddenForm.querySelector('input[name="comment"]') as HTMLInputElement).value = comment;
+            (hiddenForm.querySelector('input[name="consent"]') as HTMLInputElement).value = 'Да';
+            hiddenForm.submit();
+            
+            // Успех
+            form.classList.add('hidden');
+            success.classList.remove('hidden');
+
+            setTimeout(() => {
+                rentalWindow.closeRentalModal();
+            }, 1800);
+        } catch {
+            submitBtn.disabled = false;
+            btnText.classList.remove('hidden');
+            spinner.classList.add('hidden');
+            alert(`Ошибка отправки. Позвоните нам напрямую: ${fallbackMainPhone}`);
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal?.classList.contains('show')) {
+            rentalWindow.closeRentalModal();
+        }
+    });
+</script>

@@ -5,30 +5,25 @@ interface Props {
     id: string;
     title: string;
     desc: string;
-    fullDesc: string;
+    hideModalImage?: boolean;
     image?: ImageMetadata;
-    videoSrc?: string;
+    videoEmbedUrl?: string;
 }
 
-const { id, title, desc, fullDesc, image, videoSrc } = Astro.props;
-
-// Разделяем описание на абзацы. Первый абзац пойдет ДО картинки, остальные — ПОСЛЕ.
-const paragraphs = fullDesc.split("\n\n").filter((p) => p.trim() !== "");
-const firstParagraph = paragraphs[0];
-const remainingParagraphs = paragraphs.slice(1);
+const { id, title, desc, hideModalImage, image, videoEmbedUrl } = Astro.props;
 ---
 
 <dialog
     id={`modal-${id}`}
-    class="service-modal p-0 m-auto bg-transparent border-none w-[calc(100%-2rem)] max-w-3xl backdrop:backdrop-blur-sm backdrop:bg-slate-900/60 opacity-0 transition-opacity duration-300 open:opacity-100"
+    class="service-modal p-0 m-auto bg-transparent border-none w-[calc(100%-2rem)] max-w-5xl backdrop:backdrop-blur-sm backdrop:bg-slate-900/60 opacity-0 transition-opacity duration-300 open:opacity-100"
 >
     <!-- Основной контейнер -->
     <div
-        class="bg-white w-full rounded-2xl flex flex-col relative transform transition-all duration-500 scale-95 opacity-0 modal-content shadow-2xl overflow-hidden max-h-[90vh]"
+        class="bg-white w-full rounded flex flex-col relative transform transition-all duration-500 scale-95 opacity-0 modal-content shadow-2xl overflow-hidden max-h-[90vh]"
     >
         <!-- Кнопка закрытия (фиксирована поверх контента) -->
         <button
-            class="js-close-modal absolute top-3 right-3 md:top-4 md:right-4 z-50 bg-slate-100/90 hover:bg-slate-200 backdrop-blur p-2 rounded-full transition-colors text-slate-700 group"
+            class="js-close-modal absolute top-3 right-3 md:top-4 md:right-4 z-50 bg-slate-100/90 hover:bg-slate-200 backdrop-blur p-2 rounded transition-colors text-slate-700 group"
             aria-label="Закрыть"
             data-modal={id}
         >
@@ -50,63 +45,40 @@ const remainingParagraphs = paragraphs.slice(1);
         <div class="overflow-y-auto w-full max-h-[90vh] custom-scroll relative">
             <article class="px-6 py-10 md:p-12 text-left">
                 <!-- Заголовок -->
+
                 <h3
-                    class="font-heading text-3xl md:text-5xl uppercase text-slate-900 mb-6 leading-none pr-10"
+                    class="font-heading text-3xl md:text-5xl uppercase text-slate-900 mb-4 leading-none pr-10"
                 >
                     {title}
                 </h3>
 
-                <!-- Вводный жирный текст -->
-                <p class="text-slate-800 font-bold text-lg leading-snug mb-6">
+                <!-- Вводный текст -->
+                <p class="text-slate-600 text-lg leading-snug mb-8">
                     {desc}
                 </p>
 
-                <!-- Первый абзац -->
-                {
-                    firstParagraph && (
-                        <p class="text-slate-700 mb-8 text-base md:text-lg leading-relaxed">
-                            {firstParagraph}
-                        </p>
-                    )
-                }
+                <!-- Медиа-вставка: VK iframe или фото -->
 
-                <!-- Медиа-вставка (видео или фото) -->
-                <div
-                    class="w-full relative bg-slate-100 rounded-xl overflow-hidden mb-8 aspect-video border border-slate-100 shadow-sm"
-                >
-                    {
-                        // https://vkvideo.ru/video-64387052_456266313?sh=4
-                        // https://vk.com/video-64387052_456266313
-                        // <iframe src="https://vkvideo.ru/video_ext.php?oid=-64387052&id=456266313&hash=324cc1326e20bff9&hd=4" width="1920" height="1080" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" frameborder="0" allowfullscreen></iframe>
-                        videoSrc ? (
-                            <video
-                                class="absolute inset-0 w-full h-full object-cover"
-                                src={videoSrc}
-                                controls
-                                playsinline
-                            />
-                        ) : image ? (
+                {
+                    hideModalImage ? null : image ? (
+                        <div class="w-full relative bg-slate-100 rounded overflow-hidden mb-8 aspect-video border border-slate-100 shadow-sm">
                             <Image
                                 src={image}
                                 alt={title}
-                                widths={[640, 1024]}
-                                sizes="(max-width: 768px) 100vw, 800px"
+                                widths={[640, 1024, 1400]}
+                                sizes="(max-width: 768px) 100vw, 900px"
                                 class="absolute inset-0 w-full h-full object-cover"
                             />
-                        ) : null
-                    }
-                </div>
-
-                <!-- Оставшиеся абзацы текста -->
-                {
-                    remainingParagraphs.length > 0 && (
-                        <div class="text-slate-700 text-base md:text-lg leading-relaxed space-y-5">
-                            {remainingParagraphs.map((p) => (
-                                <p>{p}</p>
-                            ))}
                         </div>
-                    )
+                    ) : null
                 }
+
+                <!-- Тело из MD (передаётся через slot) -->
+                <div
+                    class="modal-body mt-16 text-slate-700 text-base md:text-lg leading-relaxed"
+                >
+                    <slot />
+                </div>
             </article>
         </div>
     </div>
@@ -138,5 +110,55 @@ const remainingParagraphs = paragraphs.slice(1);
     }
     .custom-scroll::-webkit-scrollbar-thumb:hover {
         background-color: #94a3b8; /* slate-400 */
+    }
+
+    /* Markdown body styling */
+    .modal-body :global(p) {
+        margin-bottom: 1.25rem;
+    }
+    .modal-body :global(ul),
+    .modal-body :global(ol) {
+        padding-left: 1.5rem;
+        margin-bottom: 1.25rem;
+    }
+    .modal-body :global(ul) {
+        list-style-type: disc;
+    }
+    .modal-body :global(ol) {
+        list-style-type: decimal;
+    }
+    .modal-body :global(li) {
+        margin-bottom: 0.4rem;
+    }
+    .modal-body :global(strong) {
+        font-weight: 700;
+        color: #1e293b;
+    }
+    .modal-body :global(h2),
+    .modal-body :global(h3),
+    .modal-body :global(h4) {
+        font-family: var(--font-heading);
+        text-transform: uppercase;
+        color: #0f172a;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    /* Responsive VK video wrapper embedded in markdown */
+    .modal-body :global(.video-embed) {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        margin-bottom: 1.5rem;
+        border-radius: 0.25rem;
+        overflow: hidden;
+        background: #000;
+    }
+    .modal-body :global(.video-embed iframe) {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
     }
 </style>

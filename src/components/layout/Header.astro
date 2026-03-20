@@ -1,5 +1,7 @@
 ---
 import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import { getCollection } from 'astro:content';
 import logoMain from '../../assets/logo-main.svg';
 import { client } from '../../sanity/client';
 
@@ -8,20 +10,50 @@ const headerData = await client.fetch(
   `*[_type == "header" && _id == "header"][0]`
 );
 
+const [contactsEntry] = (await getCollection('site')).sort((a, b) =>
+  a.id.localeCompare(b.id),
+);
+
+if (!contactsEntry) {
+  throw new Error('Site contacts content is missing in src/content/site.');
+}
+
+const contacts = contactsEntry.data;
+
+type NavSubItem = {
+  label: string;
+  href: string;
+};
+
+type NavItem = {
+  label: string;
+  href: string;
+  dropdown: NavSubItem[];
+};
+
 // Fallbacks
-const phone     = headerData?.phone     ?? '8-911-879-31-34';
-const phoneHref = headerData?.phoneHref ?? '+79118793134';
+const phone     = headerData?.phone     ?? contacts.mainPhoneDisplay;
+const phoneHref = headerData?.phoneHref ?? contacts.mainPhoneHref;
 const ctaLabel  = headerData?.ctaLabel  ?? 'Заказать звонок';
 const ctaHref   = headerData?.ctaHref   ?? '#contact-form';
-const navItems  = headerData?.navItems  ?? [
+const isHomePage = Astro.url.pathname === '/';
+const navItems: NavItem[] = headerData?.navItems  ?? [
   { label: 'О компании',         href: '/o-kompanii',     dropdown: [{ label: 'О нас', href: '/o-kompanii' }, { label: 'Вакансии', href: '/vakansii' }] },
-  { label: 'Наши работы',        href: '/proekty',  dropdown: [] },
+  { label: 'Проекты',            href: '/proekty',  dropdown: [] },
   { label: 'Аренда спецтехники', href: '/arenda-spetstehniki', dropdown: [] },
   { label: 'Контакты',           href: '/kontakty',  dropdown: [] },
 ];
 ---
 
-<header class="absolute top-0 left-0 right-0 z-50 w-full bg-gradient-to-b from-black/50 to-black/0 multiply">
+<header
+  id="site-header"
+  data-home={isHomePage ? 'true' : 'false'}
+  class={`fixed top-0 left-0 right-0 z-50 w-full transition-transform duration-300 ${
+    isHomePage
+      ? 'bg-gradient-to-b from-black/50 to-black/0'
+      : 'bg-slate-900/95 backdrop-blur-md border-b border-white/10'
+  }`}
+>
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
 
@@ -38,7 +70,7 @@ const navItems  = headerData?.navItems  ?? [
 
       <!-- Навигация (десктоп) -->
       <nav class="hidden lg:flex items-center gap-8 font-body" aria-label="Основная навигация">
-        {navItems.map((item) =>
+        {navItems.map((item: NavItem) =>
           item.dropdown && item.dropdown.length > 0 ? (
             <!-- Пункт с выпадающим меню -->
             <div class="relative group">
@@ -61,7 +93,7 @@ const navItems  = headerData?.navItems  ?? [
                           transition-all duration-200 translate-y-1 group-hover:translate-y-0">
                 <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-blue-600 rotate-45 rounded-sm"></div>
                 <ul class="relative bg-blue-600 rounded-lg overflow-hidden shadow-2xl py-1" role="menu">
-                  {item.dropdown.map((sub) => (
+                  {item.dropdown.map((sub: NavSubItem) => (
                     <li role="none">
                       <a
                         href={sub.href}
@@ -92,8 +124,9 @@ const navItems  = headerData?.navItems  ?? [
       <div class="hidden lg:flex items-center gap-5">
         <a
           href={`tel:${phoneHref}`}
-          class="text-white/80 text-sm font-semibold hover:text-white transition-colors duration-200 tracking-wide"
+          class="inline-flex items-center gap-2 text-white/80 text-sm font-semibold hover:text-white transition-colors duration-200 tracking-wide"
         >
+          <Icon name="lucide:phone" class="w-4 h-4 text-blue-300" />
           {phone}
         </a>
       </div>
@@ -121,7 +154,7 @@ const navItems  = headerData?.navItems  ?? [
     aria-hidden="true"
   >
     <nav class="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-1" aria-label="Мобильная навигация">
-      {navItems.map((item, idx) =>
+      {navItems.map((item: NavItem, idx: number) =>
         item.dropdown && item.dropdown.length > 0 ? (
           <div>
             <button
@@ -138,7 +171,7 @@ const navItems  = headerData?.navItems  ?? [
               </svg>
             </button>
             <div id={`mob-sub-${idx}`} class="hidden pl-4 flex flex-col">
-              {item.dropdown.map((sub) => (
+              {item.dropdown.map((sub: NavSubItem) => (
                 <a href={sub.href}
                    class="py-2 text-sm font-semibold tracking-widest uppercase
                           hover:text-white transition-colors">
@@ -160,7 +193,8 @@ const navItems  = headerData?.navItems  ?? [
 
       <!-- Телефон в мобильном меню -->
       <a href={`tel:${phoneHref}`}
-         class="mt-4 py-3 text-blue-300 text-sm font-semibold tracking-wide">
+         class="mt-4 py-3 text-blue-300 text-sm font-semibold tracking-wide inline-flex items-center gap-2">
+        <Icon name="lucide:phone" class="w-4 h-4" />
         {phone}
       </a>
     </nav>
@@ -172,6 +206,62 @@ const navItems  = headerData?.navItems  ?? [
   const btn  = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
   const line3 = document.getElementById('burger-line-3');
+  const header = document.getElementById('site-header');
+
+  const transparentHeaderClasses = ['bg-gradient-to-b', 'from-black/50', 'to-black/0'];
+  const solidHeaderClasses = ['bg-slate-900/95', 'backdrop-blur-md', 'border-b', 'border-white/10'];
+
+  const isHomeHeader = header?.dataset.home === 'true';
+
+  const setTransparentHeader = () => {
+    if (!header || !isHomeHeader) return;
+    header.classList.remove(...solidHeaderClasses);
+    header.classList.add(...transparentHeaderClasses);
+  };
+
+  const setSolidHeader = () => {
+    if (!header) return;
+    header.classList.remove(...transparentHeaderClasses);
+    header.classList.add(...solidHeaderClasses);
+  };
+
+  let lastScrollY = window.scrollY;
+
+  if (isHomeHeader && window.scrollY <= 4) {
+    setTransparentHeader();
+  } else {
+    setSolidHeader();
+  }
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (!header) return;
+
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY <= 4) {
+        header.style.transform = 'translateY(0)';
+        if (isHomeHeader) {
+          setTransparentHeader();
+        } else {
+          setSolidHeader();
+        }
+        lastScrollY = currentScrollY;
+        return;
+      }
+
+      if (currentScrollY > lastScrollY + 4) {
+        header.style.transform = 'translateY(-100%)';
+      } else if (currentScrollY < lastScrollY - 4) {
+        header.style.transform = 'translateY(0)';
+        setSolidHeader();
+      }
+
+      lastScrollY = currentScrollY;
+    },
+    { passive: true }
+  );
 
   btn?.addEventListener('click', () => {
     const isOpen = !menu?.classList.contains('hidden');

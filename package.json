@@ -16,6 +16,7 @@
     "@astrojs/react": "^4.4.2",
     "@astrojs/vercel": "^9.0.4",
     "@iconify-json/lucide": "^1.2.95",
+    "@iconify-json/simple-icons": "^1.2.74",
     "@sanity/client": "^7.16.0",
     "@sanity/image-url": "^2.0.3",
     "@tailwindcss/vite": "^4.2.1",

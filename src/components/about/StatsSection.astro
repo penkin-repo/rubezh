@@ -1,0 +1,127 @@
+---
+// src/components/about/StatsSection.astro
+---
+
+<section class="py-24 bg-zinc-900 pb-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="font-heading text-4xl sm:text-5xl lg:text-6xl uppercase leading-none text-white">
+                Наш масштаб <span class="text-brand-light">в цифрах</span>
+            </h2>
+        </div>
+
+        <div class="stats-bar w-full py-10 px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-wrap justify-center gap-6 lg:gap-8">
+                    <div class="stat-card group flex-1 min-w-[140px] max-w-[220px] flex flex-col items-center justify-center py-8 px-6 rounded border-1 border-white/70 bg-black/30 text-center transition-transform duration-300 hover:-translate-y-1" data-target="11" data-index="0">
+                        <div class="flex items-end justify-center leading-none mb-3">
+                            <span class="stat-number font-heading text-5xl sm:text-6xl text-white">0</span>
+                            <span class="font-heading text-5xl sm:text-6xl text-blue-400 ml-0.5">+</span>
+                        </div>
+                        <div class="font-body text-white/70 text-xs sm:text-sm uppercase tracking-widest">
+                            Лет на рынке
+                        </div>
+                    </div>
+
+                    <div class="stat-card group flex-1 min-w-[140px] max-w-[220px] flex flex-col items-center justify-center py-8 px-6 rounded border-1 border-white/70 bg-black/30 text-center transition-transform duration-300 hover:-translate-y-1" data-target="200" data-index="1">
+                        <div class="flex items-end justify-center leading-none mb-3">
+                            <span class="stat-number font-heading text-5xl sm:text-6xl text-white">0</span>
+                            <span class="font-heading text-5xl sm:text-6xl text-blue-400 ml-0.5">+</span>
+                        </div>
+                        <div class="font-body text-white/70 text-xs sm:text-sm uppercase tracking-widest">
+                            Выполненных объектов
+                        </div>
+                    </div>
+
+                    <div class="stat-card group flex-1 min-w-[140px] max-w-[220px] flex flex-col items-center justify-center py-8 px-6 rounded border-1 border-white/70 bg-black/30 text-center transition-transform duration-300 hover:-translate-y-1" data-target="60" data-index="2">
+                        <div class="flex items-end justify-center leading-none mb-3">
+                            <span class="stat-number font-heading text-5xl sm:text-6xl text-white">0</span>
+                            <span class="font-heading text-5xl sm:text-6xl text-blue-400 ml-0.5">+</span>
+                        </div>
+                        <div class="font-body text-white/70 text-xs sm:text-sm uppercase tracking-widest">
+                            Машин спецтехники
+                        </div>
+                    </div>
+
+                    <div class="stat-card group flex-1 min-w-[140px] max-w-[220px] flex flex-col items-center justify-center py-8 px-6 rounded border-1 border-white/70 bg-black/30 text-center transition-transform duration-300 hover:-translate-y-1" data-target="130" data-index="3">
+                        <div class="flex items-end justify-center leading-none mb-3">
+                            <span class="stat-number font-heading text-5xl sm:text-6xl text-white">0</span>
+                            <span class="font-heading text-5xl sm:text-6xl text-blue-400 ml-0.5">+</span>
+                        </div>
+                        <div class="font-body text-white/70 text-xs sm:text-sm uppercase tracking-widest">
+                            Сотрудников
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function easeOutQuart(t) {
+            return 1 - Math.pow(1 - t, 4);
+        }
+
+        function animateCount(el, target, duration = 1400) {
+            const start = performance.now();
+
+            function update(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                const current = Math.round(easeOutQuart(progress) * target);
+                el.textContent = String(current);
+                if (progress < 1) requestAnimationFrame(update);
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+
+                    const card = entry.target;
+                    const target = parseInt(card.dataset.target, 10);
+                    const numberEl = card.querySelector('.stat-number');
+                    if (!numberEl) return;
+
+                    const index = parseInt(card.dataset.index, 10);
+                    setTimeout(() => animateCount(numberEl, target), index * 120);
+
+                    observer.unobserve(card);
+                });
+            },
+            { threshold: 0.4 }
+        );
+
+        document.querySelectorAll('.stat-card').forEach((card) => {
+            observer.observe(card);
+        });
+
+        const scaleObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const card = entry.target;
+                    if (entry.isIntersecting) {
+                        const idx = parseInt(card.dataset.index, 10);
+                        setTimeout(() => {
+                            card.style.transform = 'scale(1) translateY(0)';
+                            card.style.opacity = '1';
+                        }, idx * 100);
+                    }
+                });
+            },
+            { threshold: 0.2 }
+        );
+
+        document.querySelectorAll('.stat-card').forEach((card) => {
+            card.style.transform = 'scale(0.88) translateY(20px)';
+            card.style.opacity = '0';
+            card.style.transition = 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease';
+            scaleObserver.observe(card);
+        });
+    });
+</script>

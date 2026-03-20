@@ -1,6 +1,19 @@
 ---
+import { getCollection } from "astro:content";
 import { Icon } from "astro-icon/components";
+import avitoIcon from "../../assets/avito.svg";
+import { Image } from "astro:assets";
 // Данные: PROJECT_LOG_HOW.md — контакты компании
+
+const [contactsEntry] = (await getCollection("site")).sort((a, b) =>
+    a.id.localeCompare(b.id),
+);
+
+if (!contactsEntry) {
+    throw new Error("Site contacts content is missing in src/content/site.");
+}
+
+const contacts = contactsEntry.data;
 ---
 
 <section
@@ -17,17 +30,17 @@ import { Icon } from "astro-icon/components";
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <!-- Заголовок -->
         <div class="mb-12">
-            <div class="flex items-center gap-3 mb-4">
+            <!-- <div class="flex items-center gap-3 mb-4">
                 <span class="w-10 h-0.5 bg-brand-light" aria-hidden="true"
                 ></span>
                 <span
                     class="text-brand-light text-xs font-semibold tracking-widest uppercase"
                     >Где нас найти</span
                 >
-            </div>
+            </div> -->
             <h2
                 id="contacts-heading"
-                class="font-heading text-white uppercase text-4xl sm:text-5xl leading-none tracking-wide"
+                class="font-heading text-center text-white uppercase text-3xl sm:text-4xl leading-none tracking-wide"
             >
                 Контакты
             </h2>
@@ -40,7 +53,7 @@ import { Icon } from "astro-icon/components";
                 <!-- Адрес -->
                 <div class="contact-card flex gap-4">
                     <div
-                        class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0"
+                        class="w-12 h-12 rounded bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0"
                     >
                         <Icon
                             name="lucide:map-pin"
@@ -54,7 +67,7 @@ import { Icon } from "astro-icon/components";
                             Адрес
                         </p>
                         <p class="text-white font-medium leading-snug">
-                            г. Архангельск,<br />ул. Дачная, д. 61, к. 1
+                            {contacts.addressFull}
                         </p>
                     </div>
                 </div>
@@ -62,7 +75,7 @@ import { Icon } from "astro-icon/components";
                 <!-- Телефон -->
                 <div class="contact-card flex gap-4">
                     <div
-                        class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0"
+                        class="w-12 h-12 rounded bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0"
                     >
                         <Icon
                             name="lucide:phone"
@@ -76,10 +89,10 @@ import { Icon } from "astro-icon/components";
                             Главный бухгалтер
                         </p>
                         <a
-                            href="tel:+79118793134"
+                            href={`tel:${contacts.mainPhoneHref}`}
                             class="text-white font-semibold text-lg hover:text-brand-light transition-colors duration-200"
                         >
-                            8-911-879-31-34
+                            {contacts.mainPhoneDisplay}
                         </a>
                     </div>
                 </div>
@@ -87,12 +100,9 @@ import { Icon } from "astro-icon/components";
                 <!-- Email -->
                 <div class="contact-card flex gap-4">
                     <div
-                        class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0"
+                        class="w-12 h-12 rounded bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0"
                     >
-                        <Icon
-                            name="lucide:mail"
-                            class="w-5 h-5 text-brand-light"
-                        />
+                        <Icon name="lucide:mail" class="w-5 h-5 text-brand-light" />
                     </div>
                     <div>
                         <p
@@ -101,10 +111,10 @@ import { Icon } from "astro-icon/components";
                             Email (офис)
                         </p>
                         <a
-                            href="mailto:amdofis@mail.ru"
+                            href={`mailto:${contacts.officeEmail}`}
                             class="text-white hover:text-brand-light transition-colors duration-200"
                         >
-                            amdofis@mail.ru
+                            {contacts.officeEmail}
                         </a>
                     </div>
                 </div>
@@ -112,7 +122,7 @@ import { Icon } from "astro-icon/components";
                 <!-- HR -->
                 <div class="contact-card flex gap-4">
                     <div
-                        class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0"
+                        class="w-12 h-12 rounded bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0"
                     >
                         <Icon
                             name="lucide:users"
@@ -126,16 +136,16 @@ import { Icon } from "astro-icon/components";
                             Отдел кадров (вакансии)
                         </p>
                         <a
-                            href="tel:+79210772466"
+                            href={`tel:${contacts.hrPhoneHref}`}
                             class="text-white hover:text-brand-light transition-colors duration-200 block"
                         >
-                            8-921-077-24-66
+                            {contacts.hrPhoneDisplay}
                         </a>
                         <a
-                            href="mailto:rubezh.poisk@mail.ru"
+                            href={`mailto:${contacts.hrEmail}`}
                             class="text-white/70 hover:text-brand-light transition-colors duration-200 text-sm"
                         >
-                            rubezh.poisk@mail.ru
+                            {contacts.hrEmail}
                         </a>
                     </div>
                 </div>
@@ -143,12 +153,9 @@ import { Icon } from "astro-icon/components";
                 <!-- ВКонтакте -->
                 <div class="contact-card flex gap-4">
                     <div
-                        class="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0"
+                        class="w-12 h-12 rounded bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0"
                     >
-                        <Icon
-                            name="lucide:link"
-                            class="w-5 h-5 text-brand-light"
-                        />
+                        <Icon name="simple-icons:vk" class="w-5 h-5 text-brand-light" />
                     </div>
                     <div>
                         <p
@@ -157,7 +164,7 @@ import { Icon } from "astro-icon/components";
                             ВКонтакте
                         </p>
                         <a
-                            href="https://vk.com/id865770117"
+                            href={contacts.vkUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             class="text-white hover:text-brand-light transition-colors duration-200"
@@ -167,9 +174,39 @@ import { Icon } from "astro-icon/components";
                     </div>
                 </div>
 
+                <!-- Avito -->
+                <div class="contact-card flex gap-4">
+                    <div
+                        class="w-12 h-12 rounded bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0"
+                    >
+                        <Image
+                            src={avitoIcon}
+                            alt="Avito"
+                            width={20}
+                            height={20}
+                            loading="lazy"
+                        />
+                    </div>
+                    <div>
+                        <p
+                            class="text-white/50 text-xs font-semibold tracking-widest uppercase mb-1"
+                        >
+                            Avito
+                        </p>
+                        <a
+                            href={contacts.avitoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-white hover:text-brand-light transition-colors duration-200"
+                        >
+                            Профиль Avito
+                        </a>
+                    </div>
+                </div>
+
                 <!-- Режим работы -->
                 <div
-                    class="mt-8 p-5 rounded-2xl bg-white/5 border border-white/10"
+                    class="mt-8 p-5 rounded bg-white/5 border border-white/10"
                 >
                     <p
                         class="text-white/50 text-xs font-semibold tracking-widest uppercase mb-3"
@@ -178,14 +215,10 @@ import { Icon } from "astro-icon/components";
                     </p>
                     <div class="space-y-1">
                         <p class="text-white text-sm flex justify-between">
-                            <span>Пн — Пт</span><span class="text-white/80"
-                                >09:00 — 17:00</span
-                            >
+                            <span class="text-white/80">{contacts.workWeekdays}</span>
                         </p>
                         <p class="text-white text-sm flex justify-between">
-                            <span>Сб — Вс</span><span class="text-white/50"
-                                >По договорённости</span
-                            >
+                            <span class="text-white/50">{contacts.workWeekend}</span>
                         </p>
                     </div>
                 </div>
@@ -193,7 +226,7 @@ import { Icon } from "astro-icon/components";
 
             <!-- Правая: Яндекс.Карта (lazy-loaded) -->
             <div
-                class="relative rounded-2xl overflow-hidden min-h-[400px] lg:min-h-0 bg-zinc-800"
+                class="relative rounded overflow-hidden min-h-[400px] lg:min-h-0 bg-zinc-800"
             >
                 <!-- Placeholder до загрузки -->
                 <div
@@ -209,7 +242,7 @@ import { Icon } from "astro-icon/components";
                     id="yandex-map"
                     title="Местоположение ООО Рубеж на карте"
                     src=""
-                    data-src="https://yandex.ru/map-widget/v1/?ll=40.598800%2C64.548900&z=16&pt=40.598800%2C64.548900,pmwtm1~&text=%D0%A3%D0%BB%D0%B8%D1%86%D0%B0%20%D0%94%D0%B0%D1%87%D0%BD%D0%B0%D1%8F%2061%D0%BA1%2C%20%D0%90%D1%80%D1%85%D0%B0%D0%BD%D0%B3%D0%B5%D0%BB%D1%8C%D1%81%D0%BA"
+                    data-src={contacts.mapEmbedUrl}
                     class="absolute inset-0 w-full h-full border-0 opacity-0 transition-opacity duration-500"
                     allowfullscreen
                     referrerpolicy="no-referrer-when-downgrade"></iframe>
