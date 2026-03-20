@@ -49,8 +49,6 @@ const hero = {
     description: 'Выполняем полный комплекс работ в Архангельской области. Собственный парк из 60+ единиц техники.',
     primaryBtnLabel: 'Заказать технику',
     primaryBtnHref: '/equipment',
-    secondaryBtnLabel: 'Рассчитать смету',
-    secondaryBtnHref: '/contacts',
 };
 
 // ── Header ────────────────────────────────────────────────────────────────────
@@ -59,6 +57,7 @@ const header = {
     _type: 'header',
     phone: '8-911-879-31-34',
     phoneHref: '+79118793134',
+    officeEmail: 'amdofis@mail.ru',
     ctaLabel: 'Заказать звонок',
     ctaHref: '#contact-form',
     navItems: [

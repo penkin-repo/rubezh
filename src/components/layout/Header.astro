@@ -34,7 +34,7 @@ type NavItem = {
 // Fallbacks
 const phone     = headerData?.phone     ?? contacts.mainPhoneDisplay;
 const phoneHref = headerData?.phoneHref ?? contacts.mainPhoneHref;
-const officeEmail = contacts.officeEmail;
+const officeEmail = headerData?.officeEmail ?? contacts.officeEmail;
 const ctaLabel  = headerData?.ctaLabel  ?? 'Заказать звонок';
 const ctaHref   = headerData?.ctaHref   ?? '#contact-form';
 const isHomePage = Astro.url.pathname === '/';

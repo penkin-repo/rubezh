@@ -43,18 +43,6 @@ export const heroSchema = defineType({
             type: 'string',
             initialValue: '/equipment',
         }),
-        defineField({
-            name: 'secondaryBtnLabel',
-            title: 'Кнопка 2 — текст',
-            type: 'string',
-            initialValue: 'Рассчитать смету',
-        }),
-        defineField({
-            name: 'secondaryBtnHref',
-            title: 'Кнопка 2 — ссылка',
-            type: 'string',
-            initialValue: '/contacts',
-        }),
     ],
     preview: {
         select: { title: 'titleLine1' },

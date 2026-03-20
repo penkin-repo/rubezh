@@ -20,6 +20,13 @@ export const headerSchema = defineType({
             initialValue: '+79118793134',
         }),
         defineField({
+            name: 'officeEmail',
+            title: 'Email (отображается в шапке)',
+            description: 'Напр.: amdofis@mail.ru',
+            type: 'string',
+            initialValue: 'amdofis@mail.ru',
+        }),
+        defineField({
             name: 'ctaLabel',
             title: 'CTA кнопка — текст',
             type: 'string',
