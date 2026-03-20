@@ -10,6 +10,20 @@ export default defineConfig({
     projectId: 'oa7cd1k7',
     dataset: 'production',
 
+    i18n: {
+        locales: [
+            {
+                id: 'ru-RU',
+                title: 'Русский',
+                weekInfo: {
+                    firstDay: 1,
+                    weekend: [6, 7],
+                    minimalDays: 4,
+                },
+            },
+        ],
+    },
+
     plugins: [
         structureTool({
             structure: (S) =>
