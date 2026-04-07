@@ -34,13 +34,13 @@ const contacts = contactsEntry.data;
             subtitle="Карьера" 
             highlight=""
         >
-            <p class="text-white/70 text-lg mt-8 leading-relaxed max-w-2xl">
+            <p class="text-white/70 text-lg mt-8 leading-relaxed max-w-2xl mb-8">
                 ООО «Рубеж» — это стабильность, масштабные проекты и современный автопарк. Ищете надежную работу со стабильными выплатами? Приглашаем ответственных профессионалов в нашу команду.
             </p>
         </PageHeader>
 
         <!-- Список вакансий -->
-        <section class="py-24 bg-zinc-50">
+        <section class="py-16 bg-zinc-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex flex-col md:flex-row items-center justify-between gap-8 mb-16">
                     <div>
@@ -52,10 +52,10 @@ const contacts = contactsEntry.data;
                     <div class="flex items-center gap-4">
                         <span class="text-sm font-bold text-zinc-400 uppercase tracking-widest">Больше вакансий:</span>
                         <div class="flex gap-2">
-                            <a href={contacts.hhUrl} target="_blank" class="w-10 h-10 rounded-lg bg-white border border-zinc-200 flex items-center justify-center text-zinc-400 hover:text-red-600 hover:border-red-600 transition-all shadow-sm" aria-label="hh.ru">
+                            <a href={contacts.hhUrl} target="_blank" class="w-10 h-10 rounded bg-white border border-zinc-200 flex items-center justify-center text-zinc-400 hover:text-red-600 hover:border-red-600 transition-all shadow-sm" aria-label="hh.ru">
                                 <span class="font-bold text-xs">hh</span>
                             </a>
-                            <a href={contacts.avitoUrl} target="_blank" class="w-10 h-10 rounded-lg bg-white border border-zinc-200 flex items-center justify-center text-zinc-400 hover:text-brand-dark hover:border-brand-dark transition-all shadow-sm" aria-label="Avito">
+                            <a href={contacts.avitoUrl} target="_blank" class="w-10 h-10 rounded bg-white border border-zinc-200 flex items-center justify-center text-zinc-400 hover:text-brand-dark hover:border-brand-dark transition-all shadow-sm" aria-label="Avito">
                                 <Image src={avitoIcon} alt="Avito" width={16} height={16} loading="lazy" />
                             </a>
                         </div>
@@ -65,7 +65,7 @@ const contacts = contactsEntry.data;
                 <VacancyAccordion />
 
                 <!-- Если не нашли вакансию -->
-                <div class="mt-20 p-8 sm:p-12 bg-white rounded-3xl border border-zinc-200 shadow-sm relative overflow-hidden">
+                <div class="mt-20 p-8 sm:p-12 bg-white rounded border border-zinc-200 shadow-sm relative overflow-hidden">
                     <div class="absolute top-0 right-0 p-8 opacity-5">
                         <Icon name="lucide:mail" class="w-32 h-32" />
                     </div>
@@ -76,7 +76,7 @@ const contacts = contactsEntry.data;
                         </p>
                         <div class="flex flex-wrap gap-6">
                             <a href={`mailto:${contacts.hrEmail}`} class="flex items-center gap-3 group">
-                                <div class="w-12 h-12 rounded-xl bg-brand-dark flex items-center justify-center text-white shadow-lg shadow-brand-dark/20 group-hover:bg-brand-light transition-colors">
+                                <div class="w-12 h-12 rounded bg-brand-dark flex items-center justify-center text-white shadow-lg shadow-brand-dark/20 group-hover:bg-brand-light transition-colors">
                                     <Icon name="lucide:mail" class="w-6 h-6" />
                                 </div>
                                 <div>
@@ -85,7 +85,7 @@ const contacts = contactsEntry.data;
                                 </div>
                             </a>
                             <a href={`tel:${contacts.hrPhoneHref}`} class="flex items-center gap-3 group">
-                                <div class="w-12 h-12 rounded-xl bg-zinc-900 flex items-center justify-center text-white shadow-lg shadow-zinc-900/20 group-hover:bg-zinc-700 transition-colors">
+                                <div class="w-12 h-12 rounded bg-zinc-900 flex items-center justify-center text-white shadow-lg shadow-zinc-900/20 group-hover:bg-zinc-700 transition-colors">
                                     <Icon name="lucide:phone" class="w-6 h-6" />
                                 </div>
                                 <div>

@@ -7,7 +7,7 @@ const allProjects = await getCollection('projects');
 const projects = allProjects.sort((a, b) => a.data.order - b.data.order).slice(0, 4);
 ---
 
-<section class="py-24 bg-zinc-100" aria-labelledby="projects-heading">
+<section class="py-16 md:py-24 bg-zinc-100" aria-labelledby="projects-heading">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
     <!-- Заголовок -->

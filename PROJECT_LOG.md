@@ -1,11 +1,11 @@
 # Project Status: RUBEZH — ООО «Рубеж» Корпоративный сайт
 
-**Last Updated:** 2026-04-07 12:30 (UTC+03:00)
+**Last Updated:** 2026-04-07 13:50 (UTC+03:00)
 **Current Phase:** Фаза 6 — Разработка на Astro + Sanity CMS 🚧
 
 ## 🚀 Active Context
-* **Current Task:** Замена placeholder-изображений в компонентах страницы "О компании" на реальные фотографии проектов из `assets/works` и `assets/services`.
-* **Next Step:** Проверить визуально страницу `/o-kompanii` на desktop и mobile; при необходимости скорректировать позиционирование изображений.
+* **Current Task:** Унификация отступов секций и скругления углов по всему сайту.
+* **Next Step:** Проверить визуально все страницы на desktop и mobile для контроля единообразия стилей.
 
 ## 🛠 Tech Stack & Versions
 * **Astro:** (установлен, см. package.json)
@@ -18,6 +18,17 @@
 * [ ] [Low] В `src/sanity/schemas/` добавлены только `hero` и `header` — нужно перенести/добавить `equipment`, `projects`, `vacancies` и singletons для внутренних страниц
 
 ## 📝 Recent Changes (Changelog)
+
+### Унификация отступов и скругления (2026-04-07)
+* [2026-04-07] Все секции сайта переведены на единый responsive padding: `py-16 md:py-24` для мобильных и desktop версий.
+* [2026-04-07] Обновлены компоненты: `FeaturesSection`, `StatsSection`, `Advantages`, `ContactForm`, `Contacts`, `Fleet`, `Projects`.
+* [2026-04-07] Скругление углов унифицировано на `rounded` (минимальное) во всех карточках вакансий (`VacancyAccordion.astro`, `vakansii.astro`).
+* [2026-04-07] Изменены: карточки вакансий, номера вакансий, иконки соцсетей, контактные блоки.
+
+### Локальное подключение Impact для мобильных (2026-04-07)
+* [2026-04-07] Добавлен `@font-face` для шрифта Impact в `src/styles/global.css` с файлами `Impact.woff` и `Impact.woff2` из `public/fonts`.
+* [2026-04-07] CSS-переменные `--font-heading` обновлены для использования локального Impact вместо системного fallback.
+* [2026-04-07] Решена проблема отображения заголовков на мобильных устройствах (Android, iOS).
 
 ### Локальное подключение Inter (2026-04-07)
 * [2026-04-07] В `src/styles/global.css` добавлены `@font-face` для локальных файлов `Inter28pt-Regular`, `Inter28pt-Medium`, `Inter28pt-SemiBold`, `Inter28pt-Bold` из `public/fonts`.
