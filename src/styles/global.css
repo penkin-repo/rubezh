@@ -1,6 +1,15 @@
 @import "tailwindcss";
 
 @font-face {
+  font-family: 'Impact';
+  src: url('/fonts/Impact.woff2') format('woff2'),
+       url('/fonts/Impact.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'Inter';
   src: url('/fonts/Inter28pt-Regular.woff2') format('woff2'),
        url('/fonts/Inter28pt-Regular.woff') format('woff');
@@ -51,7 +60,7 @@
   --gradient-brand: linear-gradient(135deg, var(--color-brand-dark), var(--color-brand-light));
 
   /* Шрифты */
-  --font-heading: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  --font-heading: "Impact", Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
   /* Тень на Hero-заголовке */
@@ -61,7 +70,7 @@
 /* @theme — Tailwind v4 директива (IDE может показывать warning, это нормально).
    Все переменные здесь становятся Tailwind-utility-классами: text-brand-dark, bg-adv-blue и т.д. */
 @theme {
-  --font-heading: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  --font-heading: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
   /* Tailwind utilities для бренд-цветов */
