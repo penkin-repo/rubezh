@@ -1,8 +1,8 @@
 ---
 // src/components/about/FeaturesSection.astro
 import { Image } from 'astro:assets';
-import image2 from '../../assets/image2.png';
-import image3 from '../../assets/image3.png';
+import teamImage from '../../assets/works/СЕВЕРАЛМАЗ (5).jpeg';
+import fleetImage from '../../assets/works/Купчино (4).png';
 ---
 
 <section class="py-24 bg-white">
@@ -31,7 +31,7 @@ import image3 from '../../assets/image3.png';
             <div class="relative animate-fade-in-right">
                 <div class="aspect-[4/3] rounded overflow-hidden shadow-2xl">
                     <Image
-                        src={image2}
+                        src={teamImage}
                         alt="Команда профессионалов"
                         widths={[600, 900]}
                         sizes="(max-width: 1024px) 100vw, 50vw"
@@ -47,7 +47,7 @@ import image3 from '../../assets/image3.png';
             <div class="relative animate-fade-in-left order-2 lg:order-1">
                 <div class="aspect-[4/3] rounded overflow-hidden shadow-2xl">
                     <Image
-                        src={image3}
+                        src={fleetImage}
                         alt="Современная спецтехника"
                         widths={[600, 900]}
                         sizes="(max-width: 1024px) 100vw, 50vw"

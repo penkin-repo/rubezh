@@ -1,5 +1,41 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter28pt-Regular.woff2') format('woff2'),
+       url('/fonts/Inter28pt-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter28pt-Medium.woff2') format('woff2'),
+       url('/fonts/Inter28pt-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter28pt-SemiBold.woff2') format('woff2'),
+       url('/fonts/Inter28pt-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/Inter28pt-Bold.woff2') format('woff2'),
+       url('/fonts/Inter28pt-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ====================================================
    Фирменные цвета ООО «Рубеж»
    --color-brand-dark  #0257c0 — тёмный синий (основной)
@@ -16,7 +52,7 @@
 
   /* Шрифты */
   --font-heading: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  --font-body: Inter, system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
   /* Тень на Hero-заголовке */
   --hero-text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4);
@@ -26,7 +62,7 @@
    Все переменные здесь становятся Tailwind-utility-классами: text-brand-dark, bg-adv-blue и т.д. */
 @theme {
   --font-heading: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  --font-body: Inter, system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
   /* Tailwind utilities для бренд-цветов */
   --color-brand-dark: #0257c0;

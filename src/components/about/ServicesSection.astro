@@ -1,15 +1,18 @@
 ---
 // src/components/about/ServicesSection.astro
 import { Image } from 'astro:assets';
-import image1 from '../../assets/image1.png';
-import image2 from '../../assets/image2.png';
-import image3 from '../../assets/image3.png';
+import roadConstruction from '../../assets/works/АРХРЕЧПОРТ (3)-2.png';
+import landscaping from '../../assets/services/благоустройство.png';
+import earthworks from '../../assets/works/Купчино (1).jpeg';
+import engineeringNetworks from '../../assets/works/СЕВЕРАЛМАЗ (3).jpeg';
+import hydraulicStructures from '../../assets/services/гидротех_сооружения.png';
 ---
 
 <section class="py-24 bg-zinc-50 relative overflow-hidden">
     <!-- Фоновая сетка -->
     <div class="absolute inset-0 pointer-events-none services-bg-grid" aria-hidden="true"></div>
     
+    <!-- Контент -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div class="text-center mb-16">
             <h2 class="font-heading text-3xl sm:text-4xl lg:text-5xl uppercase leading-none text-zinc-900 mb-4">
@@ -86,7 +89,7 @@ import image3 from '../../assets/image3.png';
                 <div class="aspect-[4/3] rounded overflow-hidden shadow-2xl">
                     <Image
                         id="service-image-1"
-                        src={image1}
+                        src={roadConstruction}
                         alt="Строительство и ремонт дорог"
                         widths={[600, 900]}
                         sizes="(max-width: 1024px) 100vw, 50vw"
@@ -94,7 +97,7 @@ import image3 from '../../assets/image3.png';
                     />
                     <Image
                         id="service-image-2"
-                        src={image2}
+                        src={landscaping}
                         alt="Благоустройство территорий"
                         widths={[600, 900]}
                         sizes="(max-width: 1024px) 100vw, 50vw"
@@ -102,7 +105,7 @@ import image3 from '../../assets/image3.png';
                     />
                     <Image
                         id="service-image-3"
-                        src={image3}
+                        src={earthworks}
                         alt="Земляные работы"
                         widths={[600, 900]}
                         sizes="(max-width: 1024px) 100vw, 50vw"
@@ -110,7 +113,7 @@ import image3 from '../../assets/image3.png';
                     />
                     <Image
                         id="service-image-4"
-                        src={image1}
+                        src={engineeringNetworks}
                         alt="Инженерные сети"
                         widths={[600, 900]}
                         sizes="(max-width: 1024px) 100vw, 50vw"
@@ -118,7 +121,7 @@ import image3 from '../../assets/image3.png';
                     />
                     <Image
                         id="service-image-5"
-                        src={image2}
+                        src={hydraulicStructures}
                         alt="Гидротехнические сооружения"
                         widths={[600, 900]}
                         sizes="(max-width: 1024px) 100vw, 50vw"

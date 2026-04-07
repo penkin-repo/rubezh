@@ -1,7 +1,7 @@
 ---
 items:
   - title: "HOWO T5G"
-    specs: "30т, 20 куб, 6 ед."
+    specs: "30 т, 20 куб, 6 ед."
     category: "Самосвалы"
     image: "../../assets/fleet/Fleet (2).jpeg"
     order: 1
@@ -15,19 +15,19 @@ items:
     order: 2
 
   - title: "КАМАЗ К3440 65222-53"
-    specs: "Полный привод, 25т"
+    specs: "Полный привод, 15 т"
     category: "Самосвалы"
     image: "../../assets/fleet/Fleet (2).jpeg"
     order: 3
 
   - title: "КАМАЗ Т2530 65115-А5"
-    specs: "25т"
+    specs: "10 т"
     category: "Самосвалы"
     image: "../../assets/fleet/Fleet (2).jpeg"
     order: 4
 
   - title: "SCANIA P8X400 P440"
-    specs: "30т, 20 куб, 2 ед."
+    specs: "30 т, 20 куб, 2 ед."
     category: "Самосвалы"
     image: "../../assets/fleet/Fleet (2).jpeg"
     order: 5
@@ -37,17 +37,17 @@ items:
   - title: "Водовозка FAW J6 6X4"
     specs: "10 куб"
     category: "Спецтехника"
-    image: "../../assets/fleet/Fleet (3).jpeg"
+    image: "../../assets/fleet/Fleet (3).png"
     order: 6
 
   - title: "Гудронатор FAW J6 6X4"
     specs: "8 куб"
     category: "Спецтехника"
-    image: "../../assets/fleet/Fleet (4).jpeg"
+    image: "../../assets/fleet/Fleet (4).jpg"
     order: 7
 
   - title: "Трал-Тонар RENAULT PREMIUM 6X4"
-    specs: "25т / 40т"
+    specs: "25 т / 40 т"
     category: "Спецтехника"
     image: "../../assets/fleet/Fleet (5).jpeg"
     order: 8
@@ -59,13 +59,13 @@ items:
     order: 9
 
   - title: "КАМАЗ 658610 (КМУ)"
-    specs: "Вылет стрелы до 18м"
+    specs: "Вылет стрелы до 18 м"
     category: "Спецтехника"
     image: "../../assets/fleet/Fleet (6).jpeg"
     order: 10
 
   - title: "Автокран КС-55729-9К-31"
-    specs: "32т, стрела 31м"
+    specs: "32 т, стрела 31 м"
     category: "Спецтехника"
     image: "../../assets/fleet/Fleet (7).jpeg"
     order: 11
@@ -83,7 +83,7 @@ items:
     order: 13
 
   - title: "Установка ГНБ GOODENG GD360C-LS"
-    specs: "Тяга 36т"
+    specs: "Тяга 36 т"
     category: "Спецтехника"
     image: "../../assets/fleet/Fleet (14).jpeg"
     order: 14
@@ -129,54 +129,54 @@ items:
     order: 20
 
   - title: "Komatsu D65PX-16"
-    specs: "21т"
+    specs: "21 т"
     category: "Бульдозеры"
-    image: "../../assets/fleet/Fleet (11).jpeg"
+    image: "../../assets/fleet/Fleet (11).png"
     order: 21
     featured: true
     featuredOrder: 4
 
   - title: "SHANTUI SD17B3XL"
-    specs: "20т"
+    specs: "20 т"
     category: "Бульдозеры"
-    image: "../../assets/fleet/Fleet (11).jpeg"
+    image: "../../assets/fleet/Fleet (11).png"
     order: 22
 
   - title: "CATERPILLAR D6R XL"
-    specs: "20т"
+    specs: "20 т"
     category: "Бульдозеры"
-    image: "../../assets/fleet/Fleet (11).jpeg"
+    image: "../../assets/fleet/Fleet (11).png"
     order: 23
 
   - title: "SHANTUI SR12P-5"
-    specs: "Грунтовый, 13.5т"
+    specs: "Грунтовый, 13.5 т"
     category: "Катки"
-    image: "../../assets/fleet/Fleet (12).jpeg"
+    image: "../../assets/fleet/Fleet (12).png"
     order: 24
 
   - title: "SHANTUI SR14P"
-    specs: "Грунтовый, 14.5т"
+    specs: "Грунтовый, 14.5 т"
     category: "Катки"
-    image: "../../assets/fleet/Fleet (12).jpeg"
+    image: "../../assets/fleet/Fleet (12).png"
     order: 25
 
   - title: "HAMM 3114"
-    specs: "Грунтовый, 14т"
+    specs: "Грунтовый, 14 т"
     category: "Катки"
-    image: "../../assets/fleet/Fleet (12).jpeg"
+    image: "../../assets/fleet/Fleet (12).png"
     order: 26
     featured: true
     featuredOrder: 5
 
   - title: "XCMG XMR403"
-    specs: "Асфальтовый, 4т"
+    specs: "Асфальтовый, 4 т"
     category: "Катки"
-    image: "../../assets/fleet/Fleet (12).jpeg"
+    image: "../../assets/fleet/Fleet (12-2).png"
     order: 27
 
   - title: "XCMG XD83"
-    specs: "Асфальтовый, 8.5т"
+    specs: "Асфальтовый, 8.5 т"
     category: "Катки"
-    image: "../../assets/fleet/Fleet (12).jpeg"
+    image: "../../assets/fleet/Fleet (12-2).png"
     order: 28
 ---

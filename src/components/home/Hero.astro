@@ -1,8 +1,9 @@
 ---
 import { Image } from "astro:assets";
-import heroImg from "../../assets/hero.jpg";
-import leftHero from "../../assets/left-hero.png";
-import rightHero from "../../assets/right-hero.png";
+import heroImgDesc from "../../assets/hero.jpg";
+import heroImgMob from "../../assets/hero-2.jpg";
+// import leftHero from "../../assets/left-hero.png";
+// import rightHero from "../../assets/right-hero.png";
 import StatsBar from "./StatsBar.astro";
 import Button from "../ui/Button.astro";
 import { client } from "../../sanity/client";
@@ -25,13 +26,22 @@ const primaryBtnHref = heroData?.primaryBtnHref ?? "/equipment";
     <!-- Фоновое изображение -->
     <div class="absolute inset-0 z-0">
         <Image
-            src={heroImg}
+            src={heroImgMob}
             alt="Спецтехника ООО Рубеж на объекте дорожного строительства"
             widths={[640, 1024, 1440, 1920]}
             sizes="100vw"
             loading="eager"
             quality={85}
-            class="w-full object-cover object-top h-full"
+            class="w-full h-full block lg:hidden object-cover lg:object-cover object-top"
+        />
+        <Image
+            src={heroImgDesc}
+            alt="Спецтехника ООО Рубеж на объекте дорожного строительства"
+            widths={[640, 1024, 1440, 1920]}
+            sizes="100vw"
+            loading="eager"
+            quality={85}
+            class="w-full h-full hidden lg:block object-cover lg:object-cover object-top"
         />
     </div>
 
@@ -84,7 +94,7 @@ const primaryBtnHref = heroData?.primaryBtnHref ?? "/equipment";
         <!-- Блок статистики + декоративные картинки -->
         <div class="relative mt-12">
             <!-- Декоративные изображения по бокам (параллакс, разные скорости) -->
-            <div
+            <!-- <div
                 class="absolute left-0 bottom-0 -translate-y-1/10 h-64 w-120 lg:h-240 lg:w-160 pointer-events-none select-none z-10 overflow opacity-50"
                 aria-hidden="true"
                 id="parallax-left"
@@ -99,8 +109,8 @@ const primaryBtnHref = heroData?.primaryBtnHref ?? "/equipment";
                     quality={80}
                     class="w-full h-full object-cover object-bottom"
                 />
-            </div>
-            <div
+            </div> -->
+            <!-- <div
                 class="absolute right-0 bottom-0 -translate-y-1/10 h-64 w-48 lg:h-260 lg:w-160 pointer-events-none select-none z-10 opacity-70"
                 aria-hidden="true"
                 id="parallax-right"
@@ -115,7 +125,7 @@ const primaryBtnHref = heroData?.primaryBtnHref ?? "/equipment";
                     quality={80}
                     class="w-full h-full object-cover object-bottom"
                 />
-            </div>
+            </div> -->
 
             <!-- Карточки статистики -->
             <StatsBar />

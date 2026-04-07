@@ -1,30 +1,40 @@
 ---
 // src/components/about/AboutHero.astro
-import { Image } from 'astro:assets';
-import servicesImg from '../../assets/services.png';
+import { Image } from "astro:assets";
+import servicesImg from "../../assets/works/АРХРЕЧПОРТ (5).png";
 ---
 
 <section class="py-24 bg-white overflow-hidden relative">
+    <!-- Фоновая сетка -->
+    <div class="absolute inset-0 pointer-events-none services-bg-grid" aria-hidden="true"></div>
+    <!-- Контент -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <h2
+            class="animate-fade-in mb-16 text-center font-heading text-3xl sm:text-4xl lg:text-5xl uppercase text-zinc-900 leading-none"
+        >
+            <span class="text-brand-dark"
+                >Дорожно-строительная компания ООО&nbsp;&laquo;Рубеж&raquo;</span
+            > является одной из&nbsp;ведущих организаций на&nbsp;рынке!
+        </h2>
         <div class="grid lg:grid-cols-2 gap-16 items-center">
             <div class="relative animate-fade-in">
-                <h2 class="text-2xl sm:text-4xl lg:text-3xl leading-none mb-8 text-zinc-900">
-                    <span class="text-brand-dark">
-                        Дорожно-строительная компания ООО&nbsp;&laquo;Рубеж&raquo;</span
-                    > является одной из&nbsp;ведущих организаций на&nbsp;рынке!
-                </h2>
-
                 <div class="space-y-4">
-                    <div class="flex items-center gap-3 text-zinc-900">
-                        <div class="w-2 h-2 bg-brand-dark rounded-full"></div>
+                    <div
+                        class="flex items-center gap-3 text-xl sm:text-2xl lg:text-3xl text-zinc-700 leading-relaxed font-light"
+                    >
+                        <div class="w-3 h-3 bg-brand-dark rounded-full"></div>
                         <span>Надежность и профессионализм</span>
                     </div>
-                    <div class="flex items-center gap-3 text-zinc-900">
-                        <div class="w-2 h-2 bg-brand-dark rounded-full"></div>
+                    <div
+                        class="flex items-center gap-3 text-xl sm:text-2xl lg:text-3xl text-zinc-700 leading-relaxed font-light"
+                    >
+                        <div class="w-3 h-3 bg-brand-dark rounded-full"></div>
                         <span>Собственный автопарк техники</span>
                     </div>
-                    <div class="flex items-center gap-3 text-zinc-900">
-                        <div class="w-2 h-2 bg-brand-dark rounded-full"></div>
+                    <div
+                        class="flex items-center gap-3 text-xl sm:text-2xl lg:text-3xl text-zinc-700 leading-relaxed font-light"
+                    >
+                        <div class="w-3 h-3 bg-brand-dark rounded-full"></div>
                         <span>Гарантия качества работ</span>
                     </div>
                 </div>
@@ -37,17 +47,29 @@ import servicesImg from '../../assets/services.png';
                         alt="Техника ООО Рубеж на объекте"
                         widths={[600, 900]}
                         sizes="(max-width: 1024px) 100vw, 50vw"
-                        class="w-full h-full object-cover"
+                        class="w-full h-full object-cover object-top"
                     />
                 </div>
-                <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-brand-dark/10 rounded-full -z-10 blur-2xl animate-pulse"></div>
-                <div class="absolute -top-6 -right-6 w-24 h-24 bg-brand-light/20 rounded-full -z-10 blur-xl animate-bounce-slow"></div>
+                <div
+                    class="absolute -bottom-6 -left-6 w-32 h-32 bg-brand-dark/10 rounded-full -z-10 blur-2xl animate-pulse"
+                >
+                </div>
+                <div
+                    class="absolute -top-6 -right-6 w-24 h-24 bg-brand-light/20 rounded-full -z-10 blur-xl animate-bounce-slow"
+                >
+                </div>
             </div>
         </div>
     </div>
 </section>
 
 <style>
+    .services-bg-grid {
+        background-image:
+            linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
+    }
     .animate-fade-in {
         animation: fadeIn 1s ease-out;
     }

@@ -1,11 +1,11 @@
 # Project Status: RUBEZH — ООО «Рубеж» Корпоративный сайт
 
-**Last Updated:** 2026-03-20 12:10 (UTC+03:00)
+**Last Updated:** 2026-04-07 12:30 (UTC+03:00)
 **Current Phase:** Фаза 6 — Разработка на Astro + Sanity CMS 🚧
 
 ## 🚀 Active Context
-* **Current Task:** Миграция секции «Основные виды деятельности» на Astro content collection `services`; правило `rounded` применено к Services + StatsBar.
-* **Next Step:** Проверить визуал секции Services и StatsBar на desktop/mobile; при необходимости скорректировать тексты MD-файлов услуг.
+* **Current Task:** Замена placeholder-изображений в компонентах страницы "О компании" на реальные фотографии проектов из `assets/works` и `assets/services`.
+* **Next Step:** Проверить визуально страницу `/o-kompanii` на desktop и mobile; при необходимости скорректировать позиционирование изображений.
 
 ## 🛠 Tech Stack & Versions
 * **Astro:** (установлен, см. package.json)
@@ -18,6 +18,25 @@
 * [ ] [Low] В `src/sanity/schemas/` добавлены только `hero` и `header` — нужно перенести/добавить `equipment`, `projects`, `vacancies` и singletons для внутренних страниц
 
 ## 📝 Recent Changes (Changelog)
+
+### Локальное подключение Inter (2026-04-07)
+* [2026-04-07] В `src/styles/global.css` добавлены `@font-face` для локальных файлов `Inter28pt-Regular`, `Inter28pt-Medium`, `Inter28pt-SemiBold`, `Inter28pt-Bold` из `public/fonts`.
+* [2026-04-07] CSS-переменная `--font-body` в `:root` и `@theme` переведена на локально хостимый `Inter`; заголовочный `Impact` оставлен системным fallback.
+
+### Изображения страницы "О компании" (2026-04-07)
+* [2026-04-07] В `src/components/about/ServicesSection.astro` заменены placeholder-изображения на реальные фотографии проектов:
+  - Строительство дорог: `АРХРЕЧПОРТ (3)-2.png`
+  - Благоустройство: `благоустройство.png`
+  - Земляные работы: `Купчино (1).jpeg`
+  - Инженерные сети: `СЕВЕРАЛМАЗ (3).jpeg`
+  - Гидротехнические сооружения: `гидротех_сооружения.png`
+* [2026-04-07] В `src/components/about/FeaturesSection.astro` заменены изображения:
+  - Профессиональная команда: `СЕВЕРАЛМАЗ (5).jpeg`
+  - Собственный автопарк: `Купчино (4).png`
+
+### Dropdown-меню шапки (2026-04-07)
+* [2026-04-07] В `src/components/layout/Header.astro` desktop dropdown переведён с ярко-синего `bg-blue-600` на тёмный фон в стиле шапки (`bg-slate-900/95`, `backdrop-blur-md`, `border-white/10`).
+* [2026-04-07] Hover в пунктах dropdown смягчён: вместо яркой синей заливки используется лёгкая подсветка фона и акцентный цвет текста.
 
 ### Вакансии переведены в Astro content (2026-03-20)
 * [2026-03-20] Добавлена коллекция `vacancies` в `src/content/config.ts` (поля: `title`, `order`).
