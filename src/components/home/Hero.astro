@@ -25,24 +25,27 @@ const primaryBtnHref = heroData?.primaryBtnHref ?? "/arenda-spetstehniki";
 <section class="relative flex flex-col pb-[30%] lg:pb-[10%]">
     <!-- Фоновое изображение -->
     <div class="absolute inset-0 z-0">
-        <Image
-            src={heroImgMob}
-            alt="Спецтехника ООО Рубеж на объекте дорожного строительства"
-            widths={[360, 640, 768, 1024]}
-            sizes="(max-width: 360px) 360px, (max-width: 640px) 640px, (max-width: 768px) 768px, 1024px"
-            loading="eager"
-            quality={85}
-            class="w-full h-full block lg:hidden object-cover lg:object-cover object-top"
-        />
-        <Image
-            src={heroImgDesc}
-            alt="Спецтехника ООО Рубеж на объекте дорожного строительства"
-            widths={[1024, 1280, 1440, 1920]}
-            sizes="(max-width: 1280px) 1024px, (max-width: 1440px) 1280px, (max-width: 1920px) 1440px, 1920px"
-            loading="eager"
-            quality={85}
-            class="w-full h-full hidden lg:block object-cover lg:object-cover object-top"
-        />
+        <picture>
+            <source
+                media="(min-width: 1024px)"
+                srcset={`${heroImgDesc.src}?w=1024&format=webp 1024w, ${heroImgDesc.src}?w=1280&format=webp 1280w, ${heroImgDesc.src}?w=1440&format=webp 1440w, ${heroImgDesc.src}?w=1920&format=webp 1920w`}
+                sizes="100vw"
+                type="image/webp"
+            />
+            <source
+                media="(max-width: 1023px)"
+                srcset={`${heroImgMob.src}?w=360&format=webp 360w, ${heroImgMob.src}?w=640&format=webp 640w, ${heroImgMob.src}?w=768&format=webp 768w, ${heroImgMob.src}?w=1024&format=webp 1024w`}
+                sizes="100vw"
+                type="image/webp"
+            />
+            <img
+                src={heroImgDesc.src}
+                alt="Спецтехника ООО Рубеж на объекте дорожного строительства"
+                loading="eager"
+                fetchpriority="high"
+                class="w-full h-full object-cover object-top"
+            />
+        </picture>
     </div>
 
     <!-- Контент hero -->

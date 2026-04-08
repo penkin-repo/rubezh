@@ -116,8 +116,25 @@ const projects = allProjects.sort((a, b) => a.data.order - b.data.order).slice(0
 <script>
   import { initPhotoSwipe } from '../../scripts/photoswipe-init';
 
-  initPhotoSwipe({
-    gallery: '.project-gallery',
-    children: 'a',
+  // Динамическая инициализация при первом клике
+  const galleries = document.querySelectorAll('.project-gallery');
+  let isInitialized = false;
+
+  galleries.forEach(gallery => {
+    gallery.addEventListener('click', async (e) => {
+      if (!isInitialized) {
+        const target = e.target as HTMLElement;
+        if (target.closest('a')) {
+          e.preventDefault();
+          await initPhotoSwipe({
+            gallery: '.project-gallery',
+            children: 'a',
+          });
+          isInitialized = true;
+          // Повторный клик после инициализации
+          setTimeout(() => target.closest('a')?.click(), 100);
+        }
+      }
+    }, { once: true });
   });
 </script>

@@ -236,28 +236,49 @@ const marqueeItems = [
 </style>
 
 <script>
-  import Swiper from "swiper";
-  import { Navigation, Pagination, A11y } from "swiper/modules";
-  import "swiper/css";
-
-  // ── Карусель карточек ──
-  new Swiper("#swiper-fleet", {
-    modules: [Navigation, Pagination, A11y],
-    slidesPerView: 1,
-    spaceBetween: 20,
-    grabCursor: true,
-    navigation: {
-      prevEl: ".swiper-fleet-prev",
-      nextEl: ".swiper-fleet-next",
-    },
-    pagination: {
-      el: ".swiper-fleet-pagination",
-      clickable: true,
-    },
-    breakpoints: {
-      640: { slidesPerView: 2, spaceBetween: 20 },
-      1024: { slidesPerView: 3, spaceBetween: 24 },
-    },
-    a11y: { enabled: true },
-  });
+  // Динамическая загрузка Swiper при появлении секции в viewport
+  const fleetSection = document.querySelector('.fleet-section');
+  
+  if (fleetSection) {
+    const observer = new IntersectionObserver(
+      async (entries) => {
+        if (entries[0].isIntersecting) {
+          observer.disconnect();
+          
+          // Динамический импорт Swiper
+          const [{ default: Swiper }, { Navigation, Pagination, A11y }] = await Promise.all([
+            import('swiper'),
+            import('swiper/modules')
+          ]);
+          
+          // Импорт стилей
+          await import('swiper/css');
+          
+          // Инициализация карусели
+          new Swiper("#swiper-fleet", {
+            modules: [Navigation, Pagination, A11y],
+            slidesPerView: 1,
+            spaceBetween: 20,
+            grabCursor: true,
+            navigation: {
+              prevEl: ".swiper-fleet-prev",
+              nextEl: ".swiper-fleet-next",
+            },
+            pagination: {
+              el: ".swiper-fleet-pagination",
+              clickable: true,
+            },
+            breakpoints: {
+              640: { slidesPerView: 2, spaceBetween: 20 },
+              1024: { slidesPerView: 3, spaceBetween: 24 },
+            },
+            a11y: { enabled: true },
+          });
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    
+    observer.observe(fleetSection);
+  }
 </script>

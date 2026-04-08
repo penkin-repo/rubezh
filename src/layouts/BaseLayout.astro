@@ -47,8 +47,9 @@ const ogImageURL = new URL(image, siteUrl);
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImageURL} />
         
-        <!-- Preload критичных шрифтов -->
+        <!-- Preload критичных ресурсов -->
         <link rel="preload" href="/fonts/Impact.woff2" as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href="/_astro/hero.jpg" as="image" type="image/jpeg" fetchpriority="high" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
     </head>
     <body>
