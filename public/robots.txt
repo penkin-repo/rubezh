@@ -1,0 +1,12 @@
+# robots.txt для ООО «Рубеж»
+# https://rubezh-arh.ru
+
+User-agent: *
+Allow: /
+
+# Запретить индексацию служебных директорий
+Disallow: /_astro/
+Disallow: /api/
+
+# Sitemap (будет добавлен позже через @astrojs/sitemap)
+# Sitemap: https://rubezh-arh.ru/sitemap-index.xml

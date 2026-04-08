@@ -1,0 +1,99 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import { Icon } from "astro-icon/components";
+---
+
+<BaseLayout
+    title="404 — Страница не найдена | ООО Рубеж"
+    description="Запрашиваемая страница не найдена. Вернитесь на главную или воспользуйтесь навигацией."
+>
+    <Header />
+
+    <section class="min-h-screen flex items-center justify-center py-16 md:py-24 bg-zinc-50 relative overflow-hidden">
+        <!-- Фоновая сетка -->
+        <div class="absolute inset-0 pointer-events-none bg-grid-pattern" aria-hidden="true"></div>
+
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <!-- Иконка ошибки -->
+            <div class="mb-8 flex justify-center">
+                <div class="w-32 h-32 rounded-full bg-red-100 flex items-center justify-center">
+                    <Icon name="lucide:alert-triangle" class="w-16 h-16 text-red-600" />
+                </div>
+            </div>
+
+            <!-- Заголовок -->
+            <h1 class="font-heading text-zinc-900 uppercase text-6xl sm:text-7xl lg:text-8xl mb-4">
+                404
+            </h1>
+            <h2 class="text-2xl sm:text-3xl font-semibold text-zinc-800 mb-6">
+                Страница не найдена
+            </h2>
+            <p class="text-lg text-zinc-600 mb-10 leading-relaxed">
+                К сожалению, запрашиваемая страница не существует или была перемещена.
+                Воспользуйтесь навигацией ниже, чтобы найти нужную информацию.
+            </p>
+
+            <!-- Навигация -->
+            <div class="grid sm:grid-cols-2 gap-4 mb-12">
+                <a
+                    href="/"
+                    class="flex items-center justify-center gap-3 px-6 py-4 rounded bg-brand-dark text-white hover:bg-brand-light transition-colors duration-300 shadow-md hover:shadow-lg"
+                >
+                    <Icon name="lucide:home" class="w-5 h-5" />
+                    <span class="font-semibold">Главная страница</span>
+                </a>
+                <a
+                    href="/arenda-spetstehniki"
+                    class="flex items-center justify-center gap-3 px-6 py-4 rounded bg-white border-2 border-brand-dark text-brand-dark hover:bg-brand-dark hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
+                >
+                    <Icon name="lucide:truck" class="w-5 h-5" />
+                    <span class="font-semibold">Аренда техники</span>
+                </a>
+            </div>
+
+            <!-- Дополнительные ссылки -->
+            <div class="border-t border-zinc-200 pt-8">
+                <p class="text-sm text-zinc-500 mb-4">Популярные разделы:</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a
+                        href="/o-kompanii"
+                        class="text-brand-dark hover:text-brand-light underline underline-offset-4 text-sm font-medium transition-colors"
+                    >
+                        О компании
+                    </a>
+                    <a
+                        href="/proekty"
+                        class="text-brand-dark hover:text-brand-light underline underline-offset-4 text-sm font-medium transition-colors"
+                    >
+                        Проекты
+                    </a>
+                    <a
+                        href="/vakansii"
+                        class="text-brand-dark hover:text-brand-light underline underline-offset-4 text-sm font-medium transition-colors"
+                    >
+                        Вакансии
+                    </a>
+                    <a
+                        href="/kontakty"
+                        class="text-brand-dark hover:text-brand-light underline underline-offset-4 text-sm font-medium transition-colors"
+                    >
+                        Контакты
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <Footer />
+</BaseLayout>
+
+<style>
+    .bg-grid-pattern {
+        background-image:
+            linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        background-size: 60px 60px;
+    }
+</style>

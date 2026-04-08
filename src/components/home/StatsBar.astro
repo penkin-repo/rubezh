@@ -46,72 +46,17 @@ const stats = [
 </div>
 
 <script>
-    // Count-up анимация при попадании в viewport
-    function easeOutQuart(t: number): number {
-        return 1 - Math.pow(1 - t, 4);
-    }
+    import { createCounterObserver, createScaleObserver, initScaleAnimation } from '../../utils/animate-counter';
 
-    function animateCount(el: HTMLElement, target: number, duration: number = 1400) {
-        const start = performance.now();
+    // Инициализируем начальное состояние для scale-анимации
+    initScaleAnimation('.stat-card');
 
-        function update(now: number) {
-            const elapsed = now - start;
-            const progress = Math.min(elapsed / duration, 1);
-            const current = Math.round(easeOutQuart(progress) * target);
-            el.textContent = String(current);
-            if (progress < 1) requestAnimationFrame(update);
-        }
+    // Создаем и запускаем observers
+    const counterObserver = createCounterObserver('.stat-card');
+    const scaleObserver = createScaleObserver('.stat-card');
 
-        requestAnimationFrame(update);
-    }
-
-    // IntersectionObserver — запускаем счётчики когда карточки входят в поле видимости
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (!entry.isIntersecting) return;
-
-                const card = entry.target as HTMLElement;
-                const target = parseInt(card.dataset.target ?? "0", 10);
-                const numberEl = card.querySelector<HTMLElement>(".stat-number");
-                if (!numberEl) return;
-
-                // Небольшая задержка по индексу для "очереди"
-                const index = parseInt(card.dataset.index ?? "0", 10);
-                setTimeout(() => animateCount(numberEl, target), index * 120);
-
-                observer.unobserve(card); // запустить счётчик только один раз
-            });
-        },
-        { threshold: 0.4 }
-    );
-
-    document.querySelectorAll<HTMLElement>(".stat-card").forEach((card) => {
-        observer.observe(card);
-    });
-
-    // Scale-анимация при появлении в viewport
-    const scaleObserver = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                const card = entry.target as HTMLElement;
-                if (entry.isIntersecting) {
-                    const idx = parseInt(card.dataset.index ?? "0", 10);
-                    setTimeout(() => {
-                        card.style.transform = "scale(1) translateY(0)";
-                        card.style.opacity = "1";
-                    }, idx * 100);
-                }
-            });
-        },
-        { threshold: 0.2 }
-    );
-
-    document.querySelectorAll<HTMLElement>(".stat-card").forEach((card) => {
-        // Начальное состояние: сжаты и прозрачны
-        card.style.transform = "scale(0.88) translateY(20px)";
-        card.style.opacity = "0";
-        card.style.transition = "transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease";
+    document.querySelectorAll<HTMLElement>('.stat-card').forEach((card) => {
+        counterObserver.observe(card);
         scaleObserver.observe(card);
     });
 </script>

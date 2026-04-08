@@ -94,7 +94,7 @@ body {
   margin: 0;
   width: 100%;
   min-height: 100vh;
-  color: #ffffff;
+  color: #18181b; /* zinc-900 - темный текст по умолчанию */
 }
 
 /* ====================================================
@@ -106,6 +106,21 @@ body {
 
 .font-body {
   font-family: var(--font-body);
+}
+
+/* Фоновые паттерны (переиспользуемые) */
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.bg-grid-pattern-white {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
 }
 
 /* Hero — тень на заголовке */

@@ -249,32 +249,44 @@ const navItems: NavItem[] = headerData?.navItems  ?? [
     setSolidHeader();
   }
 
+  // Throttle scroll handler with requestAnimationFrame
+  let rafId: number | null = null;
+
+  const handleScroll = () => {
+    if (!header) return;
+
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY <= 4) {
+      header.style.transform = 'translateY(0)';
+      if (isHomeHeader) {
+        setTransparentHeader();
+      } else {
+        setSolidHeader();
+      }
+      lastScrollY = currentScrollY;
+      return;
+    }
+
+    if (currentScrollY > lastScrollY + 4) {
+      header.style.transform = 'translateY(-100%)';
+    } else if (currentScrollY < lastScrollY - 4) {
+      header.style.transform = 'translateY(0)';
+      setSolidHeader();
+    }
+
+    lastScrollY = currentScrollY;
+  };
+
   window.addEventListener(
     'scroll',
     () => {
-      if (!header) return;
-
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY <= 4) {
-        header.style.transform = 'translateY(0)';
-        if (isHomeHeader) {
-          setTransparentHeader();
-        } else {
-          setSolidHeader();
-        }
-        lastScrollY = currentScrollY;
-        return;
-      }
-
-      if (currentScrollY > lastScrollY + 4) {
-        header.style.transform = 'translateY(-100%)';
-      } else if (currentScrollY < lastScrollY - 4) {
-        header.style.transform = 'translateY(0)';
-        setSolidHeader();
-      }
-
-      lastScrollY = currentScrollY;
+      if (rafId !== null) return;
+      
+      rafId = requestAnimationFrame(() => {
+        handleScroll();
+        rafId = null;
+      });
     },
     { passive: true }
   );

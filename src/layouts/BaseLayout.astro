@@ -4,12 +4,17 @@ import "../styles/global.css";
 interface Props {
     title?: string;
     description?: string;
+    image?: string;
 }
 
 const {
     title = "ООО Рубеж — Дорожное строительство и аренда спецтехники в Архангельске",
     description = "Дорожно-строительная компания ООО «Рубеж». Строительство дорог, аренда спецтехники, земляные работы в Архангельской области. 11+ лет опыта, 60+ единиц техники.",
+    image = "/og-image.jpg",
 } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(image, Astro.site);
 ---
 
 <!doctype html>
@@ -22,7 +27,27 @@ const {
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
         <meta name="description" content={description} />
-        <!-- Preload hero image для LCP -->
+        
+        <!-- Canonical URL -->
+        <link rel="canonical" href={canonicalURL} />
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalURL} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={ogImageURL} />
+        <meta property="og:locale" content="ru_RU" />
+        <meta property="og:site_name" content="ООО Рубеж" />
+        
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImageURL} />
+        
+        <!-- Preload критичных шрифтов -->
+        <link rel="preload" href="/fonts/Impact.woff2" as="font" type="font/woff2" crossorigin />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
     </head>
     <body>

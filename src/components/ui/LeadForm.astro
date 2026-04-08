@@ -1,0 +1,200 @@
+---
+/**
+ * Универсальный компонент формы для заявок
+ */
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  formId: string;
+  source: string;
+  title?: string;
+  submitLabel?: string;
+  showComment?: boolean;
+  commentPlaceholder?: string;
+  fallbackPhone?: string;
+  onSuccessMessage?: string;
+  onSuccessDescription?: string;
+}
+
+const {
+  formId,
+  source,
+  title,
+  submitLabel = "Отправить заявку",
+  showComment = true,
+  commentPlaceholder = "Опишите задачу...",
+  fallbackPhone = "",
+  onSuccessMessage = "Заявка принята!",
+  onSuccessDescription = "Наш менеджер свяжется с вами в ближайшее время.",
+} = Astro.props;
+---
+
+<div class="lead-form-wrapper" data-form-id={formId}>
+  <form id={formId} class="lead-form" data-source={source} data-fallback-phone={fallbackPhone} novalidate>
+    {title && <h3 class="font-heading text-zinc-900 uppercase text-2xl mb-6">{title}</h3>}
+
+    <div class="mb-5">
+      <label for={`${formId}-name`} class="block text-sm font-semibold text-zinc-700 mb-2">Ваше имя *</label>
+      <input type="text" id={`${formId}-name`} name="name" required placeholder="Иван Петров"
+        class="w-full px-4 py-3 rounded border border-zinc-200 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-brand-dark focus:border-transparent transition-all duration-200 text-sm" />
+    </div>
+
+    <div class="mb-5">
+      <label for={`${formId}-phone`} class="block text-sm font-semibold text-zinc-700 mb-2">Номер телефона *</label>
+      <input type="tel" id={`${formId}-phone`} name="phone" required placeholder="8 (___) ___-__-__" maxlength="17"
+        class="w-full px-4 py-3 rounded border border-zinc-200 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-brand-dark focus:border-transparent transition-all duration-200 text-sm" />
+    </div>
+
+    {showComment && (
+      <div class="mb-6">
+        <label for={`${formId}-comment`} class="block text-sm font-semibold text-zinc-700 mb-2">Комментарий</label>
+        <textarea id={`${formId}-comment`} name="comment" rows="3" placeholder={commentPlaceholder}
+          class="w-full px-4 py-3 rounded border border-zinc-200 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-brand-dark focus:border-transparent transition-all duration-200 text-sm resize-none"></textarea>
+      </div>
+    )}
+
+    <button type="submit" id={`${formId}-submit`} class="lead-submit-btn w-full py-4 px-8 rounded uppercase tracking-wide text-white text-sm transition-all duration-300">
+      <span id={`${formId}-btn-text`}>{submitLabel}</span>
+      <span id={`${formId}-spinner`} class="hidden">
+        <Icon name="lucide:loader-circle" class="w-5 h-5 animate-spin inline" /> Отправляем...
+      </span>
+    </button>
+
+    <p id={`${formId}-error`} class="hidden mt-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded px-3 py-2" role="alert"></p>
+
+    <label class="mt-4 flex items-start gap-2.5 text-xs text-zinc-500">
+      <input type="checkbox" id={`${formId}-consent`} name="consent" class="mt-0.5 h-4 w-4 rounded border-zinc-300 text-brand-dark focus:ring-brand-dark" />
+      <span>Я соглашаюсь с <a href="/privacy" target="_blank" rel="noopener noreferrer" class="text-brand-dark underline hover:no-underline">политикой конфиденциальности</a> и обработкой персональных данных.</span>
+    </label>
+  </form>
+
+  <div id={`${formId}-success`} class="hidden lead-success text-center">
+    <div class="w-16 h-16 rounded bg-green-100 flex items-center justify-center mx-auto mb-6">
+      <Icon name="lucide:check" class="w-8 h-8 text-green-600" />
+    </div>
+    <h3 class="font-heading text-zinc-900 uppercase text-2xl mb-3">{onSuccessMessage}</h3>
+    <p class="text-zinc-500 text-base leading-relaxed">{onSuccessDescription}</p>
+  </div>
+</div>
+
+<style>
+  .lead-submit-btn {
+    background: linear-gradient(135deg, #0257c0, #297fec);
+    box-shadow: 0 4px 16px rgba(2, 87, 192, 0.4);
+  }
+  .lead-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(2, 87, 192, 0.55);
+  }
+  .lead-submit-btn:disabled {
+    opacity: 0.7;
+    transform: none;
+    cursor: not-allowed;
+  }
+</style>
+
+<script>
+  import { PhoneMask } from '../../utils/phone-mask';
+
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzMqNnWkWI9RpuMJWVlGdG7Fzdcay5BGH4Zg1iqsOwpi-OR5DsGXLh9UARmMYzlfKcseg/exec';
+
+  document.querySelectorAll('.lead-form-wrapper').forEach((wrapper) => {
+    const formId = wrapper.getAttribute('data-form-id');
+    if (!formId) return;
+
+    const form = wrapper.querySelector('form') as HTMLFormElement;
+    const phoneInput = form.querySelector('input[name="phone"]') as HTMLInputElement;
+    const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    const btnText = form.querySelector(`#${formId}-btn-text`) as HTMLElement;
+    const spinner = form.querySelector(`#${formId}-spinner`) as HTMLElement;
+    const errorBox = form.querySelector(`#${formId}-error`) as HTMLElement;
+    const successBox = wrapper.querySelector(`#${formId}-success`) as HTMLElement;
+    
+    const source = form.dataset.source || '';
+    const fallbackPhone = form.dataset.fallbackPhone || '';
+
+    new PhoneMask(phoneInput);
+
+    const showError = (msg: string) => {
+      errorBox.textContent = msg;
+      errorBox.classList.remove('hidden');
+    };
+
+    const hideError = () => {
+      errorBox.textContent = '';
+      errorBox.classList.add('hidden');
+    };
+
+    const setLoading = (loading: boolean) => {
+      submitBtn.disabled = loading;
+      btnText.classList.toggle('hidden', loading);
+      spinner.classList.toggle('hidden', !loading);
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+
+      const name = (form.querySelector('input[name="name"]') as HTMLInputElement).value.trim();
+      const phone = phoneInput.value.trim();
+      const commentEl = form.querySelector('textarea[name="comment"]') as HTMLTextAreaElement | null;
+      const comment = commentEl?.value.trim() || '';
+      const consent = (form.querySelector('input[name="consent"]') as HTMLInputElement).checked;
+
+      if (!name || !phone) {
+        showError('Заполните обязательные поля: имя и телефон.');
+        return;
+      }
+
+      if (phone.replace(/\D/g, '').length < 11) {
+        showError('Введите телефон полностью.');
+        return;
+      }
+
+      if (!consent) {
+        showError('Подтвердите согласие с политикой конфиденциальности.');
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const formData = new FormData();
+        formData.append('fio', name);
+        formData.append('phone', phone);
+        formData.append('comment', comment);
+        formData.append('source', source);
+        formData.append('consent', 'Да');
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+        await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: formData,
+          mode: 'no-cors',
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        form.classList.add('hidden');
+        successBox.classList.remove('hidden');
+
+        setTimeout(() => {
+          form.reset();
+          form.classList.remove('hidden');
+          successBox.classList.add('hidden');
+          setLoading(false);
+        }, 3000);
+      } catch (error) {
+        setLoading(false);
+        if (error instanceof Error && error.name === 'AbortError') {
+          showError('Превышено время ожидания. Попробуйте ещё раз.');
+        } else {
+          showError(`Ошибка отправки. Позвоните: ${fallbackPhone}`);
+        }
+      }
+    });
+  });
+</script>

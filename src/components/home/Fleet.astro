@@ -65,26 +65,17 @@ const marqueeItems = [
       </div>
     </div>
 
-    <!-- Бегущая строка (Swiper marquee) -->
-    <div
-      class="marquee-wrapper overflow-hidden mb-12 border-y border-white/10 py-4"
-    >
-      <div class="swiper swiper-marquee" id="swiper-marquee" aria-hidden="true">
-        <div class="swiper-wrapper items-center">
-          {
-            [...marqueeItems, ...marqueeItems, ...marqueeItems].map((item) => (
-              <div class="swiper-slide !w-auto">
-                <span class="flex items-center gap-6 px-8 text-slate-400 text-sm font-semibold tracking-widest uppercase whitespace-nowrap">
-                  <span
-                    class="w-1.5 h-1.5 rounded-full bg-brand-light flex-shrink-0"
-                    aria-hidden="true"
-                  />
-                  {item}
-                </span>
-              </div>
-            ))
-          }
-        </div>
+    <!-- Бегущая строка (CSS marquee) -->
+    <div class="overflow-hidden mb-12 border-y border-white/10 py-4" aria-hidden="true">
+      <div class="fleet-marquee-track">
+        {
+          [...marqueeItems, ...marqueeItems].map((item) => (
+            <span class="fleet-marquee-item flex items-center gap-6 px-8 text-slate-400 text-sm font-semibold tracking-widest uppercase whitespace-nowrap">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-light flex-shrink-0" aria-hidden="true" />
+              {item}
+            </span>
+          ))
+        }
       </div>
     </div>
 
@@ -153,6 +144,26 @@ const marqueeItems = [
       linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     background-size: 60px 60px;
+  }
+
+  /* CSS Marquee Animation */
+  .fleet-marquee-track {
+    display: flex;
+    width: fit-content;
+    animation: fleet-marquee 30s linear infinite;
+  }
+
+  .fleet-marquee-item {
+    flex-shrink: 0;
+  }
+
+  @keyframes fleet-marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
   }
 
   /* Навигационные кнопки слайдера */
@@ -226,32 +237,8 @@ const marqueeItems = [
 
 <script>
   import Swiper from "swiper";
-  import {
-    Navigation,
-    Pagination,
-    Autoplay,
-    FreeMode,
-    A11y,
-  } from "swiper/modules";
+  import { Navigation, Pagination, A11y } from "swiper/modules";
   import "swiper/css";
-
-  // ── Бегущая строка ──
-  new Swiper("#swiper-marquee", {
-    modules: [Autoplay, FreeMode],
-    slidesPerView: "auto",
-    spaceBetween: 0,
-    loop: true,
-    freeMode: true,
-    speed: 6000,
-    autoplay: {
-      delay: 0,
-      disableOnInteraction: false,
-      pauseOnMouseEnter: true,
-    },
-    grabCursor: true,
-    allowTouchMove: true,
-    a11y: { enabled: false },
-  });
 
   // ── Карусель карточек ──
   new Swiper("#swiper-fleet", {

@@ -1,0 +1,52 @@
+/**
+ * Кастомизация PhotoSwipe под стилистику сайта ООО «Рубеж»
+ * Используется в Projects.astro и proekty.astro
+ */
+
+/* Фон галереи */
+:global(.pswp__bg) {
+  background: rgba(0, 0, 0, 0.9) !important;
+  backdrop-filter: blur(8px);
+}
+
+/* Верхняя панель */
+:global(.pswp__top-bar) {
+  background: transparent !important;
+}
+
+/* Счетчик фотографий */
+:global(.pswp__counter) {
+  font-family: var(--font-body, system-ui, sans-serif);
+  font-size: 14px;
+  letter-spacing: 0.05em;
+}
+
+/* Кастомный caption */
+:global(.pswp__custom-caption) {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 14px 20px 18px;
+  color: #fff;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0));
+  pointer-events: none;
+}
+
+/* Заголовок в caption */
+:global(.pswp-caption-inner h4) {
+  font-family: var(--font-heading, Impact, sans-serif);
+  font-size: 18px;
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+/* Описание в caption */
+:global(.pswp-caption-inner p) {
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 820px;
+}
