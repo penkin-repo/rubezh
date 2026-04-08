@@ -7,6 +7,7 @@ import react from '@astrojs/react';
 import icon from 'astro-icon';
 
 export default defineConfig({
+  site: 'https://rubezh-arh.ru',
   adapter: vercel(),
   vite: {
     plugins: [tailwindcss()]
