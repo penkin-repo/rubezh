@@ -1,0 +1,140 @@
+---
+/**
+ * Lazy-load компонент для VK видео
+ * Показывает превью и загружает iframe только при клике
+ * Экономит ~1.5MB на начальной загрузке
+ */
+
+interface Props {
+    src: string;
+    title?: string;
+}
+
+const { src, title = "Видео" } = Astro.props;
+
+// Извлекаем ID видео из URL для превью
+// Формат: https://vk.com/video_ext.php?oid=-64387052&id=456266313
+const urlParams = new URLSearchParams(src.split('?')[1]);
+const oid = urlParams.get('oid');
+const id = urlParams.get('id');
+---
+
+<div class="lazy-vk-video" data-src={src}>
+    <!-- Превью с кнопкой Play -->
+    <div class="video-preview">
+        <div class="video-preview__overlay">
+            <button class="video-preview__play" aria-label="Воспроизвести видео">
+                <svg width="68" height="48" viewBox="0 0 68 48" fill="none">
+                    <path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="red"/>
+                    <path d="M45 24L27 14v20" fill="white"/>
+                </svg>
+            </button>
+        </div>
+        <div class="video-preview__bg"></div>
+    </div>
+    
+    <!-- Контейнер для iframe (загружается при клике) -->
+    <div class="video-iframe-container" style="display: none;">
+        <!-- iframe будет вставлен сюда через JS -->
+    </div>
+</div>
+
+<style>
+    .lazy-vk-video {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        background: #000;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .video-preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .video-preview__bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        opacity: 0.8;
+    }
+
+    .video-preview__overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+    }
+
+    .video-preview__play {
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s;
+        padding: 0;
+    }
+
+    .video-preview__play:hover {
+        transform: scale(1.1);
+    }
+
+    .video-iframe-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .video-iframe-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+</style>
+
+<script>
+    // Lazy-load VK iframe при клике
+    document.addEventListener('DOMContentLoaded', () => {
+        const lazyVideos = document.querySelectorAll('.lazy-vk-video');
+        
+        lazyVideos.forEach(container => {
+            const preview = container.querySelector('.video-preview');
+            const iframeContainer = container.querySelector('.video-iframe-container');
+            const src = container.getAttribute('data-src');
+            
+            if (!preview || !iframeContainer || !src) return;
+            
+            preview.addEventListener('click', () => {
+                // Создаем iframe
+                const iframe = document.createElement('iframe');
+                iframe.src = src;
+                iframe.width = '1920';
+                iframe.height = '1080';
+                iframe.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;';
+                iframe.allowFullscreen = true;
+                
+                // Вставляем iframe
+                iframeContainer.appendChild(iframe);
+                
+                // Скрываем превью, показываем iframe
+                preview.style.display = 'none';
+                iframeContainer.style.display = 'block';
+            });
+        });
+    });
+</script>

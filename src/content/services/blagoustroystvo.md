@@ -7,9 +7,9 @@ order: 2
 size: "normal"
 ---
 
-<div class="video-embed">
-<iframe src="https://vk.com/video_ext.php?oid=-64387052&id=456266313&hd=4" width="1920" height="1080" allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;" frameborder="0" allowfullscreen></iframe>
-</div>
+import LazyVKVideo from "../../components/ui/LazyVKVideo.astro";
+
+<LazyVKVideo src="https://vk.com/video_ext.php?oid=-64387052&id=456266313&hd=4" title="Благоустройство территорий" />
 
 Общественные пространства — парки, скверы, площади, набережные, пешеходные зоны — формируют комфортную среду обитания, способствуют улучшению качества жизни горожан и создают привлекательные места отдыха и общения. Благоустройство таких пространств направлено на удовлетворение потребностей жителей города, развитие городской культуры и поддержание экологической стабильности.
 
