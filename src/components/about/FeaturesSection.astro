@@ -32,10 +32,12 @@ import fleetImage from '../../assets/works/Купчино (4).png';
                 <div class="aspect-[4/3] rounded overflow-hidden shadow-2xl">
                     <Image
                         src={teamImage}
-                        alt="Команда профессионалов"
-                        widths={[600, 900, 1200]}
-                        sizes="(max-width: 768px) 600px, (max-width: 1280px) 900px, 1200px"
-                        class="w-full h-full object-cover"
+                        alt="Команда специалистов ООО Рубеж"
+                        widths={[600, 800]}
+                        sizes="(max-width: 768px) 600px, 800px"
+                        loading="lazy"
+                        quality={75}
+                        class="w-full h-full object-cover rounded"
                     />
                 </div>
                 <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-brand-dark/10 rounded-full -z-10 blur-2xl animate-pulse"></div>
@@ -49,8 +51,10 @@ import fleetImage from '../../assets/works/Купчино (4).png';
                     <Image
                         src={fleetImage}
                         alt="Современная спецтехника"
-                        widths={[600, 900, 1200]}
-                        sizes="(max-width: 768px) 600px, (max-width: 1280px) 900px, 1200px"
+                        widths={[600, 800]}
+                        sizes="(max-width: 768px) 600px, 800px"
+                        loading="lazy"
+                        quality={75}
                         class="w-full h-full object-cover"
                     />
                 </div>

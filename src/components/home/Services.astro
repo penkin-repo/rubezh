@@ -62,10 +62,10 @@ const services = await Promise.all(
                         <Image
                             src={data.image}
                             alt={data.title}
-                            widths={data.size === 'large' ? [640, 900, 1200] : [400, 600, 800]}
-                            sizes={data.size === 'large' ? "(max-width: 640px) 640px, (max-width: 1024px) 900px, 1200px" : "(max-width: 640px) 400px, (max-width: 1024px) 600px, 800px"}
+                            widths={data.size === 'large' ? [640, 779] : [400, 600]}
+                            sizes={data.size === 'large' ? "(max-width: 640px) 640px, 779px" : "(max-width: 640px) 400px, 600px"}
                             loading="lazy"
-                            quality={85}
+                            quality={75}
                             class="service-card__img"
                         />
                         <div class="service-card__overlay"></div>

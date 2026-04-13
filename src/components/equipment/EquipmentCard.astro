@@ -31,9 +31,11 @@ const {
         <Image
             src={image}
             alt={title}
-            widths={[400, 600, 800]}
-            sizes="(max-width: 640px) 400px, (max-width: 1024px) 600px, 800px"
-            class="w-full h-full object-contain hover:scale-105 transition-transform duration-300"
+            widths={[400, 600]}
+            sizes="(max-width: 640px) 400px, 600px"
+            loading="lazy"
+            quality={75}
+            class="equipment-card__image"
         />
     </div>
     <div class="p-5 flex flex-col flex-1">
