@@ -17,10 +17,11 @@ export interface PhotoSwipeConfig {
  * Инициализирует PhotoSwipe галерею с кастомными настройками
  */
 export async function initPhotoSwipe(config: Partial<PhotoSwipeConfig> = {}): Promise<any> {
-  // Динамический импорт PhotoSwipe
-  const [{ default: PhotoSwipeLightbox }, _] = await Promise.all([
+  // Динамический импорт PhotoSwipe и стилей
+  const [{ default: PhotoSwipeLightbox }, _, __] = await Promise.all([
     import('photoswipe/lightbox'),
-    import('photoswipe/style.css')
+    import('photoswipe/style.css'),
+    import('../styles/photoswipe-custom.css')
   ]);
   const defaultConfig: PhotoSwipeConfig = {
     gallery: '.project-gallery',
