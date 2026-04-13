@@ -1,5 +1,6 @@
 ---
 import { Image } from "astro:assets";
+import LazyVKVideo from "../ui/LazyVKVideo.astro";
 
 interface Props {
     id: string;
@@ -60,7 +61,11 @@ const { id, title, desc, hideModalImage, image, videoEmbedUrl } = Astro.props;
                 <!-- Медиа-вставка: VK iframe или фото -->
 
                 {
-                    hideModalImage ? null : image ? (
+                    videoEmbedUrl ? (
+                        <div class="mb-8">
+                            <LazyVKVideo src={videoEmbedUrl} title={title} />
+                        </div>
+                    ) : hideModalImage ? null : image ? (
                         <div class="w-full relative bg-slate-100 rounded overflow-hidden mb-8 aspect-video border border-slate-100 shadow-sm">
                             <Image
                                 src={image}
