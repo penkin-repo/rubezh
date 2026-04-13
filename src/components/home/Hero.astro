@@ -21,37 +21,65 @@ const description =
 const primaryBtnLabel = heroData?.primaryBtnLabel ?? "Заказать технику";
 const primaryBtnHref = heroData?.primaryBtnHref ?? "/arenda-spetstehniki";
 
-// Оптимизируем изображения
-const mobileImage = await getImage({
-    src: heroImgMob,
-    widths: [360, 640, 768, 1024],
-    formats: ['avif', 'webp', 'jpg'],
-    quality: 85,
-});
+// Генерируем ОТДЕЛЬНЫЕ изображения для каждого размера
+const mob360 = await getImage({ src: heroImgMob, width: 360, format: 'webp', quality: 85 });
+const mob640 = await getImage({ src: heroImgMob, width: 640, format: 'webp', quality: 85 });
+const mob768 = await getImage({ src: heroImgMob, width: 768, format: 'webp', quality: 85 });
 
-const desktopImage = await getImage({
-    src: heroImgDesc,
-    widths: [1024, 1280, 1440, 1920],
-    formats: ['avif', 'webp', 'jpg'],
-    quality: 85,
-});
+const desk1024 = await getImage({ src: heroImgDesc, width: 1024, format: 'webp', quality: 85 });
+const desk1280 = await getImage({ src: heroImgDesc, width: 1280, format: 'webp', quality: 85 });
+const desk1440 = await getImage({ src: heroImgDesc, width: 1440, format: 'webp', quality: 85 });
+const desk1920 = await getImage({ src: heroImgDesc, width: 1920, format: 'webp', quality: 85 });
+
+// AVIF версии
+const mob360avif = await getImage({ src: heroImgMob, width: 360, format: 'avif', quality: 85 });
+const mob640avif = await getImage({ src: heroImgMob, width: 640, format: 'avif', quality: 85 });
+const mob768avif = await getImage({ src: heroImgMob, width: 768, format: 'avif', quality: 85 });
+
+const desk1024avif = await getImage({ src: heroImgDesc, width: 1024, format: 'avif', quality: 85 });
+const desk1280avif = await getImage({ src: heroImgDesc, width: 1280, format: 'avif', quality: 85 });
+const desk1440avif = await getImage({ src: heroImgDesc, width: 1440, format: 'avif', quality: 85 });
+const desk1920avif = await getImage({ src: heroImgDesc, width: 1920, format: 'avif', quality: 85 });
+
+// Fallback JPG
+const mobFallback = await getImage({ src: heroImgMob, width: 768, format: 'jpg', quality: 85 });
 ---
 
 <section class="relative flex flex-col pb-[30%] lg:pb-[10%]">
     <!-- Фоновое изображение -->
     <div class="absolute inset-0 z-0">
         <picture>
-            <!-- Desktop версия (1024px и выше) -->
+            <!-- Desktop AVIF -->
             <source
                 media="(min-width: 1024px)"
-                srcset={desktopImage.srcSet.attribute}
+                type="image/avif"
+                srcset={`${desk1024avif.src} 1024w, ${desk1280avif.src} 1280w, ${desk1440avif.src} 1440w, ${desk1920avif.src} 1920w`}
                 sizes="(max-width: 1280px) 1024px, (max-width: 1440px) 1280px, 1920px"
             />
-            <!-- Mobile версия (по умолчанию) -->
-            <img
-                src={mobileImage.src}
-                srcset={mobileImage.srcSet.attribute}
+            <!-- Desktop WebP -->
+            <source
+                media="(min-width: 1024px)"
+                type="image/webp"
+                srcset={`${desk1024.src} 1024w, ${desk1280.src} 1280w, ${desk1440.src} 1440w, ${desk1920.src} 1920w`}
+                sizes="(max-width: 1280px) 1024px, (max-width: 1440px) 1280px, 1920px"
+            />
+
+            <!-- Mobile AVIF -->
+            <source
+                type="image/avif"
+                srcset={`${mob360avif.src} 360w, ${mob640avif.src} 640w, ${mob768avif.src} 768w`}
                 sizes="(max-width: 360px) 360px, (max-width: 640px) 640px, 768px"
+            />
+            <!-- Mobile WebP -->
+            <source
+                type="image/webp"
+                srcset={`${mob360.src} 360w, ${mob640.src} 640w, ${mob768.src} 768w`}
+                sizes="(max-width: 360px) 360px, (max-width: 640px) 640px, 768px"
+            />
+
+            <!-- Fallback -->
+            <img
+                src={mobFallback.src}
                 alt="Спецтехника ООО Рубеж на объекте дорожного строительства"
                 loading="eager"
                 fetchpriority="high"

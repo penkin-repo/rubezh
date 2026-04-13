@@ -1,7 +1,7 @@
 ---
 items:
   - title: "HOWO T5G"
-    specs: "30 т, 20 куб, 6 ед."
+    specs: "30 т, 20 куб, 10 ед."
     category: "Самосвалы"
     image: "../../assets/fleet/Fleet (2).jpeg"
     order: 1
@@ -9,19 +9,19 @@ items:
     featuredOrder: 1
 
   - title: "FAW J6 6X6 6Х4"
-    specs: "Полный привод, 2 ед."
+    specs: "Полный привод, 4 ед."
     category: "Самосвалы"
     image: "../../assets/fleet/Fleet (2).jpeg"
     order: 2
 
   - title: "КАМАЗ К3440 65222-53"
-    specs: "Полный привод, 15 т"
+    specs: "Полный привод, 20 т"
     category: "Самосвалы"
     image: "../../assets/fleet/Fleet (2).jpeg"
     order: 3
 
   - title: "КАМАЗ Т2530 65115-А5"
-    specs: "10 т"
+    specs: "15 т"
     category: "Самосвалы"
     image: "../../assets/fleet/Fleet (2).jpeg"
     order: 4
@@ -90,29 +90,37 @@ items:
     featured: true
     featuredOrder: 6
 
+  - title: "HammerMaster DS 3-17х75"
+    specs: "Роторный ковш"
+    category: "Спецтехника"
+    image: "../../assets/fleet/HammerMaster_DS_3-17х75.png"
+    order: 15
+    featured: true
+    featuredOrder: 7
+
   - title: "XCMG XE180ED"
     specs: "Колёсный экскаватор"
     category: "Экскаваторы"
     image: "../../assets/fleet/Fleet (9).jpeg"
-    order: 15
+    order: 16
 
   - title: "HYUNDAI HX220S"
     specs: "Гусеничный экскаватор"
     category: "Экскаваторы"
     image: "../../assets/fleet/Fleet (10).jpeg"
-    order: 16
-
-  - title: "SHANTUI SE210-9"
-    specs: "Гусеничный, 2 ед."
-    category: "Экскаваторы"
-    image: "../../assets/fleet/Fleet (10).jpeg"
     order: 17
 
-  - title: "LIUGONG CLG922E"
-    specs: "Гусеничный, 9 ед."
+  - title: "SHANTUI SE210-9"
+    specs: "Гусеничный экскаватор, 2 ед."
     category: "Экскаваторы"
     image: "../../assets/fleet/Fleet (10).jpeg"
     order: 18
+
+  - title: "LIUGONG CLG922E"
+    specs: "Гусеничный экскаватор, 9 ед."
+    category: "Экскаваторы"
+    image: "../../assets/fleet/Fleet (10).jpeg"
+    order: 19
     featured: true
     featuredOrder: 3
 
@@ -120,19 +128,31 @@ items:
     specs: "Гусеничный экскаватор"
     category: "Экскаваторы"
     image: "../../assets/fleet/Fleet (10).jpeg"
-    order: 19
+    order: 20
+
+  - title: "LOVOL FR330D"
+    specs: "Гусеничный экскаватор, 35 т"
+    category: "Экскаваторы"
+    image: "../../assets/fleet/LOVOL_FR330D.png"
+    order: 21
+
+  - title: "LOVOL ER225E2"
+    specs: "Гусеничный экскаватор, 23 т"
+    category: "Экскаваторы"
+    image: "../../assets/fleet/LOVOL_ER225E2.png"
+    order: 22
 
   - title: "JCB 3CX K14M2NM"
     specs: "Экскаватор-погрузчик, 4 ед."
     category: "Экскаваторы"
     image: "../../assets/fleet/Fleet (1).jpeg"
-    order: 20
+    order: 21
 
   - title: "Komatsu D65PX-16"
     specs: "21 т"
     category: "Бульдозеры"
     image: "../../assets/fleet/Fleet (11).png"
-    order: 21
+    order: 22
     featured: true
     featuredOrder: 4
 
@@ -140,31 +160,31 @@ items:
     specs: "20 т"
     category: "Бульдозеры"
     image: "../../assets/fleet/Fleet (11).png"
-    order: 22
+    order: 23
 
   - title: "CATERPILLAR D6R XL"
     specs: "20 т"
     category: "Бульдозеры"
     image: "../../assets/fleet/Fleet (11).png"
-    order: 23
+    order: 24
 
   - title: "SHANTUI SR12P-5"
     specs: "Грунтовый, 13.5 т"
     category: "Катки"
     image: "../../assets/fleet/Fleet (12).png"
-    order: 24
+    order: 25
 
   - title: "SHANTUI SR14P"
     specs: "Грунтовый, 14.5 т"
     category: "Катки"
     image: "../../assets/fleet/Fleet (12).png"
-    order: 25
+    order: 26
 
   - title: "HAMM 3114"
     specs: "Грунтовый, 14 т"
     category: "Катки"
     image: "../../assets/fleet/Fleet (12).png"
-    order: 26
+    order: 27
     featured: true
     featuredOrder: 5
 
@@ -172,11 +192,11 @@ items:
     specs: "Асфальтовый, 4 т"
     category: "Катки"
     image: "../../assets/fleet/Fleet (12-2).png"
-    order: 27
+    order: 28
 
   - title: "XCMG XD83"
-    specs: "Асфальтовый, 8.5 т"
+    specs: "Асфальтовый, 9 т"
     category: "Катки"
-    image: "../../assets/fleet/Fleet (12-2).png"
-    order: 28
+    image: "../../assets/fleet/Каток_асфальтовый_XCMG_XD83.png"
+    order: 29
 ---

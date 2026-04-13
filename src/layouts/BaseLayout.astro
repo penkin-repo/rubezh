@@ -10,7 +10,7 @@ interface Props {
 const {
     title = "ООО Рубеж — Дорожное строительство и аренда спецтехники в Архангельске",
     description = "Дорожно-строительная компания ООО «Рубеж». Строительство дорог, аренда спецтехники, земляные работы в Архангельской области. 11+ лет опыта, 60+ единиц техники.",
-    image = "/og-image.jpg",
+    image = "/og-image.png",
 } = Astro.props;
 
 const siteUrl = Astro.site || 'https://rubezh-arh.ru';
@@ -49,7 +49,7 @@ const ogImageURL = new URL(image, siteUrl);
         
         <!-- Preload критичных ресурсов -->
         <link rel="preload" href="/fonts/Impact.woff2" as="font" type="font/woff2" crossorigin />
-        <link rel="preload" href="/_astro/hero.jpg" as="image" type="image/jpeg" fetchpriority="high" />
+        <!-- <link rel="preload" href="/_astro/hero.jpg" as="image" type="image/jpeg" fetchpriority="high" /> -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
     </head>
     <body>
