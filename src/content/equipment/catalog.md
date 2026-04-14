@@ -69,6 +69,8 @@ items:
     category: "Спецтехника"
     image: "../../assets/fleet/Fleet (7).jpeg"
     order: 11
+    featured: true
+    featuredOrder: 8
 
   - title: "Автобетоносмеситель КАМАЗ 581471"
     specs: "6 куб"
@@ -161,6 +163,8 @@ items:
     category: "Бульдозеры"
     image: "../../assets/fleet/Fleet (11).png"
     order: 23
+    featured: true
+    featuredOrder: 9
 
   - title: "CATERPILLAR D6R XL"
     specs: "20 т"
@@ -193,6 +197,8 @@ items:
     category: "Катки"
     image: "../../assets/fleet/Fleet (12-2).png"
     order: 28
+    featured: true
+    featuredOrder: 10
 
   - title: "XCMG XD83"
     specs: "Асфальтовый, 9 т"
