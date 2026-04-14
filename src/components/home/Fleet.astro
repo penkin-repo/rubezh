@@ -8,7 +8,7 @@ const fleet = equipmentCollection
   .flatMap((entry) => entry.data.items)
   .filter((item) => item.featured)
   .sort((a, b) => a.featuredOrder - b.featuredOrder)
-  .slice(0, 6);
+  .slice(0, 8);
 
 // Бегущая строка — повторяем 3 раза для бесшовного loop
 const marqueeItems = [

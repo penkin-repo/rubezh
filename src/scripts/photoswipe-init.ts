@@ -1,8 +1,10 @@
 /**
  * Модуль инициализации PhotoSwipe для галерей проектов
  * Используется в Projects.astro и proekty.astro
- * Все импорты динамические для оптимизации производительности
  */
+
+import PhotoSwipeLightbox from 'photoswipe/lightbox';
+import 'photoswipe/style.css';
 
 export interface PhotoSwipeConfig {
   gallery: string;
@@ -16,13 +18,7 @@ export interface PhotoSwipeConfig {
 /**
  * Инициализирует PhotoSwipe галерею с кастомными настройками
  */
-export async function initPhotoSwipe(config: Partial<PhotoSwipeConfig> = {}): Promise<any> {
-  // Динамический импорт PhotoSwipe и стилей
-  const [{ default: PhotoSwipeLightbox }, _, __] = await Promise.all([
-    import('photoswipe/lightbox'),
-    import('photoswipe/style.css'),
-    import('../styles/photoswipe-custom.css')
-  ]);
+export function initPhotoSwipe(config: Partial<PhotoSwipeConfig> = {}): any {
   const defaultConfig: PhotoSwipeConfig = {
     gallery: '.project-gallery',
     children: 'a',
