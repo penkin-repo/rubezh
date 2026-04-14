@@ -23,9 +23,21 @@ export class PhoneMask {
   }
 
   private handleInput(e: Event) {
-    const formatted = this.formatPhone(this.input.value);
-    this.input.value = formatted;
-    
+    const input = this.input;
+    const selStart = input.selectionStart ?? input.value.length;
+    const oldValue = input.value;
+
+    const formatted = this.formatPhone(oldValue);
+
+    // Вычисляем сдвиг курсора на основе разницы длин
+    const diff = formatted.length - oldValue.length;
+    const newCursor = Math.max(0, selStart + diff);
+
+    input.value = formatted;
+
+    // Восстанавливаем позицию курсора
+    input.setSelectionRange(newCursor, newCursor);
+
     if (this.options.onInput) {
       const raw = this.getRawPhone(formatted);
       this.options.onInput(formatted, raw);

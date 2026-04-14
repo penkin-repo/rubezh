@@ -39,9 +39,21 @@ const categories = [
     <main>
         <PageHeader title="Аренда спецтехники" />
 
-        <!-- Фильтры -->
+        <!-- Поиск и Фильтры -->
         <section class="py-8 bg-white border-b border-zinc-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+                <!-- Строка поиска -->
+                <div class="relative max-w-md">
+                    <Icon name="lucide:search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
+                    <input
+                        id="equipment-search"
+                        type="search"
+                        placeholder="Поиск техники: самосвал, каток..."
+                        class="w-full pl-10 pr-4 py-2.5 rounded border border-zinc-200 bg-zinc-50 text-zinc-900 text-sm placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-brand-light focus:border-transparent transition"
+                        autocomplete="off"
+                    />
+                </div>
+                <!-- Фильтры по категориям -->
                 <div class="flex flex-wrap gap-3">
                     {categories.map((category) => (
                         <button
@@ -195,28 +207,63 @@ const categories = [
     // Фильтрация техники
     const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
     const equipmentCards = document.querySelectorAll<HTMLElement>('.equipment-card');
-    
+    const searchInput = document.getElementById('equipment-search') as HTMLInputElement | null;
+
+    let activeCategory = 'Все';
+    let searchQuery = '';
+
+    function applyFilters() {
+        let visibleCount = 0;
+        equipmentCards.forEach(card => {
+            const cardCategory = card.dataset.category ?? '';
+            const cardTitle = (card.querySelector('h3')?.textContent ?? '').toLowerCase();
+            const cardSpecs = (card.querySelector('p')?.textContent ?? '').toLowerCase();
+            const cardCategoryText = cardCategory.toLowerCase();
+
+            const matchesCategory = activeCategory === 'Все' || cardCategory === activeCategory;
+            const matchesSearch = searchQuery === '' ||
+                cardTitle.includes(searchQuery) ||
+                cardSpecs.includes(searchQuery) ||
+                cardCategoryText.includes(searchQuery);
+
+            const visible = matchesCategory && matchesSearch;
+            card.style.display = visible ? 'block' : 'none';
+            if (visible) visibleCount++;
+        });
+
+        // Показываем сообщение если ничего не найдено
+        let emptyMsg = document.getElementById('search-empty');
+        if (visibleCount === 0) {
+            if (!emptyMsg) {
+                emptyMsg = document.createElement('p');
+                emptyMsg.id = 'search-empty';
+                emptyMsg.className = 'col-span-full text-center text-zinc-500 py-12 text-lg';
+                emptyMsg.textContent = 'По вашему запросу техника не найдена';
+                document.getElementById('equipment-grid')?.appendChild(emptyMsg);
+            }
+        } else {
+            emptyMsg?.remove();
+        }
+    }
+
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            const category = btn.dataset.category;
-            
-            // Обновляем активную кнопку
+            activeCategory = btn.dataset.category ?? 'Все';
+
             filterBtns.forEach(b => {
                 b.classList.remove('bg-brand-dark', 'text-white');
                 b.classList.add('bg-zinc-100', 'text-zinc-700');
             });
             btn.classList.remove('bg-zinc-100', 'text-zinc-700');
             btn.classList.add('bg-brand-dark', 'text-white');
-            
-            // Фильтруем карточки
-            equipmentCards.forEach(card => {
-                if (category === 'Все' || card.dataset.category === category) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+
+            applyFilters();
         });
+    });
+
+    searchInput?.addEventListener('input', () => {
+        searchQuery = (searchInput.value ?? '').toLowerCase().trim();
+        applyFilters();
     });
     
     // Открытие модального окна
