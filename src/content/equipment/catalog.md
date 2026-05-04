@@ -109,19 +109,19 @@ items:
   - title: "HYUNDAI HX220S"
     specs: "Гусеничный экскаватор"
     category: "Экскаваторы"
-    image: "../../assets/fleet/Fleet (10).jpeg"
+    image: "../../assets/fleet/Fleet (10).png"
     order: 17
 
   - title: "SHANTUI SE210-9"
     specs: "Гусеничный экскаватор, 2 ед."
     category: "Экскаваторы"
-    image: "../../assets/fleet/Fleet (10).jpeg"
+    image: "../../assets/fleet/Fleet (10).png"
     order: 18
 
   - title: "LIUGONG CLG922E"
     specs: "Гусеничный экскаватор, 9 ед."
     category: "Экскаваторы"
-    image: "../../assets/fleet/Fleet (10).jpeg"
+    image: "../../assets/fleet/Fleet (10).png"
     order: 19
     featured: true
     featuredOrder: 3
@@ -129,7 +129,7 @@ items:
   - title: "HITACHI ZX200-5G"
     specs: "Гусеничный экскаватор"
     category: "Экскаваторы"
-    image: "../../assets/fleet/Fleet (10).jpeg"
+    image: "../../assets/fleet/Fleet (10).png"
     order: 20
 
   - title: "LOVOL FR330D"

@@ -80,25 +80,204 @@
 
 ---
 
-## 📂 Структура проекта
+## 📂 Структура проекта (АКТУАЛЬНАЯ)
 
 ```
 RUBEZH/
 ├── src/
-│   ├── assets/          — изображения, SVG
-│   ├── components/      — переиспользуемые компоненты (.astro)
-│   ├── layouts/         — базовые layouts (BaseLayout.astro и др.)
-│   ├── pages/           — страницы сайта
-│   └── styles/          — глобальные стили (CSS/Tailwind)
-├── start/               — ТЗ клиента, план разработки, результаты шагов 1–4
-├── public/              — статика (favicon, robots.txt и др.)
-├── sanity.config.ts     — конфиг Sanity Studio и CMS
-├── astro.config.mjs     — конфиг Astro
+│   ├── assets/            — изображения, SVG, иконки
+│   │   ├── fleet/         — фото техники для каталога
+│   │   ├── services/      — фото для карточек услуг
+│   │   ├── works/         — фото объектов/проектов
+│   │   ├── hero.jpg / hero-2.jpg  — фоны Hero-секции (моб + десктоп)
+│   │   └── logo-main.svg  — логотип компании
+│   ├── components/        — все .astro компоненты (см. карту ниже)
+│   ├── content/           — Astro Content Collections (данные сайта)
+│   ├── layouts/           — BaseLayout.astro (единственный layout)
+│   ├── pages/             — маршруты сайта
+│   ├── scripts/           — клиентские скрипты (PhotoSwipe)
+│   ├── styles/            — глобальные стили
+│   └── utils/             — утилиты (маска телефона, анимации, throttle)
+├── public/                — статика (favicon, fonts, robots.txt, og-image)
+│   └── fonts/             — Impact, Inter (woff2/woff)
+├── start/                 — ТЗ клиента, план, материалы (в .gitignore)
+├── sanity.config.ts       — конфиг Sanity Studio
+├── astro.config.mjs       — конфиг Astro (site URL, Vercel adapter, Tailwind, React, Icon)
 ├── package.json
-├── MASTER-PROMPT.MD     — краткий контекст (3 строки)
-├── PROJECT_LOG.md       — живой лог проекта
-└── PROJECT_LOG_HOW.md   — этот файл
+├── PROJECT_LOG.md         — живой лог проекта (обновлять после каждого изменения!)
+└── PROJECT_LOG_HOW.md     — ЭТОТ ФАЙЛ — точка входа, контекст всего проекта
 ```
+
+---
+
+## 🧩 Карта компонентов (АКТУАЛЬНАЯ)
+
+### `src/components/home/` — секции главной страницы
+
+| Компонент | Назначение | Источник данных |
+|-----------|------------|----------------|
+| `Hero.astro` | Баннер с фоновым фото, заголовок, CTA-кнопки. `getImage` API для AVIF/WebP | Хардкод + assets |
+| `Services.astro` | Карточки видов деятельности (6 шт), клик → модальное окно | Content collection `services` |
+| `ServiceModal.astro` | Модальное окно услуги (фото/VK видео + описание) | Props от Services |
+| `Advantages.astro` | Секция преимуществ компании (цветные карточки с иконками) | Хардкод |
+| `StatsBar.astro` | Полоска с цифрами (11+ лет, 200+ объектов и т.д.) | Хардкод |
+| `Fleet.astro` | Слайдер техники (Swiper, 10 featured items, CSS marquee) | Content collection `equipment` |
+| `Projects.astro` | **СТАРЫЙ** — сетка 2×2 проектов с PhotoSwipe галереей | Content collection `projects` |
+| `Projects2.astro` | **НОВЫЙ** — проекты по годам (вкладки), фото слева + текст справа | Content collection `projects2` |
+| `ContactForm.astro` | Форма обратной связи (ФИО, телефон, комментарий) → Google Sheets | Content collection `site` |
+| `Contacts.astro` | Секция контактов с картой Яндекс | Content collection `site` |
+
+### `src/components/about/` — страница «О компании»
+
+| Компонент | Назначение |
+|-----------|------------|
+| `AboutHero.astro` | Верхний блок с фото и текстом о компании |
+| `FeaturesSection.astro` | Блок «Наши преимущества» с фото команды и техники |
+| `StatsSection.astro` | Блок с цифрами компании (анимированные счётчики) |
+| `ServicesSection.astro` | Блок видов деятельности на странице «О компании» |
+| `QuoteSection.astro` | Цитата / миссия компании |
+| `Marquee.astro` | Бегущая строка (CSS-анимация, без Swiper) |
+
+### `src/components/equipment/`
+
+| Компонент | Назначение |
+|-----------|------------|
+| `EquipmentCard.astro` | Универсальная карточка техники. Props: `actionType` (`modal` \| `link`), `href`, `buttonLabel`. Используется и на главной (Fleet), и на /arenda-spetstehniki |
+
+### `src/components/vacancies/`
+
+| Компонент | Назначение |
+|-----------|------------|
+| `VacancyAccordion.astro` | Аккордеон вакансий. Читает `getCollection('vacancies')`, рендерит body через `.render().Content` |
+
+### `src/components/layout/`
+
+| Компонент | Назначение |
+|-----------|------------|
+| `Header.astro` | Шапка сайта: логотип, навигация, мобильное меню, кнопка CTA |
+| `Footer.astro` | Подвал: контакты, навигация, соцсети, копирайт |
+
+### `src/components/ui/` — переиспользуемые UI-блоки
+
+| Компонент | Назначение |
+|-----------|------------|
+| `Button.astro` | Универсальная кнопка с вариантами стилей |
+| `LeadForm.astro` | Форма заявки (используется в модалке аренды техники) |
+| `PageHeader.astro` | Заголовок внутренней страницы (шапка с фоном) |
+
+### `src/components/SanityStudio.tsx`
+— React-компонент для Sanity Studio (роут `/studio`). Единственный React на проекте.
+
+---
+
+## 📦 Content Collections (АКТУАЛЬНАЯ)
+
+Все коллекции определены в `src/content/config.ts`. Данные хранятся в markdown-файлах с frontmatter.
+
+| Коллекция | Папка | Поля frontmatter | Используется в |
+|-----------|-------|------------------|----------------|
+| `projects` | `src/content/projects/` | `title`, `category`, `description`, `images[]`, `order` | `Projects.astro` (старый), `proekty.astro` |
+| `projects2` | `src/content/projects2/` | `year`, `title`, `works`, `client`, `images[]`, `order` | `Projects2.astro` (новый), `proekty2.astro` |
+| `equipment` | `src/content/equipment/` | `items[]` → `{title, category, specs, image, order, featured, featuredOrder}` | `Fleet.astro`, `arenda-spetstehniki.astro` |
+| `services` | `src/content/services/` | `title`, `desc`, `image`, `videoEmbedUrl?`, `hideModalImage?`, `order`, `size` | `Services.astro`, `ServiceModal.astro` |
+| `site` | `src/content/site/` | Контакты: телефоны, email, адрес, соцсети, реквизиты, расписание, mapEmbedUrl | Footer, Contacts, ContactForm, LeadForm, kontakty, vakansii, privacy |
+| `vacancies` | `src/content/vacancies/` | `title`, `order` + markdown body (описание) | `VacancyAccordion.astro` |
+
+---
+
+## 🎨 Стили (АКТУАЛЬНАЯ)
+
+### `src/styles/global.css` — главный файл стилей
+
+| Секция | Что делает |
+|--------|------------|
+| `@import "tailwindcss"` | Подключение Tailwind v4 |
+| `@font-face` (×4) | Подключение шрифтов: Impact (заголовки), Inter 400/500/600/700 (текст) из `public/fonts/` |
+| `:root` | CSS-переменные: `--color-brand-dark` (#0257c0), `--color-brand-light` (#297fec), `--gradient-brand`, `--font-heading`, `--font-body`, `--hero-text-shadow` |
+| `@theme` | Tailwind v4 директива — превращает переменные в utility-классы: `text-brand-dark`, `bg-brand-light`, `bg-adv-blue/green/violet/orange/teal`, `font-heading`, `font-body` |
+| `.font-heading` / `.font-body` | Утилитарные классы для шрифтов |
+| `.bg-grid-pattern` / `.bg-grid-pattern-white` | Фоновые сетки (паттерн) |
+| `.hero-text-shadow` | Тень на заголовке Hero |
+| `@keyframes fadeSlideUp` | Анимация появления Hero-контента (4 класса с разной задержкой) |
+
+### `src/styles/photoswipe-custom.css` — кастомные стили PhotoSwipe
+— Кастомизация lightbox-галереи: закруглённые кнопки, цвет фона, стили подписей.
+
+### Бренд-цвета
+| Переменная | Цвет | Tailwind-класс | Где используется |
+|-----------|------|----------------|------------------|
+| `--color-brand-dark` | `#0257c0` | `text-brand-dark`, `bg-brand-dark` | Кнопки, заголовки, акценты, активные вкладки |
+| `--color-brand-light` | `#297fec` | `text-brand-light`, `bg-brand-light` | Hover-состояния, вторичные акценты |
+| `--color-adv-*` | 5 цветов | `bg-adv-blue/green/violet/orange/teal` | Только в секции Advantages |
+
+### Шрифты
+| Шрифт | Переменная | Класс | Где |
+|-------|-----------|-------|-----|
+| **Impact** | `--font-heading` | `.font-heading` | h1, h2, h3, CTA-кнопки (UPPERCASE) |
+| **Inter** | `--font-body` | `.font-body` (или `html` по умолчанию) | Весь остальной текст, формы, навигация |
+
+---
+
+## 🔧 Утилиты и скрипты (АКТУАЛЬНАЯ)
+
+### `src/utils/`
+
+| Файл | Назначение |
+|------|------------|
+| `phone-mask.ts` | Класс `PhoneMask` — маска телефона `8 (___) ___-__-__`. Сохраняет позицию курсора при редактировании. Также `formatPhoneNumber()` для одноразового форматирования. |
+| `animate-counter.ts` | Анимация счётчиков (плавное увеличение числа от 0 до N). Используется в StatsBar и StatsSection. |
+| `throttle.ts` | Утилита throttle для оптимизации обработчиков событий (scroll, resize). |
+
+### `src/scripts/`
+
+| Файл | Назначение |
+|------|------------|
+| `photoswipe-init.ts` | Инициализация PhotoSwipe Lightbox. Экспортирует `initPhotoSwipe(config)`. Статический импорт (не динамический — откачали из-за багов). Используется в Projects, Projects2, proekty, proekty2. |
+
+---
+
+## 📄 Страницы (АКТУАЛЬНАЯ)
+
+| URL | Файл | Описание |
+|-----|------|----------|
+| `/` | `index.astro` | Главная: Hero → Services → Advantages → Fleet → **Projects2** → ContactForm → Contacts |
+| `/o-kompanii` | `o-kompanii.astro` | О компании: AboutHero, Stats, Features, Services, Quote |
+| `/vakansii` | `vakansii.astro` | Вакансии: VacancyAccordion |
+| `/proekty` | `proekty.astro` | **Старые** проекты: сетка с PhotoSwipe (collection `projects`) |
+| `/proekty2` | `proekty2.astro` | **Новые** проекты: по годам, фото+текст (collection `projects2`) |
+| `/arenda-spetstehniki` | `arenda-spetstehniki.astro` | Новый hero (белый фон, текст слева + экскаватор справа), каталог техники: фильтры по категориям + поиск, модальная форма заявки. Старый PageHeader закомментирован. |
+| `/kontakty` | `kontakty.astro` | Контакты: карта, телефоны, реквизиты |
+| `/privacy` | `privacy.astro` | Политика конфиденциальности |
+| `/studio` | `studio/[...slug].astro` | Sanity Studio (React) |
+| `/404` | `404.astro` | Страница 404 |
+
+---
+
+## 🖼 Assets (АКТУАЛЬНАЯ)
+
+| Папка | Содержимое |
+|-------|------------|
+| `src/assets/fleet/` | Фото техники для каталога (JPEG/PNG) |
+| `src/assets/services/` | Фото для карточек услуг |
+| `src/assets/works/` | Фото объектов/проектов (АРХРЕЧПОРТ, Купчино, ПРОМСТРОЙ, СЕВЕРАЛМАЗ) |
+| `src/assets/hero.jpg` / `hero-2.jpg` | Фоны Hero-секции (мобильный / десктопный) |
+| `src/assets/logo-main.svg` | Логотип ООО «Рубеж» |
+| `public/fonts/` | Шрифты Impact и Inter (woff2/woff) |
+| `public/robots.txt` | Правила индексации |
+
+---
+
+## 🏗 Layout
+
+### `src/layouts/BaseLayout.astro`
+— Единственный layout. Содержит:
+- `<html>`, `<head>`, `<body>`
+- Мета-теги: title, description, viewport, charset
+- **Open Graph** + **Twitter Card** теги
+- **Canonical URL** (из `Astro.url`)
+- Preload для hero-изображения (LCP оптимизация)
+- Подключение `global.css`
+- Cookie-уведомление (скрипт)
 
 ---
 
@@ -200,24 +379,7 @@ RUBEZH/
 - **Все компоненты** пишутся как `.astro` файлы — никакого React/Vue/Svelte на страницах сайта.
 - **React используется ТОЛЬКО** внутри Sanity Studio (роут `/studio`), интегрированного в Astro проект. На самом сайте — только Astro.
 - Каждая секция страницы = отдельный компонент в `src/components/`.
-- Пример декомпозиции главной страницы:
-  ```
-  src/components/
-  ├── layout/
-  │   ├── Header.astro
-  │   └── Footer.astro
-  ├── home/
-  │   ├── Hero.astro
-  │   ├── Stats.astro
-  │   ├── Services.astro
-  │   ├── Projects.astro
-  │   └── ContactForm.astro
-  ├── equipment/
-  │   └── EquipmentCard.astro
-  └── ui/
-      ├── Button.astro
-      └── SectionTitle.astro
-  ```
+- **Актуальная структура компонентов описана в секции «Карта компонентов» выше.**
 
 ### Изображения — Astro Image
 - **Всегда** используй `<Image />` из `astro:assets` (не тег `<img>`).
@@ -364,15 +526,24 @@ const { title, subtitle } = Astro.props;
 ## 🗺 Карта сайта и URL-структура
 
 ```
-/ — Главная
-/o-kompanii — О компании
-/vakansii — Вакансии
-/proekty — Проекты
-/arenda-spetstehniki — Аренда спецтехники
-/arenda-spetstehniki/samosvaly — Самосвалы
-/arenda-spetstehniki/spetstekhnika — Спецтехника
-/arenda-spetstehniki/ekskavatory — Экскаваторы
-/arenda-spetstehniki/buldozery — Бульдозеры
-/arenda-spetstehniki/katki — Катки
-/kontakty — Контакты
+/                    — Главная (Hero, Services, Advantages, Fleet, Projects2, ContactForm, Contacts)
+/o-kompanii           — О компании (AboutHero, Stats, Features, Services, Quote)
+/vakansii             — Вакансии (VacancyAccordion)
+/proekty              — Проекты СТАРЫЕ (сетка с PhotoSwipe, collection projects)
+/proekty2             — Проекты НОВЫЕ (по годам, collection projects2)
+/arenda-spetstehniki  — Аренда спецтехники (новый hero: текст + экскаватор, каталог + поиск + фильтры + модальная форма)
+/kontakty             — Контакты (карта, телефоны, реквизиты)
+/privacy              — Политика конфиденциальности
+/studio               — Sanity Studio (React)
 ```
+
+---
+
+## ⚡ Деплой
+
+- **Платформа:** Vercel (автодеплой при push в `main`)
+- **Адаптер:** `@astrojs/vercel`
+- **GitHub Pages:** отключен (workflow удалён)
+- **Домен:** настраивается в Vercel Dashboard
+- **Сборка:** `astro build` (SSG)
+- **Ошибка EPERM symlink при локальной сборке на Windows** — это баг Vercel-адаптера, на Vercel-сервере не воспроизводится
