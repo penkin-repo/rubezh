@@ -18,9 +18,10 @@ const sorted = allProjects.sort((a, b) => {
 
 const years = [...new Set(sorted.map((p) => p.data.year))].sort((a, b) => b - a);
 
+const HOME_LIMIT = 2;
 const projectsByYear: Record<number, typeof sorted> = {};
 for (const year of years) {
-  projectsByYear[year] = sorted.filter((p) => p.data.year === year);
+  projectsByYear[year] = sorted.filter((p) => p.data.year === year).slice(0, HOME_LIMIT);
 }
 
 const imageCache = new Map<string, ImageMetadata[]>();
