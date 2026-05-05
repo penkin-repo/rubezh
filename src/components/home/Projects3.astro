@@ -116,7 +116,7 @@ for (const p of sorted) {
             Проекты {year} г. <span class="text-zinc-400 text-lg normal-case">({allProjectsByYear[year].length})</span>
           </h3>
 
-          {allProjectsByYear[year].map((project) => {
+          {projectsByYear[year].map((project) => {
             const images = imageCache.get(project.data.imageFolder) || [];
             const hasImages = images.length > 0;
             return (
