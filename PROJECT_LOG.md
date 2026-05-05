@@ -1,11 +1,11 @@
 # Project Status: RUBEZH — ООО «Рубеж» Корпоративный сайт
 
-**Last Updated:** 2026-05-04 17:30 (UTC+03:00)
+**Last Updated:** 2026-05-05 11:10 (UTC+03:00)
 **Current Phase:** Фаза 6 — Разработка на Astro + Sanity CMS 🚧
 
 ## 🚀 Active Context
-* **Current Task:** Новый компонент Projects2 — проекты сгруппированы по годам (вкладки), каждый объект: фото слева, текст (название, виды работ, заказчик) справа. Текст НЕ поверх фото — решена проблема читаемости.
-* **Next Step:** Клиент скинет реальные фото и данные по проектам 2025 года. Заменить моковые данные.
+* **Current Task:** Projects2 + Projects3 на главной — проекты по годам с реальным контентом (22 проекта: 2025×7, 2024×11, 2023×4). Фото в папках, загрузка через `import.meta.glob`. На главной — 2 проекта на год, на детальной — все.
+* **Next Step:** Клиент раскидает фото по оставшимся папкам (2024, 2023). Заменить заглушки «Фото скоро» на реальные изображения.
 
 ## 🛠 Tech Stack & Versions
 * **Astro:** (установлен, см. package.json)
@@ -18,6 +18,19 @@
 * [ ] [Low] В `src/sanity/schemas/` добавлены только `hero` и `header` — нужно перенести/добавить `equipment`, `projects`, `vacancies` и singletons для внутренних страниц
 
 ## 📝 Recent Changes (Changelog)
+
+### Обновление контента и рефакторинг изображений проектов (2026-05-05)
+* [2026-05-05] **`src/content/projects2/`** — Все 22 проекта обновлены детальными описаниями из контента клиента. 2025: 7 проектов (кампус разделён на подпорную стенку + инженерную подготовку). 2024: 11 проектов. 2023: 4 проекта (4 старых удалены).
+* [2026-05-05] **`src/assets/works/`** — Добавлены реальные фото для 2025-проектов (kampus, kampus-inp, vodootvedenie, dorogi-arh, kupchino-kanalizaciya, kupchino-polotno, severalmaz-nasosnye). Созданы пустые папки под 2024/2023.
+* [2026-05-05] **`src/utils/project-images.ts`** + **glob case-fix** — `import.meta.glob` обновлён во всех 3 потребителях для поддержки заглавных расширений `.JPG`, `.PNG` (case-sensitive на Vite).
+* [2026-05-05] **Projects2/Projects3 limit + counts** — На главной отображается 2 проекта на год. В Projects3 на карточках годов — реальное количество проектов (7/11/4). В Projects2 вкладки без счётчиков. При клике в Projects3 тоже 2 проекта. Все проекты — на `/proekty2`.
+
+### Рефакторинг: папки вместо массива images (2026-05-05)
+* [2026-05-05] **`src/content/config.ts`** — `projects2` схема: `images[]` заменён на `imageFolder: string`. Фронтматтер теперь указывает папку (например `2025/kampus`).
+* [2026-05-05] **`src/components/home/Projects2.astro`** — Переписан на `import.meta.glob('/src/assets/works/**/*.{png,jpg,...}')` + `getProjectImages()`. Добавлена заглушка «Фото скоро» для проектов без фото.
+* [2026-05-05] **`src/components/home/Projects3.astro`** — Новый компонент: карточки годов с drill-down. Годовые карточки показывают реальное кол-во проектов + gradient fallback если нет обложки. Заглушка «Фото скоро».
+* [2026-05-05] **`src/pages/proekty2.astro`** — Переписана на folder-based загрузку с заглушкой для проектов без фото.
+* [2026-05-05] **`src/pages/index.astro`** — На главной добавлен Projects3 рядом с Projects2.
 
 ### Редизайн hero на странице Аренда спецтехники (2026-05-04)
 * [2026-05-04] **`src/pages/arenda-spetstehniki.astro`** — Старый PageHeader (тёмный фон с сеткой) закомментирован. Новый hero: белый фон, заголовок «АРЕНДА СПЕЦТЕХНИКИ» (Impact) слева, фото экскаватора (`Fleet (10).jpeg`) справа. Astro Image с адаптивными widths.
@@ -264,6 +277,10 @@
 * `src/styles/global.css` — Глобальные стили (Impact/Inter переменные, базовые настройки)
 * `src/layouts/BaseLayout.astro` — Базовый layout (SEO, lang=ru, global.css)
 * `src/components/layout/Header.astro` — Header + dropdown меню
+* `src/components/home/Projects2.astro` — Проекты по годам (вкладки), 2 проекта на главной
+* `src/components/home/Projects3.astro` — Проекты по годам (карточки годов с drill-down)
+* `src/utils/project-images.ts` — `getProjectImages()` для загрузки фото из папки
+* `src/pages/proekty2.astro` — Все проекты по годам (детальная страница)
 * `src/components/home/Hero.astro` — Hero-секция главной страницы
 * `src/pages/index.astro` — Главная страница
 * `PROJECT_LOG_HOW.md` — Инструкция по ведению проекта (правила кода)

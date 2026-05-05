@@ -123,7 +123,8 @@ RUBEZH/
 | `StatsBar.astro` | Полоска с цифрами (11+ лет, 200+ объектов и т.д.) | Хардкод |
 | `Fleet.astro` | Слайдер техники (Swiper, 10 featured items, CSS marquee) | Content collection `equipment` |
 | `Projects.astro` | **СТАРЫЙ** — сетка 2×2 проектов с PhotoSwipe галереей | Content collection `projects` |
-| `Projects2.astro` | **НОВЫЙ** — проекты по годам (вкладки), фото слева + текст справа | Content collection `projects2` |
+| `Projects2.astro` | **НОВЫЙ** — проекты по годам (вкладки), фото слева + текст справа. На главной — 2 проекта на год | Content collection `projects2` |
+| `Projects3.astro` | **НОВЫЙ** — карточки годов с drill-down. Годовые карточки показывают реальное кол-во проектов. На главной — 2 проекта при клике | Content collection `projects2` |
 | `ContactForm.astro` | Форма обратной связи (ФИО, телефон, комментарий) → Google Sheets | Content collection `site` |
 | `Contacts.astro` | Секция контактов с картой Яндекс | Content collection `site` |
 
@@ -177,7 +178,7 @@ RUBEZH/
 | Коллекция | Папка | Поля frontmatter | Используется в |
 |-----------|-------|------------------|----------------|
 | `projects` | `src/content/projects/` | `title`, `category`, `description`, `images[]`, `order` | `Projects.astro` (старый), `proekty.astro` |
-| `projects2` | `src/content/projects2/` | `year`, `title`, `works`, `client`, `images[]`, `order` | `Projects2.astro` (новый), `proekty2.astro` |
+| `projects2` | `src/content/projects2/` | `year`, `title`, `works`, `client`, `imageFolder` (string), `order` | `Projects2.astro`, `Projects3.astro`, `proekty2.astro` |
 | `equipment` | `src/content/equipment/` | `items[]` → `{title, category, specs, image, order, featured, featuredOrder}` | `Fleet.astro`, `arenda-spetstehniki.astro` |
 | `services` | `src/content/services/` | `title`, `desc`, `image`, `videoEmbedUrl?`, `hideModalImage?`, `order`, `size` | `Services.astro`, `ServiceModal.astro` |
 | `site` | `src/content/site/` | Контакты: телефоны, email, адрес, соцсети, реквизиты, расписание, mapEmbedUrl | Footer, Contacts, ContactForm, LeadForm, kontakty, vakansii, privacy |
@@ -259,7 +260,7 @@ RUBEZH/
 |-------|------------|
 | `src/assets/fleet/` | Фото техники для каталога (JPEG/PNG) |
 | `src/assets/services/` | Фото для карточек услуг |
-| `src/assets/works/` | Фото объектов/проектов (АРХРЕЧПОРТ, Купчино, ПРОМСТРОЙ, СЕВЕРАЛМАЗ) |
+| `src/assets/works/` | Фото проектов по папкам: `works/{year}/{slug}/` (например `works/2025/kampus/`). Загружаются через `import.meta.glob` + `getProjectImages()` |
 | `src/assets/hero.jpg` / `hero-2.jpg` | Фоны Hero-секции (мобильный / десктопный) |
 | `src/assets/logo-main.svg` | Логотип ООО «Рубеж» |
 | `public/fonts/` | Шрифты Impact и Inter (woff2/woff) |
