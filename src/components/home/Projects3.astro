@@ -20,8 +20,11 @@ const years = [...new Set(sorted.map((p) => p.data.year))].sort((a, b) => b - a)
 
 const HOME_LIMIT = 2;
 const projectsByYear: Record<number, typeof sorted> = {};
+const allProjectsByYear: Record<number, typeof sorted> = {};
 for (const year of years) {
-  projectsByYear[year] = sorted.filter((p) => p.data.year === year).slice(0, HOME_LIMIT);
+  const yearProjects = sorted.filter((p) => p.data.year === year);
+  allProjectsByYear[year] = yearProjects;
+  projectsByYear[year] = yearProjects.slice(0, HOME_LIMIT);
 }
 
 const imageCache = new Map<string, ImageMetadata[]>();
@@ -54,7 +57,7 @@ for (const p of sorted) {
     <div id="p3-years-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {years.map((year) => {
         const firstProject = projectsByYear[year][0];
-        const count = projectsByYear[year].length;
+        const count = allProjectsByYear[year].length;
         const yearCoverImages = imageCache.get(firstProject.data.imageFolder) || [];
         const hasCover = yearCoverImages.length > 0;
         return (
@@ -110,10 +113,10 @@ for (const p of sorted) {
       {years.map((year) => (
         <div class="p3-year-projects hidden space-y-8" data-year-projects={year}>
           <h3 class="font-heading text-zinc-900 uppercase text-2xl sm:text-3xl leading-none mb-6">
-            Проекты {year} г.
+            Проекты {year} г. <span class="text-zinc-400 text-lg normal-case">({allProjectsByYear[year].length})</span>
           </h3>
 
-          {projectsByYear[year].map((project) => {
+          {allProjectsByYear[year].map((project) => {
             const images = imageCache.get(project.data.imageFolder) || [];
             const hasImages = images.length > 0;
             return (
