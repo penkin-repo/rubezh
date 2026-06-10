@@ -122,9 +122,7 @@ RUBEZH/
 | `Advantages.astro` | Секция преимуществ компании (цветные карточки с иконками) | Хардкод |
 | `StatsBar.astro` | Полоска с цифрами (11+ лет, 200+ объектов и т.д.) | Хардкод |
 | `Fleet.astro` | Слайдер техники (Swiper, 10 featured items, CSS marquee) | Content collection `equipment` |
-| `Projects.astro` | **СТАРЫЙ** — сетка 2×2 проектов с PhotoSwipe галереей | Content collection `projects` |
-| `Projects2.astro` | **НОВЫЙ** — проекты по годам (вкладки), фото слева + текст справа. На главной — 2 проекта на год | Content collection `projects2` |
-| `Projects3.astro` | **НОВЫЙ** — карточки годов с drill-down. Годовые карточки показывают реальное кол-во проектов. На главной — 2 проекта при клике | Content collection `projects2` |
+| `Projects2.astro` | Проекты по годам (вкладки), фото слева + текст справа. На главной — 2 проекта на год | Content collection `projects2` |
 | `ContactForm.astro` | Форма обратной связи (ФИО, телефон, комментарий) → Google Sheets | Content collection `site` |
 | `Contacts.astro` | Секция контактов с картой Яндекс | Content collection `site` |
 
@@ -177,8 +175,7 @@ RUBEZH/
 
 | Коллекция | Папка | Поля frontmatter | Используется в |
 |-----------|-------|------------------|----------------|
-| `projects` | `src/content/projects/` | `title`, `category`, `description`, `images[]`, `order` | `Projects.astro` (старый), `proekty.astro` |
-| `projects2` | `src/content/projects2/` | `year`, `title`, `works`, `client`, `imageFolder` (string), `order` | `Projects2.astro`, `Projects3.astro`, `proekty2.astro` |
+| `projects2` | `src/content/projects2/` | `year`, `title`, `works`, `client`, `imageFolder` (string), `order` | `Projects2.astro`, `proekty.astro` |
 | `equipment` | `src/content/equipment/` | `items[]` → `{title, category, specs, image, order, featured, featuredOrder}` | `Fleet.astro`, `arenda-spetstehniki.astro` |
 | `services` | `src/content/services/` | `title`, `desc`, `image`, `videoEmbedUrl?`, `hideModalImage?`, `order`, `size` | `Services.astro`, `ServiceModal.astro` |
 | `site` | `src/content/site/` | Контакты: телефоны, email, адрес, соцсети, реквизиты, расписание, mapEmbedUrl | Footer, Contacts, ContactForm, LeadForm, kontakty, vakansii, privacy |
@@ -233,7 +230,7 @@ RUBEZH/
 
 | Файл | Назначение |
 |------|------------|
-| `photoswipe-init.ts` | Инициализация PhotoSwipe Lightbox. Экспортирует `initPhotoSwipe(config)`. Статический импорт (не динамический — откачали из-за багов). Используется в Projects, Projects2, proekty, proekty2. |
+| `photoswipe-init.ts` | Инициализация PhotoSwipe Lightbox. Экспортирует `initPhotoSwipe(config)`. Статический импорт (не динамический — откачали из-за багов). Используется в Projects2 и proekty. |
 
 ---
 
@@ -244,8 +241,7 @@ RUBEZH/
 | `/` | `index.astro` | Главная: Hero → Services → Advantages → Fleet → **Projects2** → ContactForm → Contacts |
 | `/o-kompanii` | `o-kompanii.astro` | О компании: AboutHero, Stats, Features, Services, Quote |
 | `/vakansii` | `vakansii.astro` | Вакансии: VacancyAccordion |
-| `/proekty` | `proekty.astro` | **Старые** проекты: сетка с PhotoSwipe (collection `projects`) |
-| `/proekty2` | `proekty2.astro` | **Новые** проекты: по годам, фото+текст (collection `projects2`) |
+| `/proekty` | `proekty.astro` | Проекты по годам: вкладки с PhotoSwipe (collection `projects2`) |
 | `/arenda-spetstehniki` | `arenda-spetstehniki.astro` | Новый hero (белый фон, текст слева + экскаватор справа), каталог техники: фильтры по категориям + поиск, модальная форма заявки. Старый PageHeader закомментирован. |
 | `/kontakty` | `kontakty.astro` | Контакты: карта, телефоны, реквизиты |
 | `/privacy` | `privacy.astro` | Политика конфиденциальности |
@@ -530,8 +526,7 @@ const { title, subtitle } = Astro.props;
 /                    — Главная (Hero, Services, Advantages, Fleet, Projects2, ContactForm, Contacts)
 /o-kompanii           — О компании (AboutHero, Stats, Features, Services, Quote)
 /vakansii             — Вакансии (VacancyAccordion)
-/proekty              — Проекты СТАРЫЕ (сетка с PhotoSwipe, collection projects)
-/proekty2             — Проекты НОВЫЕ (по годам, collection projects2)
+/proekty              — Проекты по годам (вкладки, collection projects2)
 /arenda-spetstehniki  — Аренда спецтехники (новый hero: текст + экскаватор, каталог + поиск + фильтры + модальная форма)
 /kontakty             — Контакты (карта, телефоны, реквизиты)
 /privacy              — Политика конфиденциальности
