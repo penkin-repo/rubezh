@@ -50,7 +50,7 @@ const { title, subtitle, highlight, image } = Astro.props;
             sizes="(max-width: 768px) 100vw, 40vw"
             loading="eager"
             quality={80}
-            class="w-full h-auto max-h-[220px] md:max-h-[300px] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.3)] animate-float"
+            class="w-full h-auto max-h-[220px] md:max-h-[300px] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)]"
           />
         </div>
       </div>
@@ -81,25 +81,16 @@ const { title, subtitle, highlight, image } = Astro.props;
     background: linear-gradient(
       135deg,
       #0257c0 0%,
-      #0c1a3a 60%,
-      #060b18 100%
+      #1e40af 20%,
+      #3b82f6 45%,
+      #f1f5f9 85%,
+      #f8fafc 100%
     );
   }
   .header-bg-grid {
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
     background-size: 60px 60px;
-  }
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-8px);
-    }
-  }
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
   }
 </style>
