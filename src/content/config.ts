@@ -83,6 +83,7 @@ const projects2 = defineCollection({
     works: z.string(),
     client: z.string(),
     imageFolder: z.string(),
+    cost: z.string().optional(),
     order: z.number().optional().default(0),
   })
 });

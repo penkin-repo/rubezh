@@ -175,7 +175,7 @@ RUBEZH/
 
 | Коллекция | Папка | Поля frontmatter | Используется в |
 |-----------|-------|------------------|----------------|
-| `projects2` | `src/content/projects2/` | `year`, `title`, `works`, `client`, `imageFolder` (string), `order` | `Projects2.astro`, `proekty.astro` |
+| `projects2` | `src/content/projects2/` | `year`, `title`, `works`, `client`, `imageFolder` (string), `cost?`, `order` | `Projects2.astro`, `proekty.astro` |
 | `equipment` | `src/content/equipment/` | `items[]` → `{title, category, specs, image, order, featured, featuredOrder}` | `Fleet.astro`, `arenda-spetstehniki.astro` |
 | `services` | `src/content/services/` | `title`, `desc`, `image`, `videoEmbedUrl?`, `hideModalImage?`, `order`, `size` | `Services.astro`, `ServiceModal.astro` |
 | `site` | `src/content/site/` | Контакты: телефоны, email, адрес, соцсети, реквизиты, расписание, mapEmbedUrl | Footer, Contacts, ContactForm, LeadForm, kontakty, vakansii, privacy |
