@@ -38,28 +38,12 @@ const officeEmail = headerData?.officeEmail ?? contacts.officeEmail;
 const ctaLabel  = headerData?.ctaLabel  ?? 'Заказать звонок';
 const ctaHref   = headerData?.ctaHref   ?? '#contact-form';
 const isHomePage = Astro.url.pathname === '/';
-let navItems: NavItem[] = headerData?.navItems  ?? [
+const navItems: NavItem[] = headerData?.navItems  ?? [
   { label: 'О компании',         href: '/o-kompanii',     dropdown: [{ label: 'О нас', href: '/o-kompanii' }, { label: 'Вакансии', href: '/vakansii' }] },
   { label: 'Проекты',            href: '/proekty',  dropdown: [] },
   { label: 'Аренда спецтехники', href: '/arenda-spetstehniki', dropdown: [] },
   { label: 'Контакты',           href: '/kontakty',  dropdown: [] },
 ];
-
-// Автоматически корректируем старые ссылки на аренду, если они приходят из Sanity
-navItems = navItems.map(item => {
-  let href = item.href;
-  if (href && (href === "/arenda" || (href.includes("arenda") && href !== "/arenda-spetstehniki"))) {
-    href = "/arenda-spetstehniki";
-  }
-  const dropdown = (item.dropdown || []).map(sub => {
-    let subHref = sub.href;
-    if (subHref && (subHref === "/arenda" || (subHref.includes("arenda") && subHref !== "/arenda-spetstehniki"))) {
-      subHref = "/arenda-spetstehniki";
-    }
-    return { ...sub, href: subHref };
-  });
-  return { ...item, href, dropdown };
-});
 ---
 
 <header
