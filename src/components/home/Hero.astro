@@ -19,7 +19,12 @@ const description =
     heroData?.description ??
     "Выполняем полный комплекс работ в Архангельской области. Собственный парк из 60+ единиц техники.";
 const primaryBtnLabel = heroData?.primaryBtnLabel ?? "Заказать технику";
-const primaryBtnHref = heroData?.primaryBtnHref ?? "/arenda-spetstehniki";
+let primaryBtnHref = heroData?.primaryBtnHref ?? "/arenda-spetstehniki";
+
+// Если в Sanity прописана старая ссылка, автоматически корректируем её на актуальную
+if (primaryBtnHref && (primaryBtnHref === "/arenda" || (primaryBtnHref.includes("arenda") && primaryBtnHref !== "/arenda-spetstehniki"))) {
+    primaryBtnHref = "/arenda-spetstehniki";
+}
 
 // Оптимизируем изображения
 const mobileImage = await getImage({

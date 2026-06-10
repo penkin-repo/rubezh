@@ -13,7 +13,7 @@ const { title, subtitle, highlight, image } = Astro.props;
 ---
 
 <section
-  class="pt-32 pb-8 md:pt-36 md:pb-12 bg-slate-900 relative overflow-hidden page-header-section border-b border-white/10"
+  class="pt-32 pb-8 md:pt-32 md:pb-10 bg-slate-900 relative overflow-hidden page-header-section border-b border-white/10"
 >
   <!-- Фоновая сетка -->
   <div
@@ -35,7 +35,7 @@ const { title, subtitle, highlight, image } = Astro.props;
             </div>
           )}
           <h1
-            class="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl uppercase text-white leading-none mb-4"
+            class="font-heading text-4xl sm:text-xl md:text-6xl lg:text-6xl xl:text-7xl uppercase text-white leading-none mb-4"
           >
             {title}
             {highlight && <span class="text-brand-light">{highlight}</span>}
@@ -50,7 +50,7 @@ const { title, subtitle, highlight, image } = Astro.props;
             sizes="(max-width: 768px) 100vw, 40vw"
             loading="eager"
             quality={80}
-            class="w-full h-auto max-h-[220px] md:max-h-[300px] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)]"
+            class="w-full h-auto max-h-[220px] md:max-h-[250px] object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.15)]"
           />
         </div>
       </div>
@@ -65,7 +65,7 @@ const { title, subtitle, highlight, image } = Astro.props;
           </div>
         )}
         <h1
-          class="font-heading text-5xl md:text-6xl lg:text-7xl xl:text-8xl uppercase text-white mb-8 leading-none"
+          class="font-heading text-4xl sm:text-xl md:text-6xl lg:text-6xl xl:text-7xl uppercase text-white leading-none mb-4"
         >
           {title}
           {highlight && <span class="text-brand-light">{highlight}</span>}
