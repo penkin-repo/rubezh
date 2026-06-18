@@ -1,0 +1,47 @@
+name: Deploy Website to Timeweb
+
+on:
+  push:
+    branches:
+      - main
+  # Позволяет запускать сборку автоматически через Webhook от Sanity
+  repository_dispatch:
+    types: [sanity_update]
+  workflow_dispatch:
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploy to Timeweb
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+
+    - name: ⚙️ Install pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10.28.2
+
+    - name: ⚙️ Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'pnpm'
+
+    - name: ⚡ Install dependencies
+      run: pnpm install
+
+    - name: 🏗️ Build static site
+      run: pnpm build
+
+    - name: 🚀 Sync files via FTP to Timeweb
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./dist/
+        # Строго папка конкретного сайта, чтобы не задеть другие сайты на аккаунте
+        server-dir: rubezh-arh.ru/public_html/
+        # Удалять старые файлы из папки rubezh-arh.ru/public_html, которых больше нет в dist/
+        delete-removed: true

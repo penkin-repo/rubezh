@@ -1,5 +1,7 @@
 ---
-export const prerender = false;
+export function getStaticPaths() {
+  return [{ params: { slug: undefined } }];
+}
 import SanityStudio from "../../components/SanityStudio";
 ---
 
