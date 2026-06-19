@@ -13,6 +13,7 @@ jobs:
   web-deploy:
     name: 🎉 Deploy to Timeweb
     runs-on: ubuntu-latest
+    if: contains(github.server_url, 'gitverse')
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v4
@@ -48,7 +49,7 @@ jobs:
         echo "Checking Port 2222 (Alternative SSH)..."
         nc -z -v -w 5 $SERVER_IP 2222 || echo "❌ Port 2222 is closed or unreachable"
 
-    - name: �🚀 Sync files via FTP to Timeweb
+    - name: �� Sync files via FTP to Timeweb
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: ${{ secrets.FTP_SERVER }}
