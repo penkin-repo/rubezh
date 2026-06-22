@@ -1,7 +1,22 @@
 # План миграции на Sanity CMS — ООО «Рубеж»
 
+> ⚠️ **ОБНОВЛЕНО 2026-06-21 — фактический статус (этот документ ниже частично устарел).**
+>
+> **Реализовано:** контакты (`site`), спецтехника (`equipment`), проекты (`project`).
+> Введён слой адаптеров `src/lib/content/*` с мягким fallback (Sanity → локальные `.md`),
+> компонент `src/components/ui/SmartImage.astro`, build-time оптимизация удалённых картинок
+> с раздачей **с Timeweb** (не с Sanity CDN) для экономии трафика. Миграционные скрипты
+> (`scripts/migrate-equipment.mjs`, `scripts/migrate-projects.mjs`, `scripts/lib/migrate-utils.mjs`)
+> сжимают фото через `sharp` (webp q80, ≤1920px) перед загрузкой.
+>
+> **Актуальные коллекции:** проекты — `projects2` (35 файлов, `imageFolder`), НЕ `projects`.
+> Страница проектов — `proekty.astro`. Деплой — GitVerse → GitHub Actions → FTP Timeweb (НЕ Vercel).
+>
+> **Осталось:** vacancies + services (Этап 5), сжатие картинок в браузере при загрузке в Studio (Этап 2).
+> Детали ниже — историческая версия плана (имена коллекций/страниц могут отличаться).
+
 **Дата создания:** 08.04.2026  
-**Текущий статус:** Частичная интеграция (Hero + Header)  
+**Текущий статус:** контакты + техника + проекты на Sanity (с fallback); vacancies/services — на локальных .md  
 **Цель:** Полный переход с Astro Content Collections на Sanity CMS
 
 ---

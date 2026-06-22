@@ -87,7 +87,7 @@ export const headerSchema = defineType({
     preview: {
         select: { title: 'phone' },
         prepare({ title }) {
-            return { title: `Header: ${title}` };
+            return { title: `Шапка сайта: ${title}` };
         },
     },
 });

@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
-import { getCollection } from 'astro:content';
+import { getContacts } from '../../lib/content/contacts';
 import logoMain from '../../assets/logo-main.svg';
 import { client } from '../../sanity/client';
 
@@ -10,15 +10,7 @@ const headerData = await client.fetch(
   `*[_type == "header" && _id == "header"][0]`
 );
 
-const [contactsEntry] = (await getCollection('site')).sort((a, b) =>
-  a.id.localeCompare(b.id),
-);
-
-if (!contactsEntry) {
-  throw new Error('Site contacts content is missing in src/content/site.');
-}
-
-const contacts = contactsEntry.data;
+const contacts = await getContacts();
 
 type NavSubItem = {
   label: string;
@@ -183,7 +175,7 @@ const navItems: NavItem[] = headerData?.navItems  ?? [
             <div id={`mob-sub-${idx}`} class="hidden pl-4 flex flex-col">
               {item.dropdown.map((sub: NavSubItem) => (
                 <a href={sub.href}
-                   class="py-2 text-sm font-semibold tracking-widest uppercase
+                   class="py-4 text-sm text-white/70 font-semibold tracking-widest uppercase
                           hover:text-white transition-colors">
                   {sub.label}
                 </a>
@@ -298,6 +290,13 @@ const navItems: NavItem[] = headerData?.navItems  ?? [
     btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
     line3?.classList.toggle('w-6');
     line3?.classList.toggle('w-4');
+
+    // Фон шапки: при открытом меню — сплошной, иначе восстанавливаем прозрачный (только на главной у верха)
+    if (!isOpen) {
+      setSolidHeader();
+    } else if (isHomeHeader && window.scrollY <= 4) {
+      setTransparentHeader();
+    }
   });
 
   // Мобильные dropdown-подменю (динамически из Keystatic)

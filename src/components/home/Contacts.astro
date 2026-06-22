@@ -1,19 +1,11 @@
 ---
-import { getCollection } from "astro:content";
+import { getContacts } from "../../lib/content/contacts";
 import { Icon } from "astro-icon/components";
 import avitoIcon from "../../assets/avito.svg";
 import { Image } from "astro:assets";
 // Данные: PROJECT_LOG_HOW.md — контакты компании
 
-const [contactsEntry] = (await getCollection("site")).sort((a, b) =>
-    a.id.localeCompare(b.id),
-);
-
-if (!contactsEntry) {
-    throw new Error("Site contacts content is missing in src/content/site.");
-}
-
-const contacts = contactsEntry.data;
+const contacts = await getContacts();
 ---
 
 <section
@@ -237,12 +229,12 @@ const contacts = contactsEntry.data;
                     <p class="text-zinc-500 text-sm">Карта загружается...</p>
                 </div>
 
-                <!-- iframe с lazy loading -->
+                <!-- iframe — грузится сразу -->
                 <iframe
                     id="yandex-map"
                     title="Местоположение ООО Рубеж на карте"
-                    src=""
-                    data-src={contacts.mapEmbedUrl}
+                    src={contacts.mapEmbedUrl}
+                    loading="eager"
                     class="absolute inset-0 w-full h-full border-0 opacity-0 transition-opacity duration-500"
                     allowfullscreen
                     referrerpolicy="no-referrer-when-downgrade"></iframe>
@@ -264,34 +256,22 @@ const contacts = contactsEntry.data;
 </style>
 
 <script>
-    // Lazy loading карты — загружаем iframe только когда секция видна
+    // Карта грузится сразу — показываем iframe по событию load
     const mapFrame = document.getElementById("yandex-map") as HTMLIFrameElement;
     const mapPlaceholder = document.getElementById(
         "map-placeholder",
     ) as HTMLElement;
 
-    const mapObserver = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting && mapFrame) {
-                    const src = mapFrame.dataset.src;
-                    if (src && mapFrame.getAttribute("src") !== src) {
-                        mapFrame.setAttribute("src", src);
-                        mapFrame.addEventListener(
-                            "load",
-                            () => {
-                                mapFrame.style.opacity = "1";
-                                mapPlaceholder?.classList.add("hidden");
-                            },
-                            { once: true },
-                        );
-                        mapObserver.unobserve(mapFrame);
-                    }
-                }
-            });
-        },
-        { rootMargin: "200px" },
-    );
+    const revealMap = () => {
+        if (mapFrame) mapFrame.style.opacity = "1";
+        mapPlaceholder?.classList.add("hidden");
+    };
 
-    if (mapFrame) mapObserver.observe(mapFrame);
+    if (mapFrame) {
+        if (mapFrame.contentDocument?.readyState === "complete") {
+            revealMap();
+        } else {
+            mapFrame.addEventListener("load", revealMap, { once: true });
+        }
+    }
 </script>

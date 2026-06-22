@@ -1,0 +1,52 @@
+---
+// Универсальная картинка: одинаково рендерит локальный ассет (fallback из Git)
+// и удалённую картинку из Sanity. В обоих случаях Astro оптимизирует её на сборке.
+import { Image } from 'astro:assets';
+import type { SmartImageSource } from '../../lib/content/types';
+
+interface Props {
+    source: SmartImageSource;
+    alt: string;
+    class?: string;
+    widths?: number[];
+    sizes?: string;
+    loading?: 'lazy' | 'eager';
+    quality?: number;
+}
+
+const {
+    source,
+    alt,
+    class: className,
+    widths,
+    sizes,
+    loading = 'lazy',
+    quality = 75,
+} = Astro.props;
+---
+
+{
+    source.kind === 'local' ? (
+        <Image
+            src={source.data}
+            alt={alt}
+            widths={widths}
+            sizes={sizes}
+            loading={loading}
+            quality={quality}
+            class={className}
+        />
+    ) : (
+        <Image
+            src={source.src}
+            width={source.width}
+            height={source.height}
+            alt={alt}
+            widths={widths}
+            sizes={sizes}
+            loading={loading}
+            quality={quality}
+            class={className}
+        />
+    )
+}

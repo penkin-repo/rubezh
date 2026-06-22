@@ -1,28 +1,11 @@
 ---
 // src/components/vacancies/VacancyAccordion.astro
-import { getCollection } from "astro:content";
-import { render } from "astro:content";
+import { getContacts } from "../../lib/content/contacts";
+import { getVacancies } from "../../lib/content/vacancies";
 import { Icon } from "astro-icon/components";
 
-const [contactsEntry] = (await getCollection("site")).sort((a, b) =>
-  a.id.localeCompare(b.id),
-);
-
-if (!contactsEntry) {
-  throw new Error("Site contacts content is missing in src/content/site.");
-}
-
-const contacts = contactsEntry.data;
-
-const vacancies = (await getCollection("vacancies"))
-  .sort((a, b) => a.data.order - b.data.order || a.id.localeCompare(b.id));
-
-const renderedVacancies = await Promise.all(
-  vacancies.map(async (vacancy) => ({
-    ...vacancy,
-    Content: (await render(vacancy)).Content,
-  })),
-);
+const contacts = await getContacts();
+const renderedVacancies = await getVacancies();
 ---
 
 <div class="space-y-4 max-w-4xl">
@@ -33,7 +16,7 @@ const renderedVacancies = await Promise.all(
           <span class="w-10 h-10 rounded bg-zinc-100 flex items-center justify-center font-heading text-xl text-zinc-400 group-open:bg-brand-dark group-open:text-white transition-colors">
             {i + 1}
           </span>
-          <h3 class="font-bold text-lg sm:text-xl text-zinc-900 group-hover:text-brand-dark transition-colors">{v.data.title}</h3>
+          <h3 class="font-bold text-lg sm:text-xl text-zinc-900 group-hover:text-brand-dark transition-colors">{v.title}</h3>
         </div>
         <div class="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-zinc-400 group-open:rotate-180 transition-transform duration-300">
            <Icon name="lucide:chevron-down" class="w-5 h-5" />
@@ -45,11 +28,15 @@ const renderedVacancies = await Promise.all(
         
         <div class="space-y-8">
            <div class="prose prose-zinc max-w-none text-zinc-700 leading-relaxed">
-              <v.Content />
+              {v.bodyHtml ? (
+                <Fragment set:html={v.bodyHtml} />
+              ) : v.Content ? (
+                <v.Content />
+              ) : null}
            </div>
 
            <div class="pt-4 flex justify-end">
-              <a href={`mailto:${contacts.hrEmail}?subject=Вакансия: ${v.data.title}`} class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-brand-dark hover:text-brand-light transition-colors">
+              <a href={`mailto:${contacts.hrEmail}?subject=Вакансия: ${v.title}`} class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-brand-dark hover:text-brand-light transition-colors">
                 Откликнуться на вакансию
                 <Icon name="lucide:arrow-right" class="w-4 h-4" />
               </a>

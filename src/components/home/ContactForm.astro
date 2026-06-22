@@ -1,17 +1,9 @@
 ---
-import { getCollection } from "astro:content";
+import { getContacts } from "../../lib/content/contacts";
 import { Icon } from "astro-icon/components";
 import LeadForm from "../ui/LeadForm.astro";
 
-const [contactsEntry] = (await getCollection("site")).sort((a, b) =>
-    a.id.localeCompare(b.id),
-);
-
-if (!contactsEntry) {
-    throw new Error("Site contacts content is missing in src/content/site.");
-}
-
-const contacts = contactsEntry.data;
+const contacts = await getContacts();
 ---
 
 <section

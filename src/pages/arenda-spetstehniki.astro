@@ -8,23 +8,12 @@ import EquipmentCard from "../components/equipment/EquipmentCard.astro";
 import LeadForm from "../components/ui/LeadForm.astro";
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
-import { getCollection } from "astro:content";
+import { getContacts } from "../lib/content/contacts";
+import { getEquipment } from "../lib/content/equipment";
 import heroExcavator from "../assets/fleet/Fleet (10).png";
 
-const equipmentCollection = await getCollection('equipment');
-const [contactsEntry] = (await getCollection('site')).sort((a, b) =>
-    a.id.localeCompare(b.id),
-);
-
-if (!contactsEntry) {
-    throw new Error('Site contacts content is missing in src/content/site.');
-}
-
-const contacts = contactsEntry.data;
-
-const equipment = equipmentCollection
-    .flatMap((entry) => entry.data.items)
-    .sort((a, b) => a.order - b.order);
+const contacts = await getContacts();
+const equipment = await getEquipment();
 
 const categories = [
     'Все',

@@ -5,19 +5,11 @@ import Footer from "../components/layout/Footer.astro";
 import ContactForm from "../components/home/ContactForm.astro";
 import PageHeader from "../components/ui/PageHeader.astro";
 import { Icon } from "astro-icon/components";
-import { getCollection } from "astro:content";
+import { getContacts } from "../lib/content/contacts";
 import { Image } from "astro:assets";
 import avitoIcon from "../assets/avito.svg";
 
-const [contactsEntry] = (await getCollection("site")).sort((a, b) =>
-    a.id.localeCompare(b.id),
-);
-
-if (!contactsEntry) {
-    throw new Error("Site contacts content is missing in src/content/site.");
-}
-
-const contacts = contactsEntry.data;
+const contacts = await getContacts();
 
 // Мета-теги
 const title = "Контакты дорожная компания (Архангельск) — ООО «Рубеж»";
@@ -131,12 +123,12 @@ const description = "Готовы обсудить условия подряда
 
                     <iframe 
                         id="kontakty-map"
-                        data-src={contacts.mapEmbedUrl}
-                        src="" 
+                        src={contacts.mapEmbedUrl}
                         width="100%" 
                         height="100%" 
                         frameborder="0" 
                         allowfullscreen="true" 
+                        loading="eager"
                         class="absolute inset-0 w-full h-full border-0 opacity-0 transition-opacity duration-500"
                     >
                     </iframe>
@@ -153,26 +145,21 @@ const description = "Готовы обсудить условия подряда
 </BaseLayout>
 
 <script>
-    // Lazy loading карты
+    // Карта грузится сразу — показываем iframe по событию load
     const mapFrame = document.getElementById("kontakty-map") as HTMLIFrameElement;
     const mapPlaceholder = document.getElementById("map-placeholder") as HTMLElement;
 
-    const mapObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting && mapFrame) {
-                const src = mapFrame.dataset.src;
-                if (src && mapFrame.getAttribute("src") !== src) {
-                    mapFrame.setAttribute("src", src);
-                    mapFrame.addEventListener("load", () => {
-                        mapFrame.classList.remove("opacity-0");
-                        mapFrame.classList.add("opacity-100");
-                        mapPlaceholder?.classList.add("hidden");
-                    }, { once: true });
-                    mapObserver.unobserve(mapFrame);
-                }
-            }
-        });
-    }, { rootMargin: "200px" });
+    const revealMap = () => {
+        mapFrame?.classList.remove("opacity-0");
+        mapFrame?.classList.add("opacity-100");
+        mapPlaceholder?.classList.add("hidden");
+    };
 
-    if (mapFrame) mapObserver.observe(mapFrame);
+    if (mapFrame) {
+        if (mapFrame.contentDocument?.readyState === "complete") {
+            revealMap();
+        } else {
+            mapFrame.addEventListener("load", revealMap, { once: true });
+        }
+    }
 </script>

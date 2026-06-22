@@ -1,45 +1,8 @@
 ---
 import { Icon } from 'astro-icon/components';
+import { getAdvantages } from '../../lib/content/advantages';
 
-// Данные из start/Шаг 4.1
-const advantages = [
-  {
-    title: 'Свой автопарк',
-    description: '60+ тяжелых машин (от бульдозеров до установок ГНБ) всегда в боевой готовности. Мы не зависим от чужой техники.',
-    icon: 'lucide:tractor',
-    span: 'lg:col-span-2',
-  },
-  {
-    title: 'Своя логистика',
-    description: 'Сами доставляем песок, щебень и асфальт нашими 3-х и 4-х осными самосвалами. Никаких простоев из-за сторонних перевозчиков.',
-    icon: 'lucide:truck',
-    span: 'lg:col-span-1',
-  },
-  {
-    title: 'Соблюдение сроков',
-    description: 'Контролируем каждый этап работ лично. Вы работаете напрямую с исполнителем, а не с цепочкой субподрядчиков.',
-    icon: 'lucide:timer',
-    span: 'lg:col-span-1',
-  },
-  {
-    title: 'Команда профессионалов',
-    description: '130+ штатных сотрудников, в их числе инженеры, геодезисты и механизаторы с актуальными допуcками к сложным работам.',
-    icon: 'lucide:hard-hat',
-    span: 'lg:col-span-2',
-  },
-  {
-    title: 'Решение сложных задач',
-    description: 'Беремся за нетиповые проекты и гидротехнические сооружения, от которых отказываются другие.',
-    icon: 'lucide:cog',
-    span: 'lg:col-span-2',
-  },
-  {
-    title: 'Гарантия качества',
-    description: 'Несем юридическую ответственность за результат. Соблюдаем СП и СНиПы на всех этапах — от песчаной подушки до финишного покрытия.',
-    icon: 'lucide:shield-check',
-    span: 'lg:col-span-1',
-  },
-] as const;
+const { heading, subtitle, items: advantages } = await getAdvantages();
 ---
 
 <section class="adv-section pb-16 md:pb-24 text-zinc-900 relative overflow-hidden w-full">
@@ -60,11 +23,11 @@ const advantages = [
           id="advantages-heading"
           class="font-heading text-3xl sm:text-4xl lg:text-5xl tracking-wide uppercase leading-none"
         >
-          Преимущества работы с нами
+          {heading}
         </h2>
       </div>
       <div class="max-w-md text-zinc-500 border-l-6 border-brand-dark pl-4 text-base lg:text-lg leading-relaxed">
-        Надёжность, подкреплённая собственными ресурсами, техникой и многолетним опытом.
+        {subtitle}
       </div>
     </div>
 
@@ -76,7 +39,7 @@ const advantages = [
             "adv-item group bg-white relative overflow-hidden",
             "flex flex-col justify-between min-h-[300px] lg:min-h-[320px] p-10",
             "transition-colors duration-500 hover:bg-zinc-50",
-            adv.span,
+            adv.wide ? 'lg:col-span-2' : 'lg:col-span-1',
           ]}
           data-index={i}
         >

@@ -2,7 +2,7 @@ import { defineField, defineType } from 'sanity';
 
 export const heroSchema = defineType({
     name: 'hero',
-    title: '🏠 Hero секция',
+    title: '🏠 Главный экран',
     type: 'document',
     fields: [
         defineField({
@@ -41,13 +41,13 @@ export const heroSchema = defineType({
             name: 'primaryBtnHref',
             title: 'Кнопка 1 — ссылка',
             type: 'string',
-            initialValue: '/equipment',
+            initialValue: '/arenda-spetstehniki',
         }),
     ],
     preview: {
         select: { title: 'titleLine1' },
         prepare({ title }) {
-            return { title: `Hero: ${title}` };
+            return { title: `Главный экран: ${title}` };
         },
     },
 });

@@ -31,7 +31,7 @@ export default defineConfig({
                     .title('Контент')
                     .items([
                         S.listItem()
-                            .title('🏠 Hero секция')
+                            .title('🏠 Главный экран')
                             .id('hero')
                             .child(
                                 S.document()
@@ -46,6 +46,35 @@ export default defineConfig({
                                     .schemaType('header')
                                     .documentId('header')
                             ),
+                        S.listItem()
+                            .title('📇 Контакты и реквизиты')
+                            .id('site')
+                            .child(
+                                S.document()
+                                    .schemaType('site')
+                                    .documentId('site')
+                            ),
+                        S.listItem()
+                            .title('📊 Цифры на главном экране')
+                            .id('stats')
+                            .child(
+                                S.document()
+                                    .schemaType('stats')
+                                    .documentId('stats')
+                            ),
+                        S.listItem()
+                            .title('⭐ Преимущества')
+                            .id('advantages')
+                            .child(
+                                S.document()
+                                    .schemaType('advantages')
+                                    .documentId('advantages')
+                            ),
+                        S.divider(),
+                        S.documentTypeListItem('equipment').title('🚜 Спецтехника'),
+                        S.documentTypeListItem('project').title('🏗 Проекты'),
+                        S.documentTypeListItem('service').title('🛠 Услуги'),
+                        S.documentTypeListItem('vacancy').title('💼 Вакансии'),
                     ]),
         }),
     ],

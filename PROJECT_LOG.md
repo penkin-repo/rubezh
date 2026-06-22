@@ -1,11 +1,11 @@
 # Project Status: RUBEZH — ООО «Рубеж» Корпоративный сайт
 
-**Last Updated:** 2026-06-10 10:55 (UTC+03:00)
-**Current Phase:** Phase 6 — Разработка на Astro + Sanity CMS 🚧
+**Last Updated:** 2026-06-21 15:55 (UTC+03:00)
+**Current Phase:** Phase 6 — Разработка на Astro + Sanity CMS 🚧 (миграция контента в Sanity с мягким fallback)
 
 ## 🚀 Active Context
-* **Current Task:** Редизайн и унификация заголовков страниц (`PageHeader.astro`). Шаблон заголовка переведен с плоского темно-синего цвета на премиальный градиент (из блока «Свяжитесь с нами») и снабжен поддержкой опционального адаптивного изображения справа. На странице «Аренда спецтехники» белый титульник успешно заменен на новый градиентный PageHeader с парящим экскаватором.
-* **Next Step:** Перенос/добавление контента для других страниц под новый стиль PageHeader с картинками при необходимости.
+* **Current Task:** Перенос данных в Sanity с мягким переходом (fallback на локальные .md при недоступности Sanity). Завершены: контакты (`site`), спецтехника (`equipment`), проекты (`project`). Картинки оптимизируются на сборке и раздаются с Timeweb (не с Sanity CDN) — экономия трафика бесплатного тарифа. Миграционные скрипты сжимают фото через sharp (webp q80, <=1920px) перед загрузкой — экономия хранилища.
+* **Next Step:** Запустить миграции/сид: `node scripts/seed-sanity.mjs` (hero, header, site, stats, advantages), `node scripts/migrate-equipment.mjs`, `node scripts/migrate-projects.mjs`, `node scripts/migrate-services.mjs`, `node scripts/migrate-vacancies.mjs` (нужен SANITY_TOKEN в .env), затем Publish в студии. Сделано: контакты, техника, проекты, услуги (видео хардкод), цифры, преимущества, вакансии + сжатие картинок при загрузке в Studio (Этап 2). Весь контент перенесён.
 
 ## 🛠 Tech Stack & Versions
 * **Astro:** (установлен, см. package.json)
@@ -15,9 +15,32 @@
 * **TypeScript:** yes
 
 ## 🐛 Known Bugs / Issues
-* [ ] [Low] В `src/sanity/schemas/` добавлены только `hero` и `header` — нужно перенести/добавить `equipment`, `projects`, `vacancies` и singletons для внутренних страниц
+* [ ] [Low] Сид `header` (`scripts/seed-sanity.mjs`) содержит устаревшие маршруты навигации (`/about`, `/projects`, `/equipment`, `/contacts`) — синхронизировать с реальными при необходимости.
+* [ ] [Low] `CompressedImageInput` заменяет стандартный UI картинки (без hotspot) — приемлемо для текущих карточек.
+* [x] [Fixed] Карточки услуг: после перехода на `SmartImage` scoped-стиль `.service-card__img` перестал применяться (img в другом scope) → `:global()` внутри `.service-card`.
 
 ## 📝 Recent Changes (Changelog)
+
+### Этап 5 + Этап 2: услуги, цифры, преимущества, сжатие при загрузке (2026-06-21)
+* [2026-06-21] **Studio: русификация** — `hero` переименован «🏠 Главный экран», preview-тексты hero/header на русском, исправлена ссылка кнопки hero `/equipment` → `/arenda-spetstehniki`.
+* [2026-06-21] **Услуги в Sanity** — схема `service` (без VK-видео!), адаптер `src/lib/content/services.ts` (`getServices`) с fallback. Тело — Portable Text (рендер через `@portabletext/to-html`); локальный fallback рендерит `<Content/>` из .md. VK-видео захардкожено в адаптере по slug (`SERVICE_VIDEOS`) и НЕ редактируется в CMS. `Services.astro`/`ServiceModal.astro` переведены на `SmartImage` + адаптер.
+* [2026-06-21] **StatsBar в Sanity** — синглтон `stats`, адаптер `src/lib/content/stats.ts` (`getStats`) с fallback на текущие 4 цифры. `StatsBar.astro` читает адаптер.
+* [2026-06-21] **Преимущества в Sanity** — синглтон `advantages` (заголовок, подзаголовок, items[] с иконкой из списка Lucide и флагом «широкая»), адаптер `src/lib/content/advantages.ts` (`getAdvantages`) с fallback. `Advantages.astro` читает адаптер.
+* [2026-06-21] **Этап 2 — сжатие при загрузке** — `src/sanity/components/CompressedImageInput.tsx`: сжимает фото в браузере (webp, ≤1920px, q0.8) ПЕРЕД загрузкой в Sanity. Применён к image-полям `equipment`, `project` (галерея), `service`. Зависимость `browser-image-compression`.
+* [2026-06-21] **Скрипты/сид** — `scripts/migrate-services.mjs` (+ `mdToPortableText` в `migrate-utils.mjs`); `seed-sanity.mjs` дополнен `stats` и `advantages`. Структура студии: добавлены «📊 Цифры», «⭐ Преимущества», «🛠 Услуги».
+* [2026-06-21] **Вакансии в Sanity** — схема `vacancy` (body=Portable Text), адаптер `src/lib/content/vacancies.ts` (`getVacancies`) с fallback, `VacancyAccordion.astro` переведён на адаптер, `scripts/migrate-vacancies.mjs`. В структуру студии добавлены «💼 Вакансии».
+* [2026-06-21] **Фикс** — `.service-card__img` сделан `:global` внутри `.service-card` (img рендерится в `SmartImage`, иной scope) — картинка снова позиционируется `object-cover`.
+* [2026-06-21] **Зависимости** — добавлены `browser-image-compression`, `@portabletext/to-html`.
+
+### Миграция контента в Sanity + мягкий fallback (2026-06-21)
+* [2026-06-21] **`astro.config.mjs`** — `image.domains: ['cdn.sanity.io']` для build-time оптимизации удалённых картинок (раздача с Timeweb, не с Sanity CDN).
+* [2026-06-21] **`src/sanity/client.ts`** — `useCdn: true` (экономия API-квоты бесплатного тарифа).
+* [2026-06-21] **Слой адаптеров `src/lib/content/`** — `contacts.ts` (`getContacts`), `equipment.ts` (`getEquipment`, `getFeaturedEquipment`), `projects.ts` (`getProjects`, `groupByYear`), `types.ts` (`SmartImageSource`). Каждый адаптер: Sanity → при ошибке/пустоте мягкий откат на локальные .md.
+* [2026-06-21] **`src/components/ui/SmartImage.astro`** — универсальная картинка: одинаково рендерит локальный ассет и удалённый URL Sanity (оба оптимизируются на сборке).
+* [2026-06-21] **Sanity-схемы** — добавлены `site` (контакты, сгруппированы по вкладкам), `equipment`, `project`; зарегистрированы в `src/sanity/schemas/index.ts` и в структуре `sanity.config.ts`.
+* [2026-06-21] **Компоненты на адаптеры** — контакты: Footer, Header, home/Contacts, ContactForm, kontakty, privacy, vakansii, VacancyAccordion, arenda. Техника: Fleet, arenda, EquipmentCard (→ SmartImage). Проекты: Projects2 (главная), proekty (→ SmartImage + полноразмеры для PhotoSwipe).
+* [2026-06-21] **Скрипты миграции** — `scripts/lib/migrate-utils.mjs` (env, sharp-сжатие, дедуп, slugify), `scripts/migrate-equipment.mjs`, `scripts/migrate-projects.mjs`; `seed-sanity.mjs` дополнен синглтоном `site`.
+* [2026-06-21] **Зависимости** — добавлен `gray-matter` (dev) для парсинга frontmatter в миграциях.
 
 ### Унификация заголовков страниц и редизайн с градиентом (2026-06-10)
 * [2026-06-10] **`src/components/ui/PageHeader.astro`** — Изменен фон заголовка: теперь это фирменный премиальный градиент с наложением полупрозрачной координатной сетки. Добавлена поддержка опционального свойства `image` (рендер картинки справа, плавающая анимация `@keyframes float`, адаптивный респонсив и стильные тени).

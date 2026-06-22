@@ -16,6 +16,7 @@
     "@astrojs/react": "^4.4.2",
     "@iconify-json/lucide": "^1.2.95",
     "@iconify-json/simple-icons": "^1.2.74",
+    "@portabletext/to-html": "^5.0.2",
     "@sanity/client": "^7.16.0",
     "@sanity/image-url": "^2.0.3",
     "@tailwindcss/vite": "^4.2.1",
@@ -23,6 +24,7 @@
     "@types/react-dom": "^19.2.3",
     "astro": "^5.17.1",
     "astro-icon": "^1.1.5",
+    "browser-image-compression": "^2.0.2",
     "photoswipe": "^5.4.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
@@ -30,5 +32,8 @@
     "sharp": "^0.34.5",
     "swiper": "^12.1.2",
     "tailwindcss": "^4.2.1"
+  },
+  "devDependencies": {
+    "gray-matter": "^4.0.3"
   }
 }

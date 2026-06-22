@@ -2,17 +2,9 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
-import { getCollection } from "astro:content";
+import { getContacts } from "../lib/content/contacts";
 
-const [contactsEntry] = (await getCollection("site")).sort((a, b) =>
-    a.id.localeCompare(b.id),
-);
-
-if (!contactsEntry) {
-    throw new Error("Site contacts content is missing in src/content/site.");
-}
-
-const contacts = contactsEntry.data;
+const contacts = await getContacts();
 
 const title = "Политика конфиденциальности — ООО «Рубеж»";
 const description = "Политика конфиденциальности ООО «Рубеж» по обработке персональных данных и использованию cookie-файлов.";

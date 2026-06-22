@@ -8,18 +8,11 @@ import ContactForm from "../components/home/ContactForm.astro";
 import VacancyAccordion from "../components/vacancies/VacancyAccordion.astro";
 import { Icon } from "astro-icon/components";
 import { getCollection } from "astro:content";
+import { getContacts } from "../lib/content/contacts";
 import { Image } from "astro:assets";
 import avitoIcon from "../assets/avito.svg";
 
-const [contactsEntry] = (await getCollection("site")).sort((a, b) =>
-    a.id.localeCompare(b.id),
-);
-
-if (!contactsEntry) {
-    throw new Error("Site contacts content is missing in src/content/site.");
-}
-
-const contacts = contactsEntry.data;
+const contacts = await getContacts();
 ---
 
 <BaseLayout 
