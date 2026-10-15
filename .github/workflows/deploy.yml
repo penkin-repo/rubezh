@@ -38,18 +38,13 @@ jobs:
     - name: 🚀 Deploy to VDS via rsync
       env:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-        DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
         DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
         TARGET_DIR: /var/www/rubezh/html
       run: |
         echo "🔧 Нормализация параметров подключения..."
         TARGET_HOST=$(echo "${DEPLOY_HOST:-195.209.215.196}" | tr -d '[:space:]')
-        TARGET_USER=$(echo "${DEPLOY_USER:-ubuntu}" | tr -d '[:space:]')
-        
-        if [ "$TARGET_USER" = "root" ] || [ "$TARGET_USER" = "andr5n" ] || [ -z "$TARGET_USER" ]; then
-          echo "⚠️ Замена пользователя '$TARGET_USER' на системного пользователя VDS 'ubuntu'"
-          TARGET_USER="ubuntu"
-        fi
+        # Системный пользователь VDS Ubuntu со sudo правами всегда строго 'ubuntu'
+        TARGET_USER="ubuntu"
 
         echo "Подключение будет выполняться как: $TARGET_USER@$TARGET_HOST"
 
@@ -60,7 +55,7 @@ jobs:
         printf '%s\n' "$DEPLOY_SSH_KEY" | tr -d '\r' > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
 
-        # 2. Генерируем публичный ключ рядом (.pub) — критично для OpenSSH 9.x, чтобы исключить type -1
+        # 2. Генерируем публичный ключ (.pub)
         ssh-keygen -y -f ~/.ssh/deploy_key > ~/.ssh/deploy_key.pub
         chmod 644 ~/.ssh/deploy_key.pub
 
@@ -73,8 +68,8 @@ jobs:
 
         SSH_OPTS="-p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PubkeyAcceptedAlgorithms=+ssh-rsa,rsa-sha2-256,rsa-sha2-512"
 
-        echo "📡 Проверка SSH подключения..."
-        ssh -v $SSH_OPTS "$TARGET_USER@$TARGET_HOST" "echo '✅ SSH connection successful!'"
+        echo "📡 Проверка SSH подключения к $TARGET_USER@$TARGET_HOST..."
+        ssh $SSH_OPTS "$TARGET_USER@$TARGET_HOST" "echo '✅ SSH connection successful!'"
 
         echo "📁 Проверка и подготовка целевой директории $TARGET_DIR..."
         ssh $SSH_OPTS "$TARGET_USER@$TARGET_HOST" "sudo mkdir -p $TARGET_DIR && sudo chown -R $TARGET_USER:$TARGET_USER $TARGET_DIR"
