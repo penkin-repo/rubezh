@@ -46,29 +46,37 @@ jobs:
         mkdir -p ~/.ssh
         chmod 700 ~/.ssh
         
-        # Записываем SSH-ключ с переводом строки в конце
-        printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+        # Корректируем переносы строк CRLF -> LF и гарантируем перевод строки в конце файла
+        printf '%s\n' "$DEPLOY_SSH_KEY" | tr -d '\r' > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
 
-        # Конфигурируем SSH клиент (RSA ключ, порт 22, отключение StrictHostKeyChecking)
-        SSH_CMD="ssh -p 22 -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PubkeyAcceptedKeyTypes=+ssh-rsa"
+        echo "🔍 Валидация формата SSH ключа..."
+        ssh-keygen -l -f ~/.ssh/deploy_key || {
+          echo "❌ Ошибка: SSH-ключ имеет неверный формат или поврежден при вставке в секреты GitVerse!"
+          echo "Первая строка ключа: $(head -n 1 ~/.ssh/deploy_key)"
+          echo "Количество строк: $(wc -l < ~/.ssh/deploy_key)"
+          exit 1
+        }
+
+        # Базовые опции SSH: поддержка RSA, отключение интерактивных вопросов
+        SSH_OPTS="-p 22 -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa,ssh-ed25519"
 
         echo "📡 Проверка SSH подключения к $DEPLOY_USER@$DEPLOY_HOST..."
-        $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "echo '✅ SSH connection successful!'"
+        ssh -v $SSH_OPTS "$DEPLOY_USER@$DEPLOY_HOST" "echo '✅ SSH connection successful!'"
 
-        echo "📁 Подготовка целевой директории $TARGET_DIR на сервере..."
-        $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "sudo mkdir -p $TARGET_DIR && sudo chown -R $DEPLOY_USER:$DEPLOY_USER $TARGET_DIR"
+        echo "📁 Проверка и подготовка целевой директории $TARGET_DIR..."
+        ssh $SSH_OPTS "$DEPLOY_USER@$DEPLOY_HOST" "sudo mkdir -p $TARGET_DIR && sudo chown -R $DEPLOY_USER:$DEPLOY_USER $TARGET_DIR"
 
         echo "🔄 Синхронизация файлов сайта через rsync..."
         rsync -avz --delete \
-          -e "$SSH_CMD" \
+          -e "ssh $SSH_OPTS" \
           --rsync-path="sudo rsync" \
           ./dist/ "$DEPLOY_USER@$DEPLOY_HOST:$TARGET_DIR/"
 
         echo "🔒 Настройка прав доступа для Nginx (www-data)..."
-        $SSH_CMD "$DEPLOY_USER@$DEPLOY_HOST" "sudo chown -R www-data:www-data $TARGET_DIR && sudo chmod -R 755 $TARGET_DIR"
+        ssh $SSH_OPTS "$DEPLOY_USER@$DEPLOY_HOST" "sudo chown -R www-data:www-data $TARGET_DIR && sudo chmod -R 755 $TARGET_DIR"
 
-        echo "🧹 Очистка временного ключа на раннере..."
+        echo "🧹 Очистка временного ключа..."
         rm -f ~/.ssh/deploy_key
 
         echo "🎉 Деплой успешно завершен!"
