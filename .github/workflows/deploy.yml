@@ -43,11 +43,9 @@ jobs:
         TARGET_DIR: /var/www/rubezh/html
       run: |
         echo "🔧 Нормализация параметров подключения..."
-        # Очищаем хост и пользователя от возможных пробелов и спецсимволов при вставке в UI
         TARGET_HOST=$(echo "${DEPLOY_HOST:-195.209.215.196}" | tr -d '[:space:]')
         TARGET_USER=$(echo "${DEPLOY_USER:-ubuntu}" | tr -d '[:space:]')
         
-        # Если пользователь случайно указал root или старый логин от timeweb, принудительно используем ubuntu
         if [ "$TARGET_USER" = "root" ] || [ "$TARGET_USER" = "andr5n" ] || [ -z "$TARGET_USER" ]; then
           echo "⚠️ Замена пользователя '$TARGET_USER' на системного пользователя VDS 'ubuntu'"
           TARGET_USER="ubuntu"
@@ -58,18 +56,22 @@ jobs:
         mkdir -p ~/.ssh
         chmod 700 ~/.ssh
         
-        # Записываем SSH-ключ с очисткой CRLF
+        # 1. Записываем приватный ключ
         printf '%s\n' "$DEPLOY_SSH_KEY" | tr -d '\r' > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
 
-        echo "🔍 Валидация формата SSH ключа..."
+        # 2. Генерируем публичный ключ рядом (.pub) — критично для OpenSSH 9.x, чтобы исключить type -1
+        ssh-keygen -y -f ~/.ssh/deploy_key > ~/.ssh/deploy_key.pub
+        chmod 644 ~/.ssh/deploy_key.pub
+
+        echo "🔍 Валидация формата SSH ключа:"
         ssh-keygen -l -f ~/.ssh/deploy_key
 
-        # Строгие параметры SSH для OpenSSH 9.x:
-        # - IdentitiesOnly=yes: использовать строго deploy_key (не тратить попытки на дефолтные ключи раннера)
-        # - PubkeyAcceptedAlgorithms=+ssh-rsa: современный синтаксис OpenSSH для RSA
-        # - PubkeyAcceptedKeyTypes=+ssh-rsa: обратная совместимость
-        SSH_OPTS="-p 22 -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PubkeyAcceptedAlgorithms=+ssh-rsa -o PubkeyAcceptedKeyTypes=+ssh-rsa -o HostKeyAlgorithms=+ssh-rsa,ssh-ed25519"
+        # 3. Запускаем ssh-agent и загружаем ключ
+        eval $(ssh-agent -s)
+        ssh-add ~/.ssh/deploy_key
+
+        SSH_OPTS="-p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o PubkeyAcceptedAlgorithms=+ssh-rsa,rsa-sha2-256,rsa-sha2-512"
 
         echo "📡 Проверка SSH подключения..."
         ssh -v $SSH_OPTS "$TARGET_USER@$TARGET_HOST" "echo '✅ SSH connection successful!'"
@@ -87,6 +89,7 @@ jobs:
         ssh $SSH_OPTS "$TARGET_USER@$TARGET_HOST" "sudo chown -R www-data:www-data $TARGET_DIR && sudo chmod -R 755 $TARGET_DIR"
 
         echo "🧹 Очистка временного ключа..."
-        rm -f ~/.ssh/deploy_key
+        rm -f ~/.ssh/deploy_key ~/.ssh/deploy_key.pub
+        ssh-agent -k || true
 
         echo "🎉 Деплой успешно завершен!"
