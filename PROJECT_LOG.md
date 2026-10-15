@@ -1,25 +1,35 @@
 # Project Status: RUBEZH — ООО «Рубеж» Корпоративный сайт
 
-**Last Updated:** 2026-06-21 15:55 (UTC+03:00)
-**Current Phase:** Phase 6 — Разработка на Astro + Sanity CMS 🚧 (миграция контента в Sanity с мягким fallback)
+**Last Updated:** 2026-10-15 11:15 (UTC+03:00)
+**Current Phase:** Phase 7 — Миграция CI/CD деплоя на собственный VDS сервер (Ubuntu 22.04 + Nginx) 🚀
 
 ## 🚀 Active Context
-* **Current Task:** Перенос данных в Sanity с мягким переходом (fallback на локальные .md при недоступности Sanity). Завершены: контакты (`site`), спецтехника (`equipment`), проекты (`project`). Картинки оптимизируются на сборке и раздаются с Timeweb (не с Sanity CDN) — экономия трафика бесплатного тарифа. Миграционные скрипты сжимают фото через sharp (webp q80, <=1920px) перед загрузкой — экономия хранилища.
-* **Next Step:** Запустить миграции/сид: `node scripts/seed-sanity.mjs` (hero, header, site, stats, advantages), `node scripts/migrate-equipment.mjs`, `node scripts/migrate-projects.mjs`, `node scripts/migrate-services.mjs`, `node scripts/migrate-vacancies.mjs` (нужен SANITY_TOKEN в .env), затем Publish в студии. Сделано: контакты, техника, проекты, услуги (видео хардкод), цифры, преимущества, вакансии + сжатие картинок при загрузке в Studio (Этап 2). Весь контент перенесён.
+* **Current Task:** Настройка автоматического CI/CD деплоя через GitVerse Actions на VDS (Ubuntu 22.04 LTS, 195.209.215.196). Проект изолирован в директории `/var/www/rubezh/html/`. Передача статики через rsync по SSH (RSA-ключ с `-o PubkeyAcceptedKeyTypes=+ssh-rsa`).
+* **Next Step:** Проверка секретов в GitVerse (`DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY`), применение Nginx-конфига на сервере и тестовый деплой через GitVerse Actions.
 
 ## 🛠 Tech Stack & Versions
-* **Astro:** (установлен, см. package.json)
+* **Astro:** 5
 * **Sanity:** `sanity` + `@sanity/client`
 * **Tailwind CSS:** v4 (через @tailwindcss/vite)
-* **pnpm:** менеджер пакетов
-* **TypeScript:** yes
+* **pnpm:** 10.28.2
+* **Web Server:** Nginx (VDS Ubuntu 22.04 LTS)
+* **CI/CD:** GitVerse Actions (rsync over SSH)
 
 ## 🐛 Known Bugs / Issues
-* [ ] [Low] Сид `header` (`scripts/seed-sanity.mjs`) содержит устаревшие маршруты навигации (`/about`, `/projects`, `/equipment`, `/contacts`) — синхронизировать с реальными при необходимости.
 * [ ] [Low] `CompressedImageInput` заменяет стандартный UI картинки (без hotspot) — приемлемо для текущих карточек.
 * [x] [Fixed] Карточки услуг: после перехода на `SmartImage` scoped-стиль `.service-card__img` перестал применяться (img в другом scope) → `:global()` внутри `.service-card`.
+* [x] [Fixed] Seed-скрипт содержал английские слаги меню (`/about`, `/projects`, `/equipment`, `/contacts`) — исправлен на русские (`/o-kompanii`, `/proekty`, `/arenda-spetstehniki`, `/kontakty`).
 
 ## 📝 Recent Changes (Changelog)
+
+### Миграция CI/CD на VDS сервер Ubuntu (2026-10-15)
+* [2026-10-15] **`.gitignore`** — Добавлены правила игнорирования приватных ключей `*.pem` и `privatekey-1152228.pem`.
+* [2026-10-15] **CI/CD `.github/workflows/deploy.yml`** — Полностью обновлён сценарий: сборка pnpm build + деплой статики на VDS по SSH/rsync с правами `sudo rsync`, автоматическим созданием целевой директории `/var/www/rubezh/html/` и установкой владельца `www-data:www-data`.
+* [2026-10-15] **`deploy/nginx/rubezh.conf`** — Подготовлен эталонный конфиг Nginx для изолированного хостинга сайта (Astro try_files, gzip, кэширование статики).
+
+* [2026-06-28] **Карта eager loading** — `src/pages/kontakty.astro` и `src/components/home/Contacts.astro`: убран `IntersectionObserver`, карты грузятся сразу (`loading="eager"`), placeholder скрывается по событию `load`. Ускорен открыв страниц.
+* [2026-06-28] **Фон шапки в бургере** — `src/components/layout/Header.astro`: при открытии мобильного меню шапка закрашивается в сплошной цвет (`setSolidHeader()`), при закрытии — возвращается прозрачность на главной у верха страницы.
+* [2026-06-28] **README.md переписан** — заменён шаблонный Astro-стартер на плотное описание проекта: стек, содержимое Sanity, архитектура контента, команды, работа со Studio/миграциями, деплой, структура `src/`. Отправлен на GitHub и GitVerse.
 
 ### Этап 5 + Этап 2: услуги, цифры, преимущества, сжатие при загрузке (2026-06-21)
 * [2026-06-21] **Studio: русификация** — `hero` переименован «🏠 Главный экран», preview-тексты hero/header на русском, исправлена ссылка кнопки hero `/equipment` → `/arenda-spetstehniki`.
